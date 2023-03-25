@@ -3,6 +3,7 @@ import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
 import ListGroup from "./list/listGroup";
 import MoviesTable from "./table/moviesTable";
+import style from "./movies.module.css"
 
 class Movies extends Component {
   constructor() {
@@ -54,6 +55,7 @@ class Movies extends Component {
 
     return (
       <div className="row">
+        <h3 className={style.title}>movie title</h3>
         <div className="col-2">
           <ListGroup
             items={genres}
