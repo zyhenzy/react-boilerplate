@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import Settings from './pages/Settings';
 import {Box} from "@mui/material";
+import Login from "./pages/Login";
 
 const App: React.FC = () => {
     return (
@@ -19,6 +20,7 @@ const App: React.FC = () => {
                         <Route path="/" element={<Dashboard />} />
                         <Route path="/users" element={<Users />} />
                         <Route path="/settings" element={<Settings />} />
+                        <Route path="/login" element={<Login />} />
                     </Routes>
                 </Box>
             </div>
