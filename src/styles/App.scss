@@ -1,0 +1,37 @@
+// 定义一些变量
+$primary-color: #1976d2;
+$secondary-color: #424242;
+$white: #fff;
+
+// 设置基本样式
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f6f8;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.navbar {
+  background-color: $primary-color;
+  color: $white;
+  padding: 10px;
+  text-align: center;
+}
+
+.sidebar {
+  width: 240px;
+  background-color: $secondary-color;
+  color: $white;
+  height: 100%;
+  padding: 20px;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}

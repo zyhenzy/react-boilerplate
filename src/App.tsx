@@ -8,23 +8,28 @@ import Users from './pages/Users';
 import Settings from './pages/Settings';
 import {Box} from "@mui/material";
 import Login from "./pages/Login";
+import './styles/App.scss';  // 引入你的SCSS文件
 
 const App: React.FC = () => {
     return (
         <Router>
-            <Navbar />
-            <div style={{ display: 'flex', marginTop: '64px' }}>
-                <Sidebar />
-                <Box component="main" sx={{ flexGrow: 1, padding: '20px' }}>
-                    <Routes>
-                        <Route path="/" element={<Dashboard />} />
-                        <Route path="/users" element={<Users />} />
-                        <Route path="/settings" element={<Settings />} />
-                        <Route path="/login" element={<Login />} />
-                    </Routes>
-                </Box>
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+                <Navbar />
+                <div style={{ display: 'flex', flexGrow: 1 }}>
+                    <Sidebar />
+                    <Box component="main">
+                        <Routes>
+                            <Route path="/" element={<Dashboard />} />
+                            <Route path="/users" element={<Users />} />
+                            <Route path="/settings" element={<Settings />} />
+                            <Route path="/login" element={<Login />} />
+                        </Routes>
+                    </Box>
+                </div>
             </div>
         </Router>
+
+
     );
 };
 

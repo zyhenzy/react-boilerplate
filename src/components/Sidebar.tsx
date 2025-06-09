@@ -13,19 +13,22 @@ const Sidebar: React.FC = () => {
     };
 
     return (
-        <Box sx={{ width: 250 }}>
+        <Box sx={{ width: 250,height:'100%'}}>
             <Drawer
                 variant="permanent"
                 sx={{
                     width: 250,
                     flexShrink: 0,
+                    height:'100%',
                     '& .MuiDrawer-paper': {
                         width: 250,
                         boxSizing: 'border-box',
+                        position: 'relative', // 覆盖默认的 fixed
+                        height:'100%'
                     },
                 }}
             >
-                <List>
+                <List sx={{height:'100%'}}>
                     {/* 使用 getListItemStyle 函数来动态设置选中项的样式 */}
                     <ListItem component={Link} to="/" sx={getListItemStyle('/')}>
                         <ListItemText primary="Dashboard" />
