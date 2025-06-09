@@ -13,23 +13,28 @@ import './styles/App.scss';  // 引入你的SCSS文件
 const App: React.FC = () => {
     return (
         <Router>
-            <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-                <Navbar />
-                <div style={{ display: 'flex', flexGrow: 1 }}>
-                    <Sidebar />
-                    <Box component="main">
-                        <Routes>
-                            <Route path="/" element={<Dashboard />} />
-                            <Route path="/users" element={<Users />} />
-                            <Route path="/settings" element={<Settings />} />
-                            <Route path="/login" element={<Login />} />
-                        </Routes>
-                    </Box>
-                </div>
-            </div>
+            <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route
+                    path="*"
+                    element={
+                        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+                            <Navbar />
+                            <div style={{ display: 'flex', flexGrow: 1 }}>
+                                <Sidebar />
+                                <Box component="main">
+                                    <Routes>
+                                        <Route path="/" element={<Dashboard />} />
+                                        <Route path="/users" element={<Users />} />
+                                        <Route path="/settings" element={<Settings />} />
+                                    </Routes>
+                                </Box>
+                            </div>
+                        </div>
+                    }
+                />
+            </Routes>
         </Router>
-
-
     );
 };
 

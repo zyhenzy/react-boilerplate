@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Container } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = () => {
         if (username === '' || password === '') {
@@ -15,8 +17,8 @@ const Login: React.FC = () => {
         // 登录逻辑可以放在这里，假设用户名为 "admin" 和密码为 "123456"
         if (username === 'admin' && password === '123456') {
             setError('');
-            // 这里你可以处理登录成功后的逻辑
-            console.log('登录成功');
+            // 登录成功后跳转到 dashboard
+            navigate('/');
         } else {
             setError('用户名或密码错误');
         }
