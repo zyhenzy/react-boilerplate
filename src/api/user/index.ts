@@ -4,12 +4,12 @@ import { setUserInfo, clearUserInfo } from '../../store/userSlice';
 import { AppDispatch } from '../../store';
 
 /**
- * 注册用户接口
+ * 注册
  * @param params 注册参数
  * @returns Promise<any>
  */
 export function registerUser(params: RegisterParams) {
-  return http.post('/v1/User/register', params)
+  return http.post('/v1/User/register', params);
 }
 
 /**
@@ -43,4 +43,57 @@ export async function getAndStoreUserInfo(dispatch: AppDispatch) {
     dispatch(clearUserInfo());
     throw e;
   }
+}
+
+/**
+ * 添加用户
+ * @param params AddUserCommand
+ * @returns Promise<any>
+ */
+export function addUser(params: any) {
+  return http.post('/v1/User/add', params);
+}
+
+/**
+ * 更新用户
+ * @param params UpdateUserCommand
+ * @returns Promise<any>
+ */
+export function updateUser(params: any) {
+  return http.post('/v1/User/update', params);
+}
+
+/**
+ * 启用/禁用用户
+ * @param params EnableUserCommand
+ * @returns Promise<any>
+ */
+export function enableUser(params: any) {
+  return http.post('/v1/User/enable', params);
+}
+
+/**
+ * 用户列表
+ * @param params 查询参数
+ * @returns Promise<any>
+ */
+export function getUserList(params?: any) {
+  return http.get('/v1/User/list', { params });
+}
+
+/**
+ * 用户详情
+ * @param id 用户ID
+ * @returns Promise<any>
+ */
+export function getUserDetail(id: string) {
+  return http.get(`/v1/User/${id}`);
+}
+
+/**
+ * 刷新Token
+ * @returns Promise<any>
+ */
+export function refreshUserToken() {
+  return http.get('/v1/User/refreshToken');
 }

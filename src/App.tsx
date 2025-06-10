@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
-import Users from './pages/Users';
+import User from './pages/User/User';
 import Settings from './pages/Settings';
 import {Box} from "@mui/material";
 import Login from "./pages/Login";
@@ -28,7 +28,7 @@ const App: React.FC = () => {
                                 <Box component="main" sx={{ flex: 1 }}>
                                     <Routes>
                                         <Route path="/" element={<Dashboard />} />
-                                        <Route path="/users" element={<Users />} />
+                                        <Route path="/user" element={<User />} />
                                         <Route path="/settings" element={<Settings />} />
                                         <Route path="/agent" element={<Agent />} />
                                     </Routes>

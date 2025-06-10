@@ -33,8 +33,8 @@ const Sidebar: React.FC = () => {
                     <ListItem component={Link} to="/" sx={getListItemStyle('/')}>
                         <ListItemText primary="Dashboard" />
                     </ListItem>
-                    <ListItem component={Link} to="/users" sx={getListItemStyle('/users')}>
-                        <ListItemText primary="Users" />
+                    <ListItem component={Link} to="/user" sx={getListItemStyle('/user')}>
+                        <ListItemText primary="User" />
                     </ListItem>
                     <ListItem component={Link} to="/settings" sx={getListItemStyle('/settings')}>
                         <ListItemText primary="Settings" />
