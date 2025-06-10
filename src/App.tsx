@@ -9,7 +9,8 @@ import Settings from './pages/Settings';
 import {Box} from "@mui/material";
 import Login from "./pages/Login";
 import './styles/App.scss';
-import Register from "./pages/Register";  // 引入你的SCSS文件
+import Register from "./pages/Register";
+import Agent from "./pages/Agent/Agent";
 
 const App: React.FC = () => {
     return (
@@ -24,11 +25,12 @@ const App: React.FC = () => {
                             <Navbar />
                             <div style={{ display: 'flex', flexGrow: 1 }}>
                                 <Sidebar />
-                                <Box component="main">
+                                <Box component="main" sx={{ flex: 1 }}>
                                     <Routes>
                                         <Route path="/" element={<Dashboard />} />
                                         <Route path="/users" element={<Users />} />
                                         <Route path="/settings" element={<Settings />} />
+                                        <Route path="/agent" element={<Agent />} />
                                     </Routes>
                                 </Box>
                             </div>

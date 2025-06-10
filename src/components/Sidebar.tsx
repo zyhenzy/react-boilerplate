@@ -39,6 +39,9 @@ const Sidebar: React.FC = () => {
                     <ListItem component={Link} to="/settings" sx={getListItemStyle('/settings')}>
                         <ListItemText primary="Settings" />
                     </ListItem>
+                    <ListItem component={Link} to="/agent" sx={getListItemStyle('/agent')}>
+                        <ListItemText primary="Agent" />
+                    </ListItem>
                 </List>
                 <Divider />
             </Drawer>

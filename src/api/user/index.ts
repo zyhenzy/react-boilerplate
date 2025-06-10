@@ -1,5 +1,5 @@
 import http from '../../utils/http';
-import {RegisterParams, LoginParams} from "./data";
+import {RegisterParams, LoginParams} from "./types";
 import { setUserInfo, clearUserInfo } from '../../store/userSlice';
 import { AppDispatch } from '../../store';
 

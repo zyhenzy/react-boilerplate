@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import {getAndStoreUserInfo, infoUser, loginUser} from '../api/user';
-import type { LoginParams } from '../api/user/data';
+import {getAndStoreUserInfo, loginUser} from '../api/user';
+import type { LoginParams } from '../api/user/types';
 import { setCookie } from '../utils/cookie';
 import { useDispatch } from 'react-redux';
 

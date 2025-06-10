@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../api/user';
 import { COUNTRY_OPTIONS } from '../constants/countryCodes';
 import Autocomplete from '@mui/material/Autocomplete';
-import {RegisterParams} from "../api/user/data";
+import {RegisterParams} from "../api/user/types";
 
 const Register: React.FC = () => {
     const [username, setUsername] = useState('');

@@ -30,7 +30,6 @@ http.interceptors.request.use(
 // 响应拦截器
 http.interceptors.response.use(
     (response: AxiosResponse) => {
-        console.log(response)
         const data = response.data;
         if (data.code === 0) {
             return data.result;
