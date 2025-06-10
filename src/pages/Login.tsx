@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { infoUser, loginUser } from '../api/user';
+import {getAndStoreUserInfo, infoUser, loginUser} from '../api/user';
 import type { LoginParams } from '../api/user/data';
 import { setCookie } from '../utils/cookie';
 import { useDispatch } from 'react-redux';
-import { setUserInfo } from '../store/userSlice';
 
 const Login: React.FC = () => {
     const [userName, setUserName] = useState('');
@@ -31,8 +30,7 @@ const Login: React.FC = () => {
                 // @ts-ignore
                 setCookie('token', res.token);
             }
-            const userInfoRes = await infoUser();
-            dispatch(setUserInfo(userInfoRes));
+            await getAndStoreUserInfo(dispatch);
             setError('');
             navigate('/');
         } catch (e: any) {

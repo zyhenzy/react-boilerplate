@@ -16,8 +16,6 @@ http.interceptors.request.use(
     (config) => {
         // 从cookie中获取token
         const token = getCookie('token');
-        console.log(token)
-        debugger
         if (token) {
             config.headers = config.headers || {};
             config.headers['Authorization'] = `Bearer ${token}`;

@@ -6,13 +6,30 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearUserInfo } from '../store/userSlice';
 import { clearCookie } from '../utils/cookie';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getAndStoreUserInfo } from '../api/user';
 
 const Navbar: React.FC = () => {
   const userInfo = useSelector((state: any) => state.user.userInfo);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await getAndStoreUserInfo(dispatch);
+      } catch (e: any) {
+        if (e?.response?.status === 401) {
+          navigate('/login');
+        }
+      }
+    })();
+  }, [dispatch, navigate]);
 
   const handleLogout = () => {
     dispatch(clearUserInfo());
@@ -41,7 +58,9 @@ const Navbar: React.FC = () => {
                       <Typography color="inherit" sx={{ mr: 2 }}>
                         {userInfo.userName || userInfo.name || '用户'}
                       </Typography>
-                      <Button color="inherit" onClick={handleLogout}>登出</Button>
+                      <IconButton color="inherit" onClick={handleLogout}>
+                        <LogoutIcon />
+                      </IconButton>
                     </>
                   ) : (
                     <Button color="inherit">Login</Button>
