@@ -18,3 +18,11 @@ export function registerUser(params: RegisterParams) {
 export function loginUser(params: LoginParams) {
   return http.post('/v1/User/login', params);
 }
+
+/**
+ * 登录的用户信息
+ * @returns Promise<any>
+ */
+export function infoUser() {
+  return http.get('/v1/User/info');
+}

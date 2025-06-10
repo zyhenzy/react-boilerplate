@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../api/user';
+import { infoUser, loginUser } from '../api/user';
 import type { LoginParams } from '../api/user/data';
+import { setCookie } from '../utils/cookie';
+import { useDispatch } from 'react-redux';
+import { setUserInfo } from '../store/userSlice';
 
 const Login: React.FC = () => {
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleLogin = async () => {
         if (userName === '' || password === '') {
@@ -21,10 +25,14 @@ const Login: React.FC = () => {
                 password,
             };
             const res = await loginUser(params);
-            // 登录成功后，将token存入cookie
-            if (res.data && res.data.token) {
-                document.cookie = `token=${res.data.token}; path=/;`;
+            // 登录成功后，将token存入cookie（使用工具方法）
+            // @ts-ignore
+            if (res && res.token) {
+                // @ts-ignore
+                setCookie('token', res.token);
             }
+            const userInfoRes = await infoUser();
+            dispatch(setUserInfo(userInfoRes));
             setError('');
             navigate('/');
         } catch (e: any) {
@@ -68,4 +76,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-

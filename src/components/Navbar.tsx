@@ -6,8 +6,11 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useSelector } from 'react-redux';
 
 const Navbar: React.FC = () => {
+  const userInfo = useSelector((state: any) => state.user.userInfo);
+
   return (
       <Box>
           <AppBar position="static">
@@ -24,7 +27,13 @@ const Navbar: React.FC = () => {
                   <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       App Name
                   </Typography>
-                  <Button color="inherit">Login</Button>
+                  {userInfo ? (
+                    <Typography color="inherit" sx={{ mr: 2 }}>
+                      {userInfo.userName || userInfo.name || '用户'}
+                    </Typography>
+                  ) : (
+                    <Button color="inherit">Login</Button>
+                  )}
               </Toolbar>
           </AppBar>
       </Box>
