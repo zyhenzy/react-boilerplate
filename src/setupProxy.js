@@ -1,5 +1,5 @@
 // @ts-ignore
-const { createProxyMiddleware } = require('http-proxy-middleware');
+const {createProxyMiddleware} = require("http-proxy-middleware");
 
 module.exports = function (app) {
     app.use(
@@ -7,5 +7,5 @@ module.exports = function (app) {
             target: "http://147.139.245.16:5055",
             changeOrigin: true,
         })
-    );
+    )
 };
