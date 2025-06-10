@@ -1,9 +1,11 @@
 import React from 'react';
 import { Box, Drawer, List, ListItem, ListItemText, Divider } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Sidebar: React.FC = () => {
     const location = useLocation(); // 获取当前路径
+    const { t } = useTranslation();
 
     // 判断是否选中
     const getListItemStyle = (path: string) => {
@@ -31,16 +33,16 @@ const Sidebar: React.FC = () => {
                 <List sx={{height:'100%'}}>
                     {/* 使用 getListItemStyle 函数来动态设置选中项的样式 */}
                     <ListItem component={Link} to="/" sx={getListItemStyle('/')}>
-                        <ListItemText primary="Dashboard" />
+                        <ListItemText primary={t('dashboard')} />
                     </ListItem>
                     <ListItem component={Link} to="/user" sx={getListItemStyle('/user')}>
-                        <ListItemText primary="User" />
+                        <ListItemText primary={t('user')} />
                     </ListItem>
                     <ListItem component={Link} to="/settings" sx={getListItemStyle('/settings')}>
-                        <ListItemText primary="Settings" />
+                        <ListItemText primary={t('settings')} />
                     </ListItem>
                     <ListItem component={Link} to="/agent" sx={getListItemStyle('/agent')}>
-                        <ListItemText primary="Agent" />
+                        <ListItemText primary={t('agent')} />
                     </ListItem>
                 </List>
                 <Divider />

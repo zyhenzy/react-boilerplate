@@ -11,8 +11,13 @@ import Login from "./pages/Login";
 import './styles/App.scss';
 import Register from "./pages/Register";
 import Agent from "./pages/Agent/Agent";
+import { useTranslation } from 'react-i18next';
 
 const App: React.FC = () => {
+    const { t, i18n } = useTranslation();
+    const handleChangeLanguage = (lng: string) => {
+        i18n.changeLanguage(lng);
+    };
     return (
         <Router>
             <Routes>

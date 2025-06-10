@@ -13,11 +13,13 @@ import { clearCookie } from '../utils/cookie';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAndStoreUserInfo } from '../api/user';
+import { useTranslation } from 'react-i18next';
 
 const Navbar: React.FC = () => {
   const userInfo = useSelector((state: any) => state.user.userInfo);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     (async () => {
@@ -51,12 +53,15 @@ const Navbar: React.FC = () => {
                       <MenuIcon />
                   </IconButton>
                   <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                      App Name
+                      {t('welcome')}
                   </Typography>
+                  {/* 语言切换按钮 */}
+                  <Button color="inherit" onClick={() => i18n.changeLanguage('zh')}>中文</Button>
+                  <Button color="inherit" onClick={() => i18n.changeLanguage('en')}>English</Button>
                   {userInfo ? (
                     <>
                       <Typography color="inherit" sx={{ mr: 2 }}>
-                        {userInfo.userName || userInfo.name || '用户'}
+                        {userInfo.userName || userInfo.name}
                       </Typography>
                       <IconButton color="inherit" onClick={handleLogout}>
                         <LogoutIcon />

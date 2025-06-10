@@ -1,0 +1,9 @@
+{
+  "welcome": "App Name",
+  "login": "Login",
+  "logout": "Logout",
+  "settings": "Settings",
+  "dashboard": "Dashboard",
+  "user": "User",
+  "agent": "Agent"
+}

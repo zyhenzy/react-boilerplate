@@ -1,0 +1,9 @@
+{
+  "welcome": "应用名称",
+  "login": "登录",
+  "logout": "退出登录",
+  "settings": "设置",
+  "dashboard": "仪表盘",
+  "user": "用户",
+  "agent": "代理人"
+}
