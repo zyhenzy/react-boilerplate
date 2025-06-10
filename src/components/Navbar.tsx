@@ -6,10 +6,19 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { clearUserInfo } from '../store/userSlice';
+import { clearCookie } from '../utils/cookie';
 
 const Navbar: React.FC = () => {
   const userInfo = useSelector((state: any) => state.user.userInfo);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(clearUserInfo());
+    clearCookie('token'); // 清除token
+    window.location.reload();
+  };
 
   return (
       <Box>
@@ -28,9 +37,12 @@ const Navbar: React.FC = () => {
                       App Name
                   </Typography>
                   {userInfo ? (
-                    <Typography color="inherit" sx={{ mr: 2 }}>
-                      {userInfo.userName || userInfo.name || '用户'}
-                    </Typography>
+                    <>
+                      <Typography color="inherit" sx={{ mr: 2 }}>
+                        {userInfo.userName || userInfo.name || '用户'}
+                      </Typography>
+                      <Button color="inherit" onClick={handleLogout}>登出</Button>
+                    </>
                   ) : (
                     <Button color="inherit">Login</Button>
                   )}
