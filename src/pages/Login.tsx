@@ -5,22 +5,26 @@ import { loginUser } from '../api/user';
 import type { LoginParams } from '../api/user/data';
 
 const Login: React.FC = () => {
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleLogin = async () => {
-        if (phoneNumber === '' || password === '') {
-            setError('手机号和密码不能为空');
+        if (userName === '' || password === '') {
+            setError('用户名和密码不能为空');
             return;
         }
         try {
             const params: LoginParams = {
-                phoneNumber,
+                userName,
                 password,
             };
-            await loginUser(params);
+            const res = await loginUser(params);
+            // 登录成功后，将token存入cookie
+            if (res.data && res.data.token) {
+                document.cookie = `token=${res.data.token}; path=/;`;
+            }
             setError('');
             navigate('/');
         } catch (e: any) {
@@ -35,12 +39,12 @@ const Login: React.FC = () => {
                 <Box sx={{ width: '100%', mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     {error && <Typography color="error">{error}</Typography>}
                     <TextField
-                        label="手机号"
+                        label="用户名"
                         variant="outlined"
                         margin="normal"
                         fullWidth
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
                     />
                     <TextField
                         label="密码"

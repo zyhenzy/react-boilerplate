@@ -17,7 +17,7 @@ const Register: React.FC = () => {
     const [countryNumber, setCountryNumber] = useState('');
     const [agentId, setAgentId] = useState('');
     const [role, setRole] = useState('');
-    const [enable, setEnable] = useState(true);
+    const [enable] = useState(true);
     const navigate = useNavigate();
 
     const handleRegister = async () => {

@@ -18,8 +18,8 @@ export interface RegisterParams {
  */
 export interface LoginParams {
   countryNumber?: string; // todo：国家区号，字符串
-  phoneNumber: string; // todo：手机号，字符串
+  phoneNumber?: string; // todo：手机号，字符串
   password: string;
-  userName?: string;
+  userName: string;
   url?: string; // todo：登录后跳转的URL，字符串
 }
