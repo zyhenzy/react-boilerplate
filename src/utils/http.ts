@@ -33,6 +33,8 @@ http.interceptors.response.use(
         const data = response.data;
         if (data.code === 0) {
             return data.result;
+        } else if (data.code === 401) {
+            console.log(data.message);
         } else if (data.code === -1) {
             // todo:统一处理异常，抛出data.message
             return Promise.reject(new Error(data.message || '请求失败'));
@@ -41,8 +43,13 @@ http.interceptors.response.use(
         }
     },
     (error) => {
-        // 可以统一处理错误
-        return Promise.reject(error);
+        if (error.status === 401) {
+            console.log('未授权，请登录');
+            return Promise.resolve(error);
+        }else{
+            // 可以统一处理错误
+            return Promise.reject(error);
+        }
     }
 );
 

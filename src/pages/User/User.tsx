@@ -12,27 +12,26 @@ import {
   Switch,
   CircularProgress,
   IconButton,
-  Pagination
+  TablePagination
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import UserFormDialog from './UserFormDialog';
+import UserFormDialog from './components/UserFormDialog';
 import { getUserList, addUser, updateUser, enableUser } from '../../api/user';
 
 const UserPage: React.FC = () => {
-  const [users, setUsers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState<any>({ enable: true });
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [pageIndex, setPageIndex] = useState(1);
-  const [pageSize] = useState(10);
+  const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [pageIndex, setPageIndex] = useState(0); // 统一分页从0开始
+  const [pageSize, setPageSize] = useState(10);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<any | null>(null);
 
-  const fetchUsers = async (page = pageIndex, size = pageSize) => {
+  const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await getUserList({ PageIndex: page, PageSize: size });
-      setUsers(res.data?.items || res.data || []);
+      const res = await getUserList({ PageIndex: pageIndex + 1, PageSize: pageSize });
+      setData(res.data?.items || []);
       setTotal(res.data?.total || 0);
     } finally {
       setLoading(false);
@@ -40,119 +39,97 @@ const UserPage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchData();
     // eslint-disable-next-line
   }, [pageIndex, pageSize]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.userName || !form.name || !form.phoneNumber || !form.countryNumber) return;
-    if (editingId) {
-      await updateUser({ ...form, id: editingId });
-    } else {
-      await addUser(form);
-    }
-    setForm({ enable: true });
-    setEditingId(null);
-    setDialogOpen(false);
-    fetchUsers(pageIndex, pageSize);
+  const handleAdd = () => {
+    setEditingUser(null);
+    setDialogOpen(true);
   };
 
   const handleEdit = (user: any) => {
-    setForm(user);
-    setEditingId(user.id);
+    setEditingUser(user);
     setDialogOpen(true);
   };
 
-  const handleEnable = async (id: string, enable: boolean) => {
-    await enableUser({ id, enable: !enable });
-    fetchUsers(pageIndex, pageSize);
+  const handleSubmit = async (values: any) => {
+    if (values.id) {
+      await updateUser(values);
+    } else {
+      await addUser(values);
+    }
+    setDialogOpen(false);
+    setEditingUser(null);
+    fetchData();
   };
 
-  const handleAdd = () => {
-    setForm({ enable: true });
-    setEditingId(null);
-    setDialogOpen(true);
+  const handleEnable = async (user: any) => {
+    await enableUser({ id: user.id, enable: !user.enable });
+    fetchData();
   };
 
   return (
-    <Box p={3}>
+    <Box p={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Button variant="contained" color="primary" onClick={handleAdd}>新增用户</Button>
+        <h2>用户管理</h2>
+        <Button variant="contained" onClick={handleAdd}>新增</Button>
       </Box>
-      {loading ? (
-        <Box display="flex" justifyContent="center" alignItems="center" height={200}>
-          <CircularProgress />
-        </Box>
-      ) : (
-        <>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>用户名</TableCell>
-                  <TableCell>姓名</TableCell>
-                  <TableCell>手机号</TableCell>
-                  <TableCell>国家号码</TableCell>
-                  <TableCell>性别</TableCell>
-                  <TableCell>角色</TableCell>
-                  <TableCell>启用</TableCell>
-                  <TableCell>操作</TableCell>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>用户名</TableCell>
+              <TableCell>姓名</TableCell>
+              <TableCell>手机号</TableCell>
+              <TableCell>国家号码</TableCell>
+              <TableCell>启用</TableCell>
+              <TableCell>操作</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {loading ? (
+              <TableRow><TableCell colSpan={6} align="center"><CircularProgress size={24} /></TableCell></TableRow>
+            ) : data.length === 0 ? (
+              <TableRow><TableCell colSpan={6}>暂无数据</TableCell></TableRow>
+            ) : (
+              data.map(item => (
+                <TableRow key={item.id}>
+                  <TableCell>{item.userName}</TableCell>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.phoneNumber}</TableCell>
+                  <TableCell>{item.countryNumber}</TableCell>
+                  <TableCell>
+                    <Switch checked={item.enable} onChange={() => handleEnable(item)} />
+                  </TableCell>
+                  <TableCell>
+                    <IconButton size="small" onClick={() => handleEdit(item)}><EditIcon /></IconButton>
+                  </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {users.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={8} align="center">暂无数据</TableCell>
-                  </TableRow>
-                ) : (
-                  users.map(user => (
-                    <TableRow key={user.id}>
-                      <TableCell>{user.userName}</TableCell>
-                      <TableCell>{user.name}</TableCell>
-                      <TableCell>{user.phoneNumber}</TableCell>
-                      <TableCell>{user.countryNumber}</TableCell>
-                      <TableCell>{user.sex}</TableCell>
-                      <TableCell>{user.role}</TableCell>
-                      <TableCell>
-                        <Switch
-                          checked={user.enable}
-                          onChange={() => handleEnable(user.id, user.enable)}
-                          color="primary"
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <IconButton color="primary" onClick={() => handleEdit(user)} size="small">
-                          <EditIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Box display="flex" justifyContent="flex-end" mt={2}>
-            <Pagination
-              count={Math.ceil(total / pageSize) || 1}
-              page={pageIndex}
-              onChange={(_, value) => setPageIndex(value)}
-              color="primary"
-            />
-          </Box>
-        </>
-      )}
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        component="div"
+        count={total}
+        page={pageIndex}
+        onPageChange={(_, newPage) => setPageIndex(newPage)}
+        rowsPerPage={pageSize}
+        onRowsPerPageChange={e => { setPageSize(Number(e.target.value)); setPageIndex(0); }}
+        rowsPerPageOptions={[10, 20, 50]}
+      />
       <UserFormDialog
         open={dialogOpen}
-        onClose={() => { setDialogOpen(false); setEditingId(null); }}
+        onClose={() => { setDialogOpen(false); setEditingUser(null); }}
         onSubmit={handleSubmit}
-        form={form}
-        setForm={setForm}
-        editingId={editingId}
+        form={editingUser || { enable: true }}
+        setForm={setEditingUser}
+        editingId={editingUser?.id || null}
       />
     </Box>
   );
 };
 
 export default UserPage;
-

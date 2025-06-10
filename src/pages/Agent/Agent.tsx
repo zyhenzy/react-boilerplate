@@ -13,29 +13,27 @@ import {
   Paper,
   Switch,
   CircularProgress,
-  IconButton
+  IconButton,
+  TablePagination
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AgentFormDialog from './components/AgentFormDialog';
-import Pagination from '@mui/material/Pagination';
 
 const AgentPage: React.FC = () => {
-  const [agents, setAgents] = useState<Agent[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState<Partial<Agent>>({ name: '', contact: '', enable: true });
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [pageIndex, setPageIndex] = useState(1);
-  const [pageSize] = useState(10);
+  const [data, setData] = useState<Agent[]>([]);
   const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [pageIndex, setPageIndex] = useState(0); // 统一分页从0开始
+  const [pageSize, setPageSize] = useState(10);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingAgent, setEditingAgent] = useState<Agent | null>(null);
 
-  // 查询列表
-  const fetchAgents = async (page = pageIndex, size = pageSize) => {
+  const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await getAgentList({ PageIndex: page, PageSize: size });
-      setAgents(res.data?.items || res.data || []);
+      const res = await getAgentList({ PageIndex: pageIndex + 1, PageSize: pageSize });
+      setData(res.data?.items || []);
       setTotal(res.data?.total || 0);
     } finally {
       setLoading(false);
@@ -43,114 +41,100 @@ const AgentPage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchAgents();
+    fetchData();
     // eslint-disable-next-line
   }, [pageIndex, pageSize]);
 
-  // 新增或更新
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.name || !form.contact) return;
-    if (editingId) {
-      await updateAgent({ ...form, id: editingId } as Agent);
-    } else {
-      await createAgent(form as Agent);
-    }
-    setForm({ name: '', contact: '', enable: true });
-    setEditingId(null);
-    setDialogOpen(false);
-    fetchAgents(pageIndex, pageSize);
-  };
-
-  // 编辑
-  const handleEdit = (agent: Agent) => {
-    setForm(agent);
-    setEditingId(agent.id!);
-    setDialogOpen(true);
-  };
-
-  // 启用/禁用（逻辑删除）
-  const handleDelete = async (id: string, enable: boolean) => {
-    await enableAgent(id, !enable);
-    fetchAgents();
-  };
-
-  // 打开新增弹窗
   const handleAdd = () => {
-    setForm({ name: '', contact: '', enable: true });
-    setEditingId(null);
+    setEditingAgent(null);
     setDialogOpen(true);
+  };
+
+  const handleEdit = (agent: Agent) => {
+    setEditingAgent(agent);
+    setDialogOpen(true);
+  };
+
+  const handleSubmit = async (values: Omit<Agent, 'id'> | Agent) => {
+    if ((values as Agent).id) {
+      await updateAgent(values as Agent);
+    } else {
+      await createAgent(values as Omit<Agent, 'id'>);
+    }
+    setDialogOpen(false);
+    setEditingAgent(null);
+    fetchData();
+  };
+
+  const handleEnable = async (agent: Agent) => {
+    await enableAgent(agent.id!, !agent.enable);
+    fetchData();
   };
 
   return (
-    <Box p={3}>
+    <Box p={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Button variant="contained" color="primary" onClick={handleAdd}>新增Agent</Button>
+        <h2>代理管理</h2>
+        <Button variant="contained" onClick={handleAdd}>新增</Button>
       </Box>
-      {loading ? (
-        <Box display="flex" justifyContent="center" alignItems="center" height={200}>
-          <CircularProgress />
-        </Box>
-      ) : (
-        <>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>名称</TableCell>
-                  <TableCell>联系方式</TableCell>
-                  <TableCell>启用</TableCell>
-                  <TableCell>操作</TableCell>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>名称</TableCell>
+              <TableCell>联系方式</TableCell>
+              <TableCell>国家代码</TableCell>
+              <TableCell>城市代码</TableCell>
+              <TableCell>币种</TableCell>
+              <TableCell>启用</TableCell>
+              <TableCell>操作</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {loading ? (
+              <TableRow><TableCell colSpan={7} align="center"><CircularProgress size={24} /></TableCell></TableRow>
+            ) : data.length === 0 ? (
+              <TableRow><TableCell colSpan={7}>暂无数据</TableCell></TableRow>
+            ) : (
+              data.map(item => (
+                <TableRow key={item.id}>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.contact}</TableCell>
+                  <TableCell>{item.countryCode}</TableCell>
+                  <TableCell>{item.cityCode}</TableCell>
+                  <TableCell>{item.currency}</TableCell>
+                  <TableCell>
+                    <Switch checked={item.enable} onChange={() => handleEnable(item)} />
+                  </TableCell>
+                  <TableCell>
+                    <IconButton size="small" onClick={() => handleEdit(item)}><EditIcon /></IconButton>
+                  </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {agents.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={4} align="center">暂无数据</TableCell>
-                  </TableRow>
-                ) : (
-                  agents.map(agent => (
-                    <TableRow key={agent.id}>
-                      <TableCell>{agent.name}</TableCell>
-                      <TableCell>{agent.contact}</TableCell>
-                      <TableCell>
-                        <Switch
-                          checked={agent.enable}
-                          onChange={() => handleDelete(agent.id!, agent.enable)}
-                          color="primary"
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <IconButton color="primary" onClick={() => handleEdit(agent)} size="small">
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton color="secondary" onClick={() => handleDelete(agent.id!, agent.enable)} size="small">
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Box display="flex" justifyContent="flex-end" mt={2}>
-            <Pagination
-              count={Math.ceil(total / pageSize) || 1}
-              page={pageIndex}
-              onChange={(_, value) => setPageIndex(value)}
-              color="primary"
-            />
-          </Box>
-        </>
-      )}
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        component="div"
+        count={total}
+        page={pageIndex}
+        onPageChange={(_, newPage) => setPageIndex(newPage)}
+        rowsPerPage={pageSize}
+        onRowsPerPageChange={e => { setPageSize(Number(e.target.value)); setPageIndex(0); }}
+        rowsPerPageOptions={[10, 20, 50]}
+      />
       <AgentFormDialog
         open={dialogOpen}
-        onClose={() => { setDialogOpen(false); setEditingId(null); }}
-        onSubmit={handleSubmit}
-        form={form}
-        setForm={setForm}
-        editingId={editingId}
+        onClose={() => { setDialogOpen(false); setEditingAgent(null); }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!editingAgent?.name || !editingAgent?.contact) return;
+          handleSubmit(editingAgent as Agent);
+        }}
+        form={editingAgent || { name: '', contact: '', enable: true }}
+        setForm={f => setEditingAgent(f as Agent | null)}
+        editingId={editingAgent?.id || null}
       />
     </Box>
   );

@@ -64,9 +64,12 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
                   <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       {t('welcome')}
                   </Typography>
-                  {/* 语言切换按钮 */}
-                  <Button color="inherit" onClick={() => i18n.changeLanguage('zh')}>中文</Button>
-                  <Button color="inherit" onClick={() => i18n.changeLanguage('en')}>English</Button>
+                  {/* 语言切换按钮（仅显示当前非激活语言） */}
+                  {i18n.language === 'zh' ? (
+                    <Button color="inherit" size="small" sx={{ minWidth: 0, px: 1 }} onClick={() => i18n.changeLanguage('en')}>EN</Button>
+                  ) : (
+                    <Button color="inherit" size="small" sx={{ minWidth: 0, px: 1 }} onClick={() => i18n.changeLanguage('zh')}>中</Button>
+                  )}
                   {userInfo ? (
                     <>
                       <Typography color="inherit" sx={{ mr: 2 }}>
