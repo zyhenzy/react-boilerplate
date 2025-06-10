@@ -8,13 +8,15 @@ import Users from './pages/Users';
 import Settings from './pages/Settings';
 import {Box} from "@mui/material";
 import Login from "./pages/Login";
-import './styles/App.scss';  // 引入你的SCSS文件
+import './styles/App.scss';
+import Register from "./pages/Register";  // 引入你的SCSS文件
 
 const App: React.FC = () => {
     return (
         <Router>
             <Routes>
                 <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
                 <Route
                     path="*"
                     element={

@@ -50,6 +50,9 @@ const Login: React.FC = () => {
                     <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }} onClick={handleLogin}>
                         登录
                     </Button>
+                    <Button variant="text" color="secondary" fullWidth sx={{ mt: 1 }} onClick={() => navigate('/register')}>
+                        注册
+                    </Button>
                 </Box>
             </Box>
         </Container>
