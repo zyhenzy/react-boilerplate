@@ -14,12 +14,18 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAndStoreUserInfo } from '../api/user';
 import { useTranslation } from 'react-i18next';
+import { useMediaQuery, Theme } from '@mui/material';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  onMenuClick?: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
   const userInfo = useSelector((state: any) => state.user.userInfo);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
   useEffect(() => {
     (async () => {
@@ -43,15 +49,18 @@ const Navbar: React.FC = () => {
       <Box>
           <AppBar position="static">
               <Toolbar>
-                  <IconButton
-                      size="large"
-                      edge="start"
-                      color="inherit"
-                      aria-label="menu"
-                      sx={{ mr: 2 }}
-                  >
-                      <MenuIcon />
-                  </IconButton>
+                  {isMobile && (
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                        onClick={onMenuClick}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                  )}
                   <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       {t('welcome')}
                   </Typography>

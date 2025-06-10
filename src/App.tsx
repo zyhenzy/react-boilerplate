@@ -1,6 +1,7 @@
 // src/App.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useMediaQuery, Theme } from '@mui/material';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
@@ -11,13 +12,13 @@ import Login from "./pages/Login";
 import './styles/App.scss';
 import Register from "./pages/Register";
 import Agent from "./pages/Agent/Agent";
-import { useTranslation } from 'react-i18next';
 
 const App: React.FC = () => {
-    const { t, i18n } = useTranslation();
-    const handleChangeLanguage = (lng: string) => {
-        i18n.changeLanguage(lng);
-    };
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+    const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
+    const handleDrawerClose = () => setMobileOpen(false);
+
     return (
         <Router>
             <Routes>
@@ -27,10 +28,10 @@ const App: React.FC = () => {
                     path="*"
                     element={
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-                            <Navbar />
+                            <Navbar onMenuClick={handleDrawerToggle} />
                             <div style={{ display: 'flex', flexGrow: 1 }}>
-                                <Sidebar />
-                                <Box component="main" sx={{ flex: 1 }}>
+                                <Sidebar mobileOpen={mobileOpen} onClose={handleDrawerClose} />
+                                <Box component="main" sx={{ flex: 1, width: '100%', ml: isMobile ? 0 : '0px', p: isMobile ? 1 : 3 }}>
                                     <Routes>
                                         <Route path="/" element={<Dashboard />} />
                                         <Route path="/user" element={<User />} />

@@ -1,52 +1,74 @@
 import React from 'react';
-import { Box, Drawer, List, ListItem, ListItemText, Divider } from '@mui/material';
-import { Link, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import {Box, Drawer, List, ListItem, ListItemText, Divider, useMediaQuery, Theme} from '@mui/material';
+import {Link, useLocation} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
-const Sidebar: React.FC = () => {
-    const location = useLocation(); // 获取当前路径
-    const { t } = useTranslation();
+interface SidebarProps {
+    mobileOpen: boolean;
+    onClose: () => void;
+}
 
-    // 判断是否选中
+const Sidebar: React.FC<SidebarProps> = ({mobileOpen, onClose}) => {
+    const location = useLocation();
+    const {t} = useTranslation();
+    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+
     const getListItemStyle = (path: string) => {
         return location.pathname === path
-            ? { backgroundColor: '#f4f4f4', color: '#1976d2' } // 选中项的样式
-            : {}; // 未选中项的样式
+            ? {backgroundColor: '#f4f4f4', color: '#1976d2'}
+            : {};
     };
 
+    const drawerContent = (
+        <List sx={{height: '100%'}}>
+            <ListItem component={Link} to="/" sx={getListItemStyle('/')}> <ListItemText
+                primary={t('dashboard')}/></ListItem>
+            <ListItem component={Link} to="/user" sx={getListItemStyle('/user')}><ListItemText
+                primary={t('user')}/></ListItem>
+            <ListItem component={Link} to="/settings" sx={getListItemStyle('/settings')}><ListItemText
+                primary={t('settings')}/></ListItem>
+            <ListItem component={Link} to="/agent" sx={getListItemStyle('/agent')}><ListItemText primary={t('agent')}/></ListItem>
+        </List>
+    );
+
     return (
-        <Box sx={{ width: 250,height:'100%'}}>
-            <Drawer
-                variant="permanent"
-                sx={{
-                    width: 250,
-                    flexShrink: 0,
-                    height:'100%',
-                    '& .MuiDrawer-paper': {
+        <Box sx={{width: isMobile ? 0 : 250, height: '100%'}}>
+            {isMobile ? (
+                <Drawer
+                    variant="temporary"
+                    open={mobileOpen}
+                    onClose={onClose}
+                    ModalProps={{keepMounted: true}}
+                    sx={{
+                        '& .MuiDrawer-paper': {
+                            width: 250,
+                            boxSizing: 'border-box',
+                        },
+                    }}
+                >
+                    {drawerContent}
+                    <Divider/>
+                </Drawer>
+            ) : (
+                <Drawer
+                    variant="permanent"
+                    sx={{
                         width: 250,
-                        boxSizing: 'border-box',
-                        position: 'relative', // 覆盖默认的 fixed
-                        height:'100%'
-                    },
-                }}
-            >
-                <List sx={{height:'100%'}}>
-                    {/* 使用 getListItemStyle 函数来动态设置选中项的样式 */}
-                    <ListItem component={Link} to="/" sx={getListItemStyle('/')}>
-                        <ListItemText primary={t('dashboard')} />
-                    </ListItem>
-                    <ListItem component={Link} to="/user" sx={getListItemStyle('/user')}>
-                        <ListItemText primary={t('user')} />
-                    </ListItem>
-                    <ListItem component={Link} to="/settings" sx={getListItemStyle('/settings')}>
-                        <ListItemText primary={t('settings')} />
-                    </ListItem>
-                    <ListItem component={Link} to="/agent" sx={getListItemStyle('/agent')}>
-                        <ListItemText primary={t('agent')} />
-                    </ListItem>
-                </List>
-                <Divider />
-            </Drawer>
+                        flexShrink: 0,
+                        height: '100%',
+                        '& .MuiDrawer-paper': {
+                            width: 250,
+                            boxSizing: 'border-box',
+                            position: 'relative',
+                            height: '100%'
+                        },
+                    }}
+                    open
+                >
+                    {drawerContent}
+                    <Divider/>
+                </Drawer>
+            )}
         </Box>
     );
 };
