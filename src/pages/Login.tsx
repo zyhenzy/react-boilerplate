@@ -1,26 +1,30 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../api/user';
+import type { LoginParams } from '../api/user/data';
 
 const Login: React.FC = () => {
-    const [username, setUsername] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = () => {
-        if (username === '' || password === '') {
-            setError('用户名和密码不能为空');
+    const handleLogin = async () => {
+        if (phoneNumber === '' || password === '') {
+            setError('手机号和密码不能为空');
             return;
         }
-
-        // 登录逻辑可以放在这里，假设用户名为 "admin" 和密码为 "123456"
-        if (username === 'admin' && password === '123456') {
+        try {
+            const params: LoginParams = {
+                phoneNumber,
+                password,
+            };
+            await loginUser(params);
             setError('');
-            // 登录成功后跳转到 dashboard
             navigate('/');
-        } else {
-            setError('用户名或密码错误');
+        } catch (e: any) {
+            setError(e?.message || '登录失败');
         }
     };
 
@@ -31,12 +35,12 @@ const Login: React.FC = () => {
                 <Box sx={{ width: '100%', mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     {error && <Typography color="error">{error}</Typography>}
                     <TextField
-                        label="用户名"
+                        label="手机号"
                         variant="outlined"
                         margin="normal"
                         fullWidth
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
                     />
                     <TextField
                         label="密码"
@@ -60,3 +64,4 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+

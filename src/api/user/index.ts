@@ -1,4 +1,5 @@
 import http from '../../utils/http';
+import {RegisterParams, LoginParams} from "./data";
 
 /**
  * 注册用户接口
@@ -10,16 +11,10 @@ export function registerUser(params: RegisterParams) {
 }
 
 /**
- * 注册参数接口
+ * 登录用户接口
+ * @param params 登录参数
+ * @returns Promise<any>
  */
-export interface RegisterParams {
-  userName: string;
-  name: string;
-  sex?: 'M' | 'F' | 'O' | null;
-  phoneNumber: string;
-  countryNumber: string;
-  password: string;
-  agentId?: string | null;
-  role?: string | null;
-  enable: boolean;
+export function loginUser(params: LoginParams) {
+  return http.post('/v1/User/login', params);
 }

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Container, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { registerUser, RegisterParams } from '../api/user';
+import { registerUser } from '../api/user';
 import { COUNTRY_OPTIONS } from '../constants/countryCodes';
 import Autocomplete from '@mui/material/Autocomplete';
+import {RegisterParams} from "../api/user/data";
 
 const Register: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -44,7 +45,7 @@ const Register: React.FC = () => {
             await registerUser(params);
             navigate('/login');
         } catch (e: any) {
-            setError(e?.response?.data?.message || '注册失败');
+            setError(e?.message || '注册失败');
         }
     };
 
@@ -59,6 +60,7 @@ const Register: React.FC = () => {
                         variant="outlined"
                         margin="normal"
                         fullWidth
+                        size="small"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                     />
@@ -67,6 +69,7 @@ const Register: React.FC = () => {
                         variant="outlined"
                         margin="normal"
                         fullWidth
+                        size="small"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
@@ -75,6 +78,7 @@ const Register: React.FC = () => {
                         variant="outlined"
                         margin="normal"
                         fullWidth
+                        size="small"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                     />
@@ -84,7 +88,7 @@ const Register: React.FC = () => {
                         value={COUNTRY_OPTIONS.find(option => option.code === countryNumber) || null}
                         onChange={(_, newValue) => setCountryNumber(newValue ? newValue.code : '')}
                         renderInput={(params) => (
-                            <TextField {...params} label="国家号码*" margin="normal" fullWidth />
+                            <TextField {...params} label="国家号码*" margin="normal" fullWidth size="small" />
                         )}
                         size="small"
                         ListboxProps={{ style: { maxHeight: 200 } }}
@@ -97,6 +101,7 @@ const Register: React.FC = () => {
                         variant="outlined"
                         margin="normal"
                         fullWidth
+                        size="small"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
@@ -106,15 +111,17 @@ const Register: React.FC = () => {
                         variant="outlined"
                         margin="normal"
                         fullWidth
+                        size="small"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                     <FormControl fullWidth margin="normal">
-                        <InputLabel id="sex-label">性别</InputLabel>
+                        <InputLabel id="sex-label" size="small">性别</InputLabel>
                         <Select
                             labelId="sex-label"
                             value={sex}
                             label="性别"
+                            size="small"
                             onChange={(e) => setSex(e.target.value as 'M' | 'F' | 'O')}
                         >
                             <MenuItem value="M">男 (Male)</MenuItem>
@@ -127,6 +134,7 @@ const Register: React.FC = () => {
                         variant="outlined"
                         margin="normal"
                         fullWidth
+                        size="small"
                         value={agentId}
                         onChange={(e) => setAgentId(e.target.value)}
                     />
@@ -135,6 +143,7 @@ const Register: React.FC = () => {
                         variant="outlined"
                         margin="normal"
                         fullWidth
+                        size="small"
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
                     />
@@ -149,5 +158,6 @@ const Register: React.FC = () => {
         </Container>
     );
 };
+
 
 export default Register;

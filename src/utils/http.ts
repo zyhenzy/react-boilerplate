@@ -29,7 +29,14 @@ http.interceptors.request.use(
 // 响应拦截器
 http.interceptors.response.use(
   (response: AxiosResponse) => {
-    return response.data;
+    console.log(response)
+    const data = response.data;
+    if (data.code === -1) {
+      // 统一处理异常，抛出data.message
+      return Promise.reject(new Error(data.message || '请求失败'));
+    } else {
+      return data;
+    }
   },
   (error) => {
     // 可以统一处理错误
@@ -38,4 +45,3 @@ http.interceptors.response.use(
 );
 
 export default http;
-
