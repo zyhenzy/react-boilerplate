@@ -21,5 +21,5 @@ export interface LoginParams {
   phoneNumber?: string; // todo：手机号，字符串
   password: string;
   userName: string;
-  url?: string; // todo：登录后跳转的URL，字符串
+  isAdmin?: boolean; // 是否是后台管理系统
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { Agent } from "../../api/agent/types";
 import { createAgent, enableAgent, getAgentList, updateAgent } from "../../api/agent";
+import { getCountryOptions } from '../../api/basic';
 import {
   Box,
   Button,
@@ -17,8 +18,8 @@ import {
   TablePagination
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import AgentFormDialog from './components/AgentFormDialog';
+import {IOption} from "../../api/basic/types";
 
 const AgentPage: React.FC = () => {
   const [data, setData] = useState<Agent[]>([]);
@@ -28,21 +29,31 @@ const AgentPage: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingAgent, setEditingAgent] = useState<Agent | null>(null);
+  const [countryOptions, setCountryOptions] = useState<IOption[]>([]);
 
   const fetchData = async () => {
     setLoading(true);
     try {
       const res = await getAgentList({ PageIndex: pageIndex + 1, PageSize: pageSize });
-      setData(res.data?.items || []);
-      setTotal(res.data?.total || 0);
+      setData(res.data || []);
+      setTotal(res.total || 0);
     } finally {
       setLoading(false);
     }
   };
 
+  // 获取国家选项
+  const fetchCountryOptions = async () => {
+    const res = await getCountryOptions();
+    setCountryOptions(res);
+  };
+
+  useEffect(() => {
+    fetchCountryOptions();
+  }, []);
+
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line
   }, [pageIndex, pageSize]);
 
   const handleAdd = () => {
@@ -100,7 +111,7 @@ const AgentPage: React.FC = () => {
                 <TableRow key={item.id}>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.contact}</TableCell>
-                  <TableCell>{item.countryCode}</TableCell>
+                  <TableCell>{countryOptions.find(opt => opt.value === item.countryCode)?.label || item.countryCode}</TableCell>
                   <TableCell>{item.cityCode}</TableCell>
                   <TableCell>{item.currency}</TableCell>
                   <TableCell>
@@ -135,6 +146,7 @@ const AgentPage: React.FC = () => {
         form={editingAgent || { name: '', contact: '', enable: true }}
         setForm={f => setEditingAgent(f as Agent | null)}
         editingId={editingAgent?.id || null}
+        countryOptions={countryOptions}
       />
     </Box>
   );

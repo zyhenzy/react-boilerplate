@@ -2,6 +2,8 @@ import http from '../../utils/http';
 import {RegisterParams, LoginParams} from "./types";
 import { setUserInfo, clearUserInfo } from '../../store/userSlice';
 import { AppDispatch } from '../../store';
+import type {ListResponse} from "../types";
+import type {Agent} from "../agent/types";
 
 /**
  * 注册
@@ -18,7 +20,8 @@ export function registerUser(params: RegisterParams) {
  * @returns Promise<any>
  */
 export function loginUser(params: LoginParams) {
-  return http.post('/v1/User/login', params);
+  const _params:LoginParams = Object.assign({isAdmin:true}, params);
+  return http.post('/v1/User/login', _params);
 }
 
 /**
@@ -78,7 +81,7 @@ export function enableUser(params: any) {
  * @returns Promise<any>
  */
 export function getUserList(params?: any) {
-  return http.get('/v1/User/list', { params });
+  return http.get<ListResponse<any>>('/v1/User/list', { params });
 }
 
 /**

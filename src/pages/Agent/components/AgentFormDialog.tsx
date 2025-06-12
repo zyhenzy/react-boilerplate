@@ -12,7 +12,7 @@ import {
   FormControl
 } from '@mui/material';
 import type { Agent } from '../../../api/agent/types';
-import { COUNTRY_OPTIONS } from '../../../constants/countryCodes';
+import {IOption} from "../../../api/basic/types";
 
 interface AgentFormDialogProps {
   open: boolean;
@@ -21,6 +21,7 @@ interface AgentFormDialogProps {
   form: Partial<Agent>;
   setForm: React.Dispatch<React.SetStateAction<Partial<Agent>>>;
   editingId: string | null;
+  countryOptions: IOption[];
 }
 
 const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
@@ -29,7 +30,8 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
   onSubmit,
   form,
   setForm,
-  editingId
+  editingId,
+  countryOptions
 }) => (
   <Dialog open={open} onClose={onClose}>
     <form onSubmit={onSubmit}>
@@ -63,9 +65,8 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
             onChange={e => setForm(f => ({ ...f, countryCode: e.target.value }))}
             displayEmpty
           >
-            <MenuItem value=""><em>无</em></MenuItem>
-            {COUNTRY_OPTIONS.map(option => (
-              <MenuItem key={option.code} value={option.code}>{option.display}</MenuItem>
+            {countryOptions.map(option => (
+              <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
             ))}
           </Select>
         </FormControl>

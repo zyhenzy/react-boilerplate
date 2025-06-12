@@ -31,8 +31,8 @@ const UserPage: React.FC = () => {
     setLoading(true);
     try {
       const res = await getUserList({ PageIndex: pageIndex + 1, PageSize: pageSize });
-      setData(res.data?.items || []);
-      setTotal(res.data?.total || 0);
+      setData(res.data || []);
+      setTotal(res.total || 0);
     } finally {
       setLoading(false);
     }
