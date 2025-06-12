@@ -19,9 +19,11 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import AgentFormDialog from './components/AgentFormDialog';
-import {IOption} from "../../api/basic/types";
+import { IOption } from "../../api/basic/types";
+import { useTranslation } from 'react-i18next';
 
 const AgentPage: React.FC = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState<Agent[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -87,27 +89,27 @@ const AgentPage: React.FC = () => {
   return (
     <Box p={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <h2>代理管理</h2>
-        <Button variant="contained" onClick={handleAdd}>新增</Button>
+        <h2>{t('agent.title')}</h2>
+        <Button variant="contained" onClick={handleAdd}>{t('agent.add')}</Button>
       </Box>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>名称</TableCell>
-              <TableCell>联系方式</TableCell>
-              <TableCell>国家代码</TableCell>
-              <TableCell>城市代码</TableCell>
-              <TableCell>币种</TableCell>
-              <TableCell>启用</TableCell>
-              <TableCell>操作</TableCell>
+              <TableCell>{t('agent.name')}</TableCell>
+              <TableCell>{t('agent.contact')}</TableCell>
+              <TableCell>{t('agent.countryCode')}</TableCell>
+              <TableCell>{t('agent.cityCode')}</TableCell>
+              <TableCell>{t('agent.currency')}</TableCell>
+              <TableCell>{t('agent.enable')}</TableCell>
+              <TableCell>{t('agent.actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {loading ? (
-              <TableRow><TableCell colSpan={7} align="center"><CircularProgress size={24} /></TableCell></TableRow>
+              <TableRow><TableCell colSpan={7} align="center">{t('agent.loading')}</TableCell></TableRow>
             ) : data.length === 0 ? (
-              <TableRow><TableCell colSpan={7}>暂无数据</TableCell></TableRow>
+              <TableRow><TableCell colSpan={7}>{t('agent.noData')}</TableCell></TableRow>
             ) : (
               data.map(item => (
                 <TableRow key={item.id}>

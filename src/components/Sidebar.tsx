@@ -27,7 +27,7 @@ const Sidebar: React.FC<SidebarProps> = ({mobileOpen, onClose}) => {
                 primary={t('user')}/></ListItem>
             <ListItem component={Link} to="/settings" sx={getListItemStyle('/settings')}><ListItemText
                 primary={t('settings')}/></ListItem>
-            <ListItem component={Link} to="/agent" sx={getListItemStyle('/agent')}><ListItemText primary={t('agent')}/></ListItem>
+            <ListItem component={Link} to="/agent" sx={getListItemStyle('/agent')}><ListItemText primary={t('agent.title')}/></ListItem>
             <ListItem component={Link} to="/supplier" sx={getListItemStyle('/supplier')}><ListItemText primary={t('supplier')}/></ListItem>
         </List>
     );

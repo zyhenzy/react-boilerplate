@@ -5,6 +5,21 @@
   "settings": "Settings",
   "dashboard": "Dashboard",
   "user": "User",
-  "agent": "Agent",
+  "agent": {
+    "title": "Agent",
+    "name": "Name",
+    "contact": "Contact",
+    "countryCode": "Country Code",
+    "cityCode": "City Code",
+    "currency": "Currency",
+    "enable": "Enable",
+    "actions": "Actions",
+    "add": "Add Agent",
+    "edit": "Edit Agent",
+    "noData": "No data",
+    "loading": "Loading...",
+    "invoiceHeader": "Invoice Header",
+    "invoiceTaxNumber": "Invoice Tax Number"
+  },
   "supplier": "Supplier"
 }

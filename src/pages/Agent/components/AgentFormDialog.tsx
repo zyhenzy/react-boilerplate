@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import type { Agent } from '../../../api/agent/types';
 import {IOption} from "../../../api/basic/types";
+import { useTranslation } from 'react-i18next';
 
 interface AgentFormDialogProps {
   open: boolean;
@@ -32,93 +33,96 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
   setForm,
   editingId,
   countryOptions
-}) => (
-  <Dialog open={open} onClose={onClose}>
-    <form onSubmit={onSubmit}>
-      <DialogTitle>{editingId ? '编辑Agent' : '新增Agent'}</DialogTitle>
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          label="名称"
-          fullWidth
-          value={form.name || ''}
-          onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-          required
-          inputProps={{ maxLength: 50 }}
-        />
-        <TextField
-          margin="dense"
-          label="联系方式"
-          fullWidth
-          value={form.contact || ''}
-          onChange={e => setForm(f => ({ ...f, contact: e.target.value }))}
-          required
-          inputProps={{ maxLength: 50 }}
-        />
-        <FormControl fullWidth margin="dense">
-          <InputLabel id="countryCode-label">国家代码</InputLabel>
-          <Select
-            labelId="countryCode-label"
-            label="国家代码"
-            value={form.countryCode || ''}
-            onChange={e => setForm(f => ({ ...f, countryCode: e.target.value }))}
-            displayEmpty
-          >
-            {countryOptions.map(option => (
-              <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <TextField
-          margin="dense"
-          label="城市代码"
-          fullWidth
-          value={form.cityCode || ''}
-          onChange={e => setForm(f => ({ ...f, cityCode: e.target.value }))}
-          inputProps={{ maxLength: 3 }}
-        />
-        <TextField
-          margin="dense"
-          label="币种"
-          fullWidth
-          value={form.currency || ''}
-          onChange={e => setForm(f => ({ ...f, currency: e.target.value }))}
-          inputProps={{ maxLength: 3 }}
-        />
-        <TextField
-          margin="dense"
-          label="发票抬头"
-          fullWidth
-          value={form.invoiceHeader || ''}
-          onChange={e => setForm(f => ({ ...f, invoiceHeader: e.target.value }))}
-          inputProps={{ maxLength: 50 }}
-        />
-        <TextField
-          margin="dense"
-          label="发票税号"
-          fullWidth
-          value={form.invoiceTaxNumber || ''}
-          onChange={e => setForm(f => ({ ...f, invoiceTaxNumber: e.target.value }))}
-          inputProps={{ maxLength: 50 }}
-        />
-        <div style={{marginTop: 8}}>
-          <label style={{display: 'flex', alignItems: 'center'}}>
-            <span style={{marginRight: 8}}>启用</span>
-            <input
-              type="checkbox"
-              checked={form.enable ?? true}
-              onChange={e => setForm(f => ({ ...f, enable: e.target.checked }))}
-            />
-          </label>
-        </div>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="secondary">取消</Button>
-        <Button type="submit" variant="contained" color="primary">{editingId ? '更新' : '新增'}</Button>
-      </DialogActions>
-    </form>
-  </Dialog>
-);
+}) => {
+  const { t } = useTranslation();
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <form onSubmit={onSubmit}>
+        <DialogTitle>{editingId ? t('agent.edit') : t('agent.add')}</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label={t('agent.name')}
+            fullWidth
+            value={form.name || ''}
+            onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+            required
+            inputProps={{ maxLength: 50 }}
+          />
+          <TextField
+            margin="dense"
+            label={t('agent.contact')}
+            fullWidth
+            value={form.contact || ''}
+            onChange={e => setForm(f => ({ ...f, contact: e.target.value }))}
+            required
+            inputProps={{ maxLength: 50 }}
+          />
+          <FormControl fullWidth margin="dense">
+            <InputLabel id="countryCode-label">{t('agent.countryCode')}</InputLabel>
+            <Select
+              labelId="countryCode-label"
+              label={t('agent.countryCode')}
+              value={form.countryCode || ''}
+              onChange={e => setForm(f => ({ ...f, countryCode: e.target.value }))}
+              displayEmpty
+            >
+              {countryOptions.map(option => (
+                <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            margin="dense"
+            label={t('agent.cityCode')}
+            fullWidth
+            value={form.cityCode || ''}
+            onChange={e => setForm(f => ({ ...f, cityCode: e.target.value }))}
+            inputProps={{ maxLength: 3 }}
+          />
+          <TextField
+            margin="dense"
+            label={t('agent.currency')}
+            fullWidth
+            value={form.currency || ''}
+            onChange={e => setForm(f => ({ ...f, currency: e.target.value }))}
+            inputProps={{ maxLength: 3 }}
+          />
+          <TextField
+            margin="dense"
+            label={t('agent.invoiceHeader')}
+            fullWidth
+            value={form.invoiceHeader || ''}
+            onChange={e => setForm(f => ({ ...f, invoiceHeader: e.target.value }))}
+            inputProps={{ maxLength: 50 }}
+          />
+          <TextField
+            margin="dense"
+            label={t('agent.invoiceTaxNumber')}
+            fullWidth
+            value={form.invoiceTaxNumber || ''}
+            onChange={e => setForm(f => ({ ...f, invoiceTaxNumber: e.target.value }))}
+            inputProps={{ maxLength: 50 }}
+          />
+          <div style={{marginTop: 8}}>
+            <label style={{display: 'flex', alignItems: 'center'}}>
+              <span style={{marginRight: 8}}>{t('agent.enable')}</span>
+              <input
+                type="checkbox"
+                checked={form.enable ?? true}
+                onChange={e => setForm(f => ({ ...f, enable: e.target.checked }))}
+              />
+            </label>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose} color="secondary">{t('cancel', '取消')}</Button>
+          <Button type="submit" variant="contained" color="primary">{editingId ? t('update', '更新') : t('add', '新增')}</Button>
+        </DialogActions>
+      </form>
+    </Dialog>
+  );
+};
 
 export default AgentFormDialog;

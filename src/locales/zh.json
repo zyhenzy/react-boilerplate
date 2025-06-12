@@ -5,6 +5,21 @@
   "settings": "设置",
   "dashboard": "仪表盘",
   "user": "用户",
-  "agent": "代理",
+  "agent": {
+    "title": "代理",
+    "name": "名称",
+    "contact": "联系方式",
+    "countryCode": "国家代码",
+    "cityCode": "城市代码",
+    "currency": "币种",
+    "enable": "启用",
+    "actions": "操作",
+    "add": "新增代理",
+    "edit": "编辑代理",
+    "noData": "暂无数据",
+    "loading": "加载中...",
+    "invoiceHeader": "发票抬头",
+    "invoiceTaxNumber": "发票税号"
+  },
   "supplier": "供应商"
 }
