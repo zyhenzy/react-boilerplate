@@ -78,7 +78,9 @@ const AgentPage: React.FC = () => {
   };
 
   const handleEnable = async (agent: Agent) => {
+    setLoading(true);
     await enableAgent(agent.id!, !agent.enable);
+    setLoading(false);
     fetchData();
   };
 
@@ -115,10 +117,10 @@ const AgentPage: React.FC = () => {
                   <TableCell>{item.cityCode}</TableCell>
                   <TableCell>{item.currency}</TableCell>
                   <TableCell>
-                    <Switch checked={item.enable} onChange={() => handleEnable(item)} />
+                    <Switch checked={item.enable} onChange={() => handleEnable(item)} disabled={loading} />
                   </TableCell>
                   <TableCell>
-                    <IconButton size="small" onClick={() => handleEdit(item)}><EditIcon /></IconButton>
+                    <IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>
                   </TableCell>
                 </TableRow>
               ))
