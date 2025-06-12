@@ -17,8 +17,11 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import UserFormDialog from './components/UserFormDialog';
 import { getUserList, addUser, updateUser, enableUser } from '../../api/user';
+import { getRoleOptions } from '../../api/basic';
+import { useTranslation } from 'react-i18next';
 
 const UserPage: React.FC = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -26,6 +29,7 @@ const UserPage: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<any | null>(null);
+  const [roleOptions, setRoleOptions] = useState<{ value: string; label: string }[]>([]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -38,8 +42,14 @@ const UserPage: React.FC = () => {
     }
   };
 
+  const fetchRoleOptions = async () => {
+    const res = await getRoleOptions();
+    setRoleOptions(res || []);
+  };
+
   useEffect(() => {
     fetchData();
+    fetchRoleOptions();
     // eslint-disable-next-line
   }, [pageIndex, pageSize]);
 
@@ -65,33 +75,35 @@ const UserPage: React.FC = () => {
   };
 
   const handleEnable = async (user: any) => {
+    setLoading(true);
     await enableUser({ id: user.id, enable: !user.enable });
+    setLoading(false);
     fetchData();
   };
 
   return (
     <Box p={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <h2>用户管理</h2>
-        <Button variant="contained" onClick={handleAdd}>新增</Button>
+        <h2>{t('user.title')}</h2>
+        <Button variant="contained" onClick={handleAdd}>{t('user.add')}</Button>
       </Box>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>用户名</TableCell>
-              <TableCell>姓名</TableCell>
-              <TableCell>手机号</TableCell>
-              <TableCell>国家号码</TableCell>
-              <TableCell>启用</TableCell>
-              <TableCell>操作</TableCell>
+              <TableCell>{t('user.userName')}</TableCell>
+              <TableCell>{t('user.name')}</TableCell>
+              <TableCell>{t('user.phoneNumber')}</TableCell>
+              <TableCell>{t('user.countryNumber')}</TableCell>
+              <TableCell>{t('user.enable')}</TableCell>
+              <TableCell>{t('user.actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {loading ? (
-              <TableRow><TableCell colSpan={6} align="center"><CircularProgress size={24} /></TableCell></TableRow>
+              <TableRow><TableCell colSpan={6} align="center">{t('user.loading')}</TableCell></TableRow>
             ) : data.length === 0 ? (
-              <TableRow><TableCell colSpan={6}>暂无数据</TableCell></TableRow>
+              <TableRow><TableCell colSpan={6}>{t('user.noData')}</TableCell></TableRow>
             ) : (
               data.map(item => (
                 <TableRow key={item.id}>
@@ -100,10 +112,10 @@ const UserPage: React.FC = () => {
                   <TableCell>{item.phoneNumber}</TableCell>
                   <TableCell>{item.countryNumber}</TableCell>
                   <TableCell>
-                    <Switch checked={item.enable} onChange={() => handleEnable(item)} />
+                    <Switch checked={item.enable} onChange={() => handleEnable(item)} disabled={loading} />
                   </TableCell>
                   <TableCell>
-                    <IconButton size="small" onClick={() => handleEdit(item)}><EditIcon /></IconButton>
+                    <IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>
                   </TableCell>
                 </TableRow>
               ))
@@ -123,10 +135,15 @@ const UserPage: React.FC = () => {
       <UserFormDialog
         open={dialogOpen}
         onClose={() => { setDialogOpen(false); setEditingUser(null); }}
-        onSubmit={handleSubmit}
-        form={editingUser || { enable: true }}
-        setForm={setEditingUser}
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!editingUser?.userName || !editingUser?.name) return;
+          handleSubmit(editingUser);
+        }}
+        form={editingUser || { userName: '', name: '', enable: true }}
+        setForm={f => setEditingUser(f as any)}
         editingId={editingUser?.id || null}
+        roleOptions={roleOptions}
       />
     </Box>
   );

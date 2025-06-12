@@ -1,9 +1,10 @@
 import http from '../../utils/http';
 import type { Supplier, SupplierQuery } from './types';
+import {ListResponse} from "../types";
 
 // 获取供应商列表
 export function getSupplierList(params?: SupplierQuery) {
-  return http.get('/v1/Supplier/list', { params });
+  return http.get<ListResponse<Supplier>>('/v1/Supplier/list', { params });
 }
 
 // 获取供应商详情

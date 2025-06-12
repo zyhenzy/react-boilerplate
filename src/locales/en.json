@@ -4,7 +4,22 @@
   "logout": "Logout",
   "settings": "Settings",
   "dashboard": "Dashboard",
-  "user": "User",
+  "user": {
+    "title": "User Management",
+    "userName": "Username",
+    "name": "Name",
+    "phoneNumber": "Phone Number",
+    "countryNumber": "Country Code",
+    "sex": "Gender",
+    "role": "Role",
+    "password": "Password",
+    "enable": "Enable",
+    "actions": "Actions",
+    "add": "Add User",
+    "edit": "Edit User",
+    "noData": "No data",
+    "loading": "Loading..."
+  },
   "agent": {
     "title": "Agent",
     "name": "Name",
@@ -21,5 +36,16 @@
     "invoiceHeader": "Invoice Header",
     "invoiceTaxNumber": "Invoice Tax Number"
   },
-  "supplier": "Supplier"
+  "supplier": {
+    "title": "Supplier Management",
+    "name": "Supplier Name",
+    "contact": "Contact",
+    "currency": "Currency",
+    "enable": "Enable",
+    "actions": "Actions",
+    "add": "Add Supplier",
+    "edit": "Edit Supplier",
+    "noData": "No data",
+    "loading": "Loading..."
+  }
 }

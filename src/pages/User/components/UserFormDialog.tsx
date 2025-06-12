@@ -10,6 +10,7 @@ import {
   FormControlLabel,
   Switch
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 interface UserFormDialogProps {
   open: boolean;
@@ -18,13 +19,8 @@ interface UserFormDialogProps {
   form: any;
   setForm: React.Dispatch<React.SetStateAction<any>>;
   editingId: string | null;
+  roleOptions: { value: string; label: string }[];
 }
-
-const sexOptions = [
-  { value: 'M', label: '男' },
-  { value: 'F', label: '女' },
-  { value: 'O', label: '其他' },
-];
 
 const UserFormDialog: React.FC<UserFormDialogProps> = ({
   open,
@@ -32,96 +28,111 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
   onSubmit,
   form,
   setForm,
-  editingId
-}) => (
-  <Dialog open={open} onClose={onClose}>
-    <form onSubmit={onSubmit}>
-      <DialogTitle>{editingId ? '编辑用户' : '新增用户'}</DialogTitle>
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          label="用户名"
-          fullWidth
-          value={form.userName || ''}
-          onChange={e => setForm((f: any) => ({ ...f, userName: e.target.value }))}
-          required
-          inputProps={{ maxLength: 25 }}
-        />
-        <TextField
-          margin="dense"
-          label="姓名"
-          fullWidth
-          value={form.name || ''}
-          onChange={e => setForm((f: any) => ({ ...f, name: e.target.value }))}
-          required
-          inputProps={{ maxLength: 25 }}
-        />
-        <TextField
-          margin="dense"
-          label="手机号"
-          fullWidth
-          value={form.phoneNumber || ''}
-          onChange={e => setForm((f: any) => ({ ...f, phoneNumber: e.target.value }))}
-          required
-          inputProps={{ maxLength: 25 }}
-        />
-        <TextField
-          margin="dense"
-          label="国家号码"
-          fullWidth
-          value={form.countryNumber || ''}
-          onChange={e => setForm((f: any) => ({ ...f, countryNumber: e.target.value }))}
-          required
-          inputProps={{ maxLength: 5 }}
-        />
-        <TextField
-          margin="dense"
-          label="性别"
-          select
-          fullWidth
-          value={form.sex || ''}
-          onChange={e => setForm((f: any) => ({ ...f, sex: e.target.value }))}
-        >
-          {sexOptions.map(option => (
-            <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          margin="dense"
-          label="角色"
-          fullWidth
-          value={form.role || ''}
-          onChange={e => setForm((f: any) => ({ ...f, role: e.target.value }))}
-        />
-        {!editingId && (
+  editingId,
+  roleOptions
+}) => {
+  const { t } = useTranslation();
+
+  const sexOptions = [
+    { value: 'M', label: t('user.sex_m', '男') },
+    { value: 'F', label: t('user.sex_f', '女') },
+    { value: 'O', label: t('user.sex_o', '其他') },
+  ];
+
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <form onSubmit={onSubmit}>
+        <DialogTitle>{editingId ? t('user.edit') : t('user.add')}</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label={t('user.userName')}
+            fullWidth
+            value={form.userName || ''}
+            onChange={e => setForm((f: any) => ({ ...f, userName: e.target.value }))}
+            required
+            inputProps={{ maxLength: 25 }}
+          />
           <TextField
             margin="dense"
-            label="密码"
-            type="password"
+            label={t('user.name')}
             fullWidth
-            value={form.password || ''}
-            onChange={e => setForm((f: any) => ({ ...f, password: e.target.value }))}
+            value={form.name || ''}
+            onChange={e => setForm((f: any) => ({ ...f, name: e.target.value }))}
             required
+            inputProps={{ maxLength: 25 }}
           />
-        )}
-        <FormControlLabel
-          control={
-            <Switch
-              checked={form.enable ?? true}
-              onChange={e => setForm((f: any) => ({ ...f, enable: e.target.checked }))}
+          <TextField
+            margin="dense"
+            label={t('user.phoneNumber')}
+            fullWidth
+            value={form.phoneNumber || ''}
+            onChange={e => setForm((f: any) => ({ ...f, phoneNumber: e.target.value }))}
+            required
+            inputProps={{ maxLength: 25 }}
+          />
+          <TextField
+            margin="dense"
+            label={t('user.countryNumber')}
+            fullWidth
+            value={form.countryNumber || ''}
+            onChange={e => setForm((f: any) => ({ ...f, countryNumber: e.target.value }))}
+            required
+            inputProps={{ maxLength: 5 }}
+          />
+          <TextField
+            margin="dense"
+            label={t('user.sex')}
+            select
+            fullWidth
+            value={form.sex || ''}
+            onChange={e => setForm((f: any) => ({ ...f, sex: e.target.value }))}
+          >
+            {sexOptions.map(option => (
+              <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            margin="dense"
+            label={t('user.role')}
+            select
+            fullWidth
+            value={form.role || ''}
+            onChange={e => setForm((f: any) => ({ ...f, role: e.target.value }))}
+          >
+            {roleOptions.map(option => (
+              <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+            ))}
+          </TextField>
+          {!editingId && (
+            <TextField
+              margin="dense"
+              label={t('user.password')}
+              type="password"
+              fullWidth
+              value={form.password || ''}
+              onChange={e => setForm((f: any) => ({ ...f, password: e.target.value }))}
+              required
             />
-          }
-          label="启用"
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="secondary">取消</Button>
-        <Button type="submit" variant="contained" color="primary">{editingId ? '更新' : '新增'}</Button>
-      </DialogActions>
-    </form>
-  </Dialog>
-);
+          )}
+          <FormControlLabel
+            control={
+              <Switch
+                checked={form.enable ?? true}
+                onChange={e => setForm((f: any) => ({ ...f, enable: e.target.checked }))}
+              />
+            }
+            label={t('user.enable')}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose} color="secondary">{t('cancel', '取消')}</Button>
+          <Button type="submit" variant="contained" color="primary">{editingId ? t('update', '更新') : t('add', '新增')}</Button>
+        </DialogActions>
+      </form>
+    </Dialog>
+  );
+};
 
 export default UserFormDialog;
-

@@ -7,8 +7,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import Switch from '@mui/material/Switch';
+import { useTranslation } from 'react-i18next';
 
 const SupplierPage: React.FC = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState<Supplier[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -77,25 +79,25 @@ const SupplierPage: React.FC = () => {
   return (
     <Box p={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <h2>供应商管理</h2>
-        <Button variant="contained" onClick={() => { setEditingSupplier(null); setDialogOpen(true); }}>新增</Button>
+        <h2>{t('supplier.title')}</h2>
+        <Button variant="contained" onClick={() => { setEditingSupplier(null); setDialogOpen(true); }}>{t('supplier.add')}</Button>
       </Box>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>名称</TableCell>
-              <TableCell>联系方式</TableCell>
-              <TableCell>币种</TableCell>
-              <TableCell>启用</TableCell>
-              <TableCell>操作</TableCell>
+              <TableCell>{t('supplier.name')}</TableCell>
+              <TableCell>{t('supplier.contact')}</TableCell>
+              <TableCell>{t('supplier.currency')}</TableCell>
+              <TableCell>{t('supplier.enable')}</TableCell>
+              <TableCell>{t('supplier.actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {loading ? (
-              <TableRow><TableCell colSpan={5} align="center"><CircularProgress size={24} /></TableCell></TableRow>
+              <TableRow><TableCell colSpan={5} align="center">{t('supplier.loading')}</TableCell></TableRow>
             ) : data.length === 0 ? (
-              <TableRow><TableCell colSpan={5}>暂无数据</TableCell></TableRow>
+              <TableRow><TableCell colSpan={5}>{t('supplier.noData')}</TableCell></TableRow>
             ) : (
               data.map(item => (
                 <TableRow key={item.id}>
@@ -103,10 +105,10 @@ const SupplierPage: React.FC = () => {
                   <TableCell>{item.contact}</TableCell>
                   <TableCell>{item.currency}</TableCell>
                   <TableCell>
-                    <Switch checked={item.enable} onChange={() => handleEnable(item)} />
+                    <Switch checked={item.enable} onChange={() => handleEnable(item)} disabled={loading} />
                   </TableCell>
                   <TableCell>
-                    <IconButton size="small" onClick={() => handleEdit(item)}><EditIcon /></IconButton>
+                    <IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>
                   </TableCell>
                 </TableRow>
               ))

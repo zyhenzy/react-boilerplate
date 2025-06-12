@@ -4,7 +4,22 @@
   "logout": "退出登录",
   "settings": "设置",
   "dashboard": "仪表盘",
-  "user": "用户",
+  "user": {
+    "title": "用户管理",
+    "userName": "用户名",
+    "name": "姓名",
+    "phoneNumber": "手机号",
+    "countryNumber": "国家号码",
+    "sex": "性别",
+    "role": "角色",
+    "password": "密码",
+    "enable": "启用",
+    "actions": "操作",
+    "add": "新增用户",
+    "edit": "编辑用户",
+    "noData": "暂无数据",
+    "loading": "加载中..."
+  },
   "agent": {
     "title": "代理",
     "name": "名称",
@@ -21,5 +36,16 @@
     "invoiceHeader": "发票抬头",
     "invoiceTaxNumber": "发票税号"
   },
-  "supplier": "供应商"
+  "supplier": {
+    "title": "供应商管理",
+    "name": "供应商名称",
+    "contact": "联系方式",
+    "currency": "币种",
+    "enable": "启用",
+    "actions": "操作",
+    "add": "新增供应商",
+    "edit": "编辑供应商",
+    "noData": "暂无数据",
+    "loading": "加载中..."
+  }
 }
