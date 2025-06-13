@@ -6,13 +6,11 @@ import {
   DialogTitle,
   TextField,
   Button,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl
+  MenuItem
 } from '@mui/material';
 import type { RequestOrder } from '../../../api/request-order/types';
 import { useTranslation } from 'react-i18next';
+import PassengerList from './PassengerList';
 
 interface RequestOrderFormDialogProps {
   open: boolean;
@@ -21,6 +19,7 @@ interface RequestOrderFormDialogProps {
   form: Partial<RequestOrder>;
   setForm: React.Dispatch<React.SetStateAction<Partial<RequestOrder>>>;
   editingId: string | null;
+  countryOptions: { label: string; value: string }[];
 }
 
 const RequestOrderFormDialog: React.FC<RequestOrderFormDialogProps> = ({
@@ -29,7 +28,8 @@ const RequestOrderFormDialog: React.FC<RequestOrderFormDialogProps> = ({
   onSubmit,
   form,
   setForm,
-  editingId
+  editingId,
+  countryOptions
 }) => {
   const { t } = useTranslation();
   return (
@@ -61,19 +61,18 @@ const RequestOrderFormDialog: React.FC<RequestOrderFormDialogProps> = ({
             value={form.phoneNumber || ''}
             onChange={e => setForm(f => ({ ...f, phoneNumber: e.target.value }))}
           />
-          <FormControl fullWidth margin="dense">
-            <InputLabel id="status-label">{t('requestOrder.status')}</InputLabel>
-            <Select
-              labelId="status-label"
-              label={t('requestOrder.status')}
-              value={form.status ?? 0}
-              onChange={e => setForm(f => ({ ...f, status: Number(e.target.value) }))}
-            >
-              <MenuItem value={0}>{t('requestOrder.status_0')}</MenuItem>
-              <MenuItem value={1}>{t('requestOrder.status_1')}</MenuItem>
-              <MenuItem value={2}>{t('requestOrder.status_2')}</MenuItem>
-            </Select>
-          </FormControl>
+          <TextField
+            select
+            margin="dense"
+            label={t('requestOrder.countryNumber')}
+            fullWidth
+            value={form.countryNumber || ''}
+            onChange={e => setForm(f => ({ ...f, countryNumber: e.target.value }))}
+          >
+            {countryOptions.map(opt => (
+              <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+            ))}
+          </TextField>
           <TextField
             margin="dense"
             label={t('requestOrder.remark')}
@@ -82,6 +81,11 @@ const RequestOrderFormDialog: React.FC<RequestOrderFormDialogProps> = ({
             onChange={e => setForm(f => ({ ...f, remark: e.target.value }))}
             multiline
             rows={2}
+          />
+          <PassengerList
+            countryOptions={countryOptions}
+            passengerList={form.passengerList || []}
+            onChange={list => setForm(f => ({ ...f, passengerList: list }))}
           />
         </DialogContent>
         <DialogActions>

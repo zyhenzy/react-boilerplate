@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { RequestOrder} from "../../api/request-order/types";
 import { getRequestOrderList, addRequestOrder, updateRequestOrder } from "../../api/request-order";
+import { getCountryOptions } from '../../api/basic';
 import {
   Box,
   Button,
@@ -27,6 +28,7 @@ const RequestOrderPage: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingOrder, setEditingOrder] = useState<RequestOrder | null>(null);
+  const [countryOptions, setCountryOptions] = useState<{ label: string; value: string }[]>([]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -42,6 +44,12 @@ const RequestOrderPage: React.FC = () => {
   useEffect(() => {
     fetchData();
   }, [pageIndex, pageSize]);
+
+  useEffect(() => {
+    getCountryOptions().then(res => {
+      setCountryOptions(res.map(opt => ({ label: opt.label, value: opt.value })));
+    });
+  }, []);
 
   const handleAdd = () => {
     setEditingOrder(null);
@@ -127,9 +135,10 @@ const RequestOrderPage: React.FC = () => {
         open={dialogOpen}
         onClose={() => { setDialogOpen(false); setEditingOrder(null); }}
         onSubmit={handleSubmit}
-        form={editingOrder || { dep: '', arr: '', phoneNumber: '', status: 0 }}
+        form={editingOrder || { dep: '', arr: '', phoneNumber: '', countryNumber: '', status: 0 }}
         setForm={f => setEditingOrder(f as RequestOrder | null)}
         editingId={editingOrder?.id || null}
+        countryOptions={countryOptions}
       />
     </Box>
   );
