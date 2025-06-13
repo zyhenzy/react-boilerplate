@@ -93,5 +93,22 @@
     "actions": "操作",
     "noData": "暂无数据",
     "loading": "加载中..."
+  },
+  "ticketOrder": {
+    "title": "航班订单",
+    "add": "新增订单",
+    "edit": "编辑订单",
+    "billNo": "订单号",
+    "bookerName": "订票人",
+    "bookerContact": "联系方式",
+    "pnr": "PNR",
+    "status": "状态",
+    "status_0": "待处理",
+    "status_1": "已支付",
+    "status_2": "已出票",
+    "status_3": "已完成",
+    "actions": "操作",
+    "noData": "暂无数据",
+    "loading": "加载中..."
   }
 }

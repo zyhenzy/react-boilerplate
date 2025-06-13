@@ -93,5 +93,22 @@
     "actions": "Actions",
     "noData": "No data",
     "loading": "Loading..."
+  },
+  "ticketOrder": {
+    "title": "Flight Ticket Order",
+    "add": "Add Order",
+    "edit": "Edit Order",
+    "billNo": "Order No",
+    "bookerName": "Booker Name",
+    "bookerContact": "Contact Info",
+    "pnr": "PNR",
+    "status": "Status",
+    "status_0": "Pending",
+    "status_1": "Paid",
+    "status_2": "Ticketed",
+    "status_3": "Completed",
+    "actions": "Actions",
+    "noData": "No data",
+    "loading": "Loading..."
   }
 }

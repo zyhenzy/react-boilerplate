@@ -12,12 +12,13 @@ import {
   DeleteTicketOrderTripCommand,
   AddTicketOrderPassengerCommand,
   UpdateTicketOrderPassengerCommand,
-  DeleteTicketOrderPassengerCommand,
+  DeleteTicketOrderPassengerCommand, TicketOrder,
 } from './types';
+import {ListResponse} from "../types";
 
 // 获取机票订单列表
 export function getTicketOrderList(params?: TicketOrderQuery) {
-  return http.get('/v1/TicketOrder/list', { params });
+  return http.get<ListResponse<TicketOrder>>('/v1/TicketOrder/list', { params });
 }
 
 // 获取机票订单用户列表
@@ -89,4 +90,5 @@ export function updateTicketOrderPassenger(data: UpdateTicketOrderPassengerComma
 export function deleteTicketOrderPassenger(data: DeleteTicketOrderPassengerCommand) {
   return http.post('/v1/TicketOrder/deletePassenger', data);
 }
+
 

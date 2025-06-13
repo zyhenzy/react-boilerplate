@@ -15,6 +15,7 @@ import Agent from "./pages/Agent/Agent";
 import SupplierPage from './pages/Supplier/SupplierPage';
 import AgentOrderPage from "./pages/AgentOrder/AgentOrderPage";
 import RequestOrderPage from "./pages/RequestOrder/RequestOrderPage";
+import TicketOrderPage from "./pages/TicketOrder/TicketOrderPage";
 
 const App: React.FC = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -43,6 +44,7 @@ const App: React.FC = () => {
                                         <Route path="/supplier" element={<SupplierPage />} />
                                         <Route path="/agentOrder" element={<AgentOrderPage />} />
                                         <Route path="/requestOrder" element={<RequestOrderPage />} />
+                                        <Route path="/ticketOrder" element={<TicketOrderPage />} />
                                     </Routes>
                                 </Box>
                             </div>
