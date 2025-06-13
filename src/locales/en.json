@@ -76,5 +76,22 @@
     "actions": "Actions",
     "noData": "No data",
     "loading": "Loading..."
+  },
+  "requestOrder": {
+    "title": "Flight Request Order",
+    "add": "Add Order",
+    "edit": "Edit Order",
+    "dep": "Departure",
+    "arr": "Arrival",
+    "phoneNumber": "Phone Number",
+    "countryNumber": "Country Code",
+    "status": "Status",
+    "status_0": "Pending",
+    "status_1": "Processed",
+    "status_2": "Cancelled",
+    "remark": "Remark",
+    "actions": "Actions",
+    "noData": "No data",
+    "loading": "Loading..."
   }
 }

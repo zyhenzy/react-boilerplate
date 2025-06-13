@@ -76,5 +76,22 @@
     "actions": "操作",
     "noData": "暂无数据",
     "loading": "加载中..."
+  },
+  "requestOrder": {
+    "title": "航班需求订单",
+    "add": "新增订单",
+    "edit": "编辑订单",
+    "dep": "出发地",
+    "arr": "目的地",
+    "phoneNumber": "手机号",
+    "countryNumber": "国家号码",
+    "status": "状态",
+    "status_0": "待处理",
+    "status_1": "已处理",
+    "status_2": "已取消",
+    "remark": "备注",
+    "actions": "操作",
+    "noData": "暂无数据",
+    "loading": "加载中..."
   }
 }

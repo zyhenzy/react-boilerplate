@@ -3,12 +3,13 @@ import {
   RequestOrderQuery,
   AddRequestOrderCommand,
   UpdateRequestOrderCommand,
-  RequestOrderStatus,
+  RequestOrder,
 } from './types';
+import type {ListResponse} from "../types";
 
 // 获取需求订单列表
 export function getRequestOrderList(params?: RequestOrderQuery) {
-  return http.get('/v1/RequestOrder/list', { params });
+  return http.get<ListResponse<RequestOrder>>('/v1/RequestOrder/list', { params });
 }
 
 // 获取需求订单用户列表
