@@ -46,6 +46,9 @@
     "add": "Add Supplier",
     "edit": "Edit Supplier",
     "noData": "No data",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "upload": "Avatar",
+    "uploading": "Uploading...",
+    "changeAvatar": "Click to change avatar"
   }
 }

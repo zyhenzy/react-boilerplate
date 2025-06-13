@@ -10,3 +10,14 @@ export function getCountryOptions() {
 export function getRoleOptions() {
   return http.get<IOption[]>('/v1/Data/roleOptions');
 }
+
+// 上传图片接口，支持自定义 headers
+export function uploadImage(formData: FormData) {
+  return http.post<string>('/v1/Image/upload', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+}
+
+export function getImage(imageId: string) {
+  return `/api/v1/Image/${imageId}`
+}

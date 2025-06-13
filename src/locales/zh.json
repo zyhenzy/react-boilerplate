@@ -46,6 +46,9 @@
     "add": "新增供应商",
     "edit": "编辑供应商",
     "noData": "暂无数据",
-    "loading": "加载中..."
+    "loading": "加载中...",
+    "upload": "头像",
+    "uploading": "上传中...",
+    "changeAvatar": "点击更换头像"
   }
 }

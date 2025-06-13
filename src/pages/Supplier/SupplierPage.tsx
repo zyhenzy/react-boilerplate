@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getSupplierList, createSupplier, updateSupplier, enableSupplier } from '../../api/supplier';
-import type { Supplier, SupplierQuery } from '../../api/supplier/types';
+import type { Supplier } from '../../api/supplier/types';
 import SupplierFormDialog from './components/SupplierFormDialog';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TablePagination, Box } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import Switch from '@mui/material/Switch';
@@ -12,28 +11,19 @@ import { useTranslation } from 'react-i18next';
 const SupplierPage: React.FC = () => {
   const { t } = useTranslation();
   const [data, setData] = useState<Supplier[]>([]);
-  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [pageIndex, setPageIndex] = useState(0); // MUI分页从0开始
+  const [pageIndex, setPageIndex] = useState(0); // 统一分页从0开始
   const [pageSize, setPageSize] = useState(10);
+  const [total, setTotal] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingSupplier, setEditingSupplier] = useState<Supplier | null>(null);
 
-  const fetchData = async (params: SupplierQuery = {}) => {
+  const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await getSupplierList({
-        PageIndex: pageIndex + 1,
-        PageSize: pageSize,
-        ...params,
-      });
-      // 兼容 axios 返回结构
-      // @ts-ignore
-      const items = res.data?.items || res.items || [];
-      // @ts-ignore
-      const totalCount = res.data?.total || res.total || 0;
-      setData(items);
-      setTotal(totalCount);
+      const res = await getSupplierList({ PageIndex: pageIndex + 1, PageSize: pageSize });
+      setData(res.data || []);
+      setTotal(res.total || 0);
     } finally {
       setLoading(false);
     }
@@ -48,7 +38,7 @@ const SupplierPage: React.FC = () => {
     setPageIndex(newPage);
   };
 
-  const handlePageSizeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleRowsPerPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPageSize(Number(e.target.value));
     setPageIndex(0);
   };
@@ -120,9 +110,9 @@ const SupplierPage: React.FC = () => {
         component="div"
         count={total}
         page={pageIndex}
-        onPageChange={(_, newPage) => setPageIndex(newPage)}
+        onPageChange={handlePageChange}
         rowsPerPage={pageSize}
-        onRowsPerPageChange={e => { setPageSize(Number(e.target.value)); setPageIndex(0); }}
+        onRowsPerPageChange={handleRowsPerPageChange}
         rowsPerPageOptions={[10, 20, 50]}
       />
       <SupplierFormDialog

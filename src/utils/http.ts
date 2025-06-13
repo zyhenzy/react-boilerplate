@@ -34,10 +34,6 @@ class HttpRequest {
                 const data = response.data;
                 if (data.code === 0) {
                     return data.result;
-                } else if (data.code === 401) {
-                    // 未授权
-                    console.log(data.message);
-                    return Promise.reject(new Error(data.message || '未授权'));
                 } else {
                     return Promise.reject(new Error(data.message || '请求失败'));
                 }
@@ -45,6 +41,7 @@ class HttpRequest {
             (error) => {
                 if (error.status === 401) {
                     console.log('未授权，请登录');
+                    window.location.href = '/login';
                     return Promise.resolve(error);
                 } else {
                     return Promise.reject(error);
@@ -57,8 +54,8 @@ class HttpRequest {
         return this.instance.get(url, { params }) as Promise<T>;
     }
 
-    public post<T>(url: string, data?: any): Promise<T> {
-        return this.instance.post(url, data) as Promise<T>;
+    public post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+        return this.instance.post(url, data, config) as Promise<T>;
     }
 
     public put<T>(url: string, data?: any): Promise<T> {
@@ -73,3 +70,4 @@ class HttpRequest {
 const http = new HttpRequest('/api');
 
 export default http;
+
