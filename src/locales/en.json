@@ -50,5 +50,31 @@
     "upload": "Avatar",
     "uploading": "Uploading...",
     "changeAvatar": "Click to change avatar"
+  },
+  "agentOrder": {
+    "title": "Agent Order Management",
+    "add": "Add Order",
+    "edit": "Edit Order",
+    "orderNo": "Order No",
+    "type": "Order Type",
+    "type0": "Normal",
+    "type1": "Change",
+    "type2": "Refund",
+    "status": "Order Status",
+    "status0": "Pending",
+    "status1": "Accepted",
+    "status2": "Rejected",
+    "status3": "Ticketed",
+    "status4": "Completed",
+    "status5": "Cancelled",
+    "price": "Price",
+    "tax": "Tax",
+    "serviceCharge": "Service Charge",
+    "pnr": "PNR",
+    "agentRemark": "Agent Remark",
+    "tcRemark": "TC Remark",
+    "actions": "Actions",
+    "noData": "No data",
+    "loading": "Loading..."
   }
 }

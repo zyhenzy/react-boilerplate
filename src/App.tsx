@@ -13,6 +13,7 @@ import './styles/App.scss';
 import Register from "./pages/Register";
 import Agent from "./pages/Agent/Agent";
 import SupplierPage from './pages/Supplier/SupplierPage';
+import AgentOrderPage from "./pages/AgentOrder/AgentOrderPage";
 
 const App: React.FC = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -39,6 +40,7 @@ const App: React.FC = () => {
                                         <Route path="/settings" element={<Settings />} />
                                         <Route path="/agent" element={<Agent />} />
                                         <Route path="/supplier" element={<SupplierPage />} />
+                                        <Route path="/agentOrder" element={<AgentOrderPage />} />
                                     </Routes>
                                 </Box>
                             </div>

@@ -1,4 +1,5 @@
 import http from '../../utils/http';
+import type { ListResponse } from '../types';
 import {
   AgentOrderQuery,
   SubmitAgentOrderCommand,
@@ -6,17 +7,17 @@ import {
   ConvertedAgentOrderCommand,
   RefuseAgentOrderCommand,
   AcceptAgentOrderCommand,
-  IssuedAgentOrderCommand,
+  IssuedAgentOrderCommand, AgentOrder,
 } from './types';
 
 // 获取代理订单列表
 export function getAgentOrderList(params?: AgentOrderQuery) {
-  return http.get('/v1/AgentOrder/list', { params });
+  return http.get<ListResponse<AgentOrder>>('/v1/AgentOrder/list', { params });
 }
 
 // 获取代理订单用户列表
 export function getAgentOrderUserList(params?: AgentOrderQuery) {
-  return http.get('/v1/AgentOrder/userList', { params });
+  return http.get<ListResponse<AgentOrder>>('/v1/AgentOrder/userList', { params });
 }
 
 // 获取代理订单详情
