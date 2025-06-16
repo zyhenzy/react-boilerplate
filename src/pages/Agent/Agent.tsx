@@ -30,7 +30,7 @@ const AgentPage: React.FC = () => {
   const [pageIndex, setPageIndex] = useState(0); // 统一分页从0开始
   const [pageSize, setPageSize] = useState(10);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [editingAgent, setEditingAgent] = useState<Agent | null>(null);
+  const [editingAgent, setEditingAgent] = useState<Partial<Agent> | null>(null);
   const [countryOptions, setCountryOptions] = useState<IOption[]>([]);
 
   const fetchData = async () => {
@@ -59,7 +59,7 @@ const AgentPage: React.FC = () => {
   }, [pageIndex, pageSize]);
 
   const handleAdd = () => {
-    setEditingAgent(null);
+    setEditingAgent({ name: '', contact: '', enable: true });
     setDialogOpen(true);
   };
 
@@ -68,11 +68,12 @@ const AgentPage: React.FC = () => {
     setDialogOpen(true);
   };
 
-  const handleSubmit = async (values: Omit<Agent, 'id'> | Agent) => {
-    if ((values as Agent).id) {
-      await updateAgent(values as Agent);
+  const handleSubmit = async (values: Partial<Agent>) => {
+    const submitValues = { ...values, enable: values.enable === undefined ? true : values.enable };
+    if (submitValues.id) {
+      await updateAgent(submitValues as Agent);
     } else {
-      await createAgent(values as Omit<Agent, 'id'>);
+      await createAgent(submitValues as Omit<Agent, 'id'>);
     }
     setDialogOpen(false);
     setEditingAgent(null);
@@ -145,10 +146,10 @@ const AgentPage: React.FC = () => {
         onSubmit={(e) => {
           e.preventDefault();
           if (!editingAgent?.name || !editingAgent?.contact) return;
-          handleSubmit(editingAgent as Agent);
+          handleSubmit(editingAgent as Partial<Agent>);
         }}
         form={editingAgent || { name: '', contact: '', enable: true }}
-        setForm={f => setEditingAgent(f as Agent | null)}
+        setForm={f => setEditingAgent(f as Partial<Agent> | null)}
         editingId={editingAgent?.id || null}
         countryOptions={countryOptions}
       />

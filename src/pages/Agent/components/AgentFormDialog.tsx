@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Dialog,
   DialogActions,
@@ -35,6 +35,13 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
   countryOptions
 }) => {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (form.enable === undefined) {
+      setForm(f => ({ ...f, enable: true }));
+    }
+  }, [form.enable, setForm]);
+
   return (
     <Dialog open={open} onClose={onClose}>
       <form onSubmit={onSubmit}>

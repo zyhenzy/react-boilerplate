@@ -61,8 +61,6 @@ const UserPage: React.FC = () => {
     setLoading(true);
     try {
       const res = await getUserDetail(user.id);
-      console.log(res)
-      debugger
       setEditingUser(res);
       setDialogOpen(true);
     } finally {
