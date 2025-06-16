@@ -23,3 +23,20 @@ export interface LoginParams {
   userName: string;
   isAdmin?: boolean; // 是否是后台管理系统
 }
+
+/**
+ * 用户信息接口
+ */
+export interface IUser {
+  id: string;
+  userName: string;
+  name: string;
+  sex?: 'M' | 'F' | 'O' | null;
+  enable: boolean;
+  createTime?: string;
+  countryNumber: string;
+  phoneNumber: string;
+  createUserName?: string;
+  agentId?: string | null;
+  role?: string | null;
+}

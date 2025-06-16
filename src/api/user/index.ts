@@ -1,9 +1,8 @@
 import http from '../../utils/http';
-import {RegisterParams, LoginParams} from "./types";
+import {RegisterParams, LoginParams, IUser} from "./types";
 import { setUserInfo, clearUserInfo } from '../../store/userSlice';
 import { AppDispatch } from '../../store';
 import type {ListResponse} from "../types";
-import type {Agent} from "../agent/types";
 
 /**
  * 注册
@@ -29,7 +28,7 @@ export function loginUser(params: LoginParams) {
  * @returns Promise<any>
  */
 export function infoUser() {
-  return http.get('/v1/User/info');
+  return http.get<IUser>('/v1/User/info');
 }
 
 /**
@@ -81,7 +80,7 @@ export function enableUser(params: any) {
  * @returns Promise<any>
  */
 export function getUserList(params?: any) {
-  return http.get<ListResponse<any>>('/v1/User/list', { params });
+  return http.get<ListResponse<Omit<IUser, 'role'>>>('/v1/User/list', { params });
 }
 
 /**
@@ -90,7 +89,7 @@ export function getUserList(params?: any) {
  * @returns Promise<any>
  */
 export function getUserDetail(id: string) {
-  return http.get(`/v1/User/${id}`);
+  return http.get<IUser>(`/v1/User/${id}`);
 }
 
 /**

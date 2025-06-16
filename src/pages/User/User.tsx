@@ -10,13 +10,12 @@ import {
   TableRow,
   Paper,
   Switch,
-  CircularProgress,
   IconButton,
   TablePagination
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import UserFormDialog from './components/UserFormDialog';
-import { getUserList, addUser, updateUser, enableUser } from '../../api/user';
+import { getUserList, addUser, updateUser, enableUser, getUserDetail } from '../../api/user';
 import { getRoleOptions } from '../../api/basic';
 import { useTranslation } from 'react-i18next';
 
@@ -58,9 +57,17 @@ const UserPage: React.FC = () => {
     setDialogOpen(true);
   };
 
-  const handleEdit = (user: any) => {
-    setEditingUser(user);
-    setDialogOpen(true);
+  const handleEdit = async (user: any) => {
+    setLoading(true);
+    try {
+      const res = await getUserDetail(user.id);
+      console.log(res)
+      debugger
+      setEditingUser(res);
+      setDialogOpen(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = async (values: any) => {
