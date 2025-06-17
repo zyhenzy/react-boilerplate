@@ -17,6 +17,7 @@ import PassengerFormDialog from './PassengerFormDialog';
 import TripFormDialog from './TripFormDialog';
 import type { AddTicketOrderPassengerCommand, AddTicketOrderTripCommand } from '../../../api/ticket-order/types';
 import type { Supplier } from '../../../api/supplier/types';
+import type { IOption } from '../../../api/basic/types';
 
 interface TicketOrderFormDialogProps {
   open: boolean;
@@ -26,6 +27,7 @@ interface TicketOrderFormDialogProps {
   setForm: React.Dispatch<React.SetStateAction<Partial<TicketOrder>>>;
   editingId: string | null;
   suppliers: Supplier[];
+  certificateOptions: IOption[];
 }
 
 const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
@@ -35,7 +37,8 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                                                                        form,
                                                                        setForm,
                                                                        editingId,
-                                                                       suppliers
+                                                                       suppliers,
+                                                                       certificateOptions
                                                                      }) => {
   const { t } = useTranslation();
   const [passengerDialogOpen, setPassengerDialogOpen] = React.useState(false);
@@ -229,6 +232,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 onClose={() => setPassengerDialogOpen(false)}
                 onSubmit={handlePassengerSubmit}
                 passenger={editingPassenger}
+                certificateOptions={certificateOptions}
             />
             <TripFormDialog
                 open={tripDialogOpen}

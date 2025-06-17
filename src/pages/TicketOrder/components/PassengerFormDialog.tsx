@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import type { AddTicketOrderPassengerCommand } from '../../../api/ticket-order/types';
+import type { IOption } from '../../../api/basic/types';
 
 interface PassengerFormDialogProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (values: AddTicketOrderPassengerCommand) => void;
   passenger?: AddTicketOrderPassengerCommand;
+  certificateOptions: IOption[];
 }
 
-const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose, onSubmit, passenger }) => {
+const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose, onSubmit, passenger, certificateOptions }) => {
   const { t } = useTranslation();
   const [form, setForm] = useState<AddTicketOrderPassengerCommand>({});
 
@@ -38,13 +40,18 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
             value={form.englishName || ''}
             onChange={e => setForm(f => ({ ...f, englishName: e.target.value }))}
           />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.certificateType')}
-            fullWidth
-            value={form.certificateType || ''}
-            onChange={e => setForm(f => ({ ...f, certificateType: e.target.value }))}
-          />
+          <FormControl fullWidth margin="dense">
+            <InputLabel>{t('ticketOrder.certificateType')}</InputLabel>
+            <Select
+              label={t('ticketOrder.certificateType')}
+              value={form.certificateType || ''}
+              onChange={e => setForm(f => ({ ...f, certificateType: e.target.value }))}
+            >
+              {certificateOptions.map(opt => (
+                <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <TextField
             margin="dense"
             label={t('ticketOrder.certificateNo')}
