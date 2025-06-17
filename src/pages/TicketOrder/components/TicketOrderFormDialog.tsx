@@ -10,6 +10,9 @@ import {
 } from '@mui/material';
 import type { TicketOrder } from '../../../api/ticket-order/types';
 import { useTranslation } from 'react-i18next';
+import PassengerFormDialog from './PassengerFormDialog';
+import TripFormDialog from './TripFormDialog';
+import type { AddTicketOrderPassengerCommand, AddTicketOrderTripCommand } from '../../../api/ticket-order/types';
 
 interface TicketOrderFormDialogProps {
   open: boolean;
@@ -29,6 +32,63 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
   editingId
 }) => {
   const { t } = useTranslation();
+  const [passengerDialogOpen, setPassengerDialogOpen] = React.useState(false);
+  const [editingPassenger, setEditingPassenger] = React.useState<AddTicketOrderPassengerCommand | undefined>(undefined);
+  const [tripDialogOpen, setTripDialogOpen] = React.useState(false);
+  const [editingTrip, setEditingTrip] = React.useState<AddTicketOrderTripCommand | undefined>(undefined);
+
+  const handleAddPassenger = () => {
+    setEditingPassenger(undefined);
+    setPassengerDialogOpen(true);
+  };
+
+  const handleEditPassenger = (p: AddTicketOrderPassengerCommand, idx: number) => {
+    setEditingPassenger({ ...p, _idx: idx } as any);
+    setPassengerDialogOpen(true);
+  };
+
+  const handlePassengerSubmit = (values: AddTicketOrderPassengerCommand) => {
+    setPassengerDialogOpen(false);
+    setEditingPassenger(undefined);
+    setForm(f => {
+      const list = Array.isArray(f.passengerList) ? [...f.passengerList] : [];
+      if ((values as any)._idx !== undefined) {
+        // 编辑
+        list[(values as any)._idx] = { ...values };
+        delete (list[(values as any)._idx] as any)._idx;
+      } else {
+        // 新增
+        list.push(values);
+      }
+      return { ...f, passengerList: list };
+    });
+  };
+
+  const handleAddTrip = () => {
+    setEditingTrip(undefined);
+    setTripDialogOpen(true);
+  };
+
+  const handleEditTrip = (trip: AddTicketOrderTripCommand, idx: number) => {
+    setEditingTrip({ ...trip, _idx: idx } as any);
+    setTripDialogOpen(true);
+  };
+
+  const handleTripSubmit = (values: AddTicketOrderTripCommand) => {
+    setTripDialogOpen(false);
+    setEditingTrip(undefined);
+    setForm(f => {
+      const list = Array.isArray(f.flightList) ? [...f.flightList] : [];
+      if ((values as any)._idx !== undefined) {
+        list[(values as any)._idx] = { ...values };
+        delete (list[(values as any)._idx] as any)._idx;
+      } else {
+        list.push(values);
+      }
+      return { ...f, flightList: list };
+    });
+  };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <form onSubmit={e => { e.preventDefault(); onSubmit(form); }}>
@@ -127,54 +187,44 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
             value={form.serviceFee || ''}
             onChange={e => setForm(f => ({ ...f, serviceFee: Number(e.target.value) }))}
           />
-          {/* 航班列表输入（简化版） */}
+          {/* 行程列表弹窗编辑版 */}
           <div style={{ margin: '16px 0' }}>
-            <InputLabel>{t('ticketOrder.flightList')}</InputLabel>
-            {(form.flightList || []).map((flight, idx) => (
-              <TextField
-                key={idx}
-                margin="dense"
-                label={t('ticketOrder.flight') + (idx + 1)}
-                fullWidth
-                value={flight.flight || ''}
-                onChange={e => {
-                  const newList = [...(form.flightList || [])];
-                  newList[idx] = { ...newList[idx], flight: e.target.value };
-                  setForm(f => ({ ...f, flightList: newList }));
-                }}
-              />
-            ))}
-            <Button onClick={() => setForm(f => ({
-              ...(f || {}),
-              flightList: Array.isArray(f?.flightList) ? [...f.flightList, {}] : [{}]
-            }))} size="small">
-              {t('ticketOrder.addFlight')}
-            </Button>
+            <InputLabel>{t('ticketOrder.tripList') || t('ticketOrder.flightList')}</InputLabel>
+            <ul style={{ paddingLeft: 16 }}>
+              {(form.flightList || []).map((trip, idx) => (
+                <li key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
+                  <span style={{ flex: 1 }}>{trip.flight || t('ticketOrder.flight') + (idx + 1)}</span>
+                  <Button size="small" onClick={() => handleEditTrip(trip, idx)}>{t('edit')}</Button>
+                </li>
+              ))}
+            </ul>
+            <Button onClick={handleAddTrip} size="small">{t('ticketOrder.addFlight')}</Button>
           </div>
-          {/* 乘客列表输入（简化版） */}
+          {/* 乘客列表弹窗编辑版 */}
           <div style={{ margin: '16px 0' }}>
             <InputLabel>{t('ticketOrder.passengerList')}</InputLabel>
-            {(form.passengerList || []).map((p, idx) => (
-              <TextField
-                key={idx}
-                margin="dense"
-                label={t('ticketOrder.passenger') + (idx + 1)}
-                fullWidth
-                value={p.name || ''}
-                onChange={e => {
-                  const newList = [...(form.passengerList || [])];
-                  newList[idx] = { ...newList[idx], name: e.target.value };
-                  setForm(f => ({ ...f, passengerList: newList }));
-                }}
-              />
-            ))}
-            <Button onClick={() => setForm(f => ({
-              ...(f || {}),
-              passengerList: Array.isArray(f?.passengerList) ? [...f.passengerList, {}] : [{}]
-            }))} size="small">
-              {t('ticketOrder.addPassenger')}
-            </Button>
+            <ul style={{ paddingLeft: 16 }}>
+              {(form.passengerList || []).map((p, idx) => (
+                <li key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
+                  <span style={{ flex: 1 }}>{p.name || t('ticketOrder.passenger') + (idx + 1)}</span>
+                  <Button size="small" onClick={() => handleEditPassenger(p, idx)}>{t('edit')}</Button>
+                </li>
+              ))}
+            </ul>
+            <Button onClick={handleAddPassenger} size="small">{t('ticketOrder.addPassenger')}</Button>
           </div>
+          <PassengerFormDialog
+            open={passengerDialogOpen}
+            onClose={() => setPassengerDialogOpen(false)}
+            onSubmit={handlePassengerSubmit}
+            passenger={editingPassenger}
+          />
+          <TripFormDialog
+            open={tripDialogOpen}
+            onClose={() => setTripDialogOpen(false)}
+            onSubmit={handleTripSubmit}
+            trip={editingTrip}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="secondary">{t('cancel')}</Button>

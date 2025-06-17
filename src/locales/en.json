@@ -122,6 +122,7 @@
     "passengerList": "Passenger List",
     "addPassenger": "Add Passenger",
     "passenger": "Passenger",
+    "tripList": "Trip List",
     "actions": "Actions",
     "noData": "No data",
     "loading": "Loading..."

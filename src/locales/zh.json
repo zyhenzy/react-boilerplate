@@ -122,6 +122,7 @@
     "passengerList": "乘客列表",
     "addPassenger": "添加乘客",
     "passenger": "乘客",
+    "tripList": "行程列表",
     "actions": "操作",
     "noData": "暂无数据",
     "loading": "加载中..."
