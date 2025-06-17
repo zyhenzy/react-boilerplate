@@ -10,9 +10,11 @@ interface PassengerFormDialogProps {
   onSubmit: (values: AddTicketOrderPassengerCommand) => void;
   passenger?: AddTicketOrderPassengerCommand;
   certificateOptions: IOption[];
+  countryOptions: IOption[];
+  countryCodeOptions: IOption[];
 }
 
-const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose, onSubmit, passenger, certificateOptions }) => {
+const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose, onSubmit, passenger, certificateOptions, countryOptions, countryCodeOptions }) => {
   const { t } = useTranslation();
   const [form, setForm] = useState<AddTicketOrderPassengerCommand>({});
 
@@ -75,20 +77,30 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
             value={form.birthday || ''}
             onChange={e => setForm(f => ({ ...f, birthday: e.target.value }))}
           />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.nationality')}
-            fullWidth
-            value={form.nationality || ''}
-            onChange={e => setForm(f => ({ ...f, nationality: e.target.value }))}
-          />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.countryNumber')}
-            fullWidth
-            value={form.countryNumber || ''}
-            onChange={e => setForm(f => ({ ...f, countryNumber: e.target.value }))}
-          />
+          <FormControl fullWidth margin="dense">
+            <InputLabel>{t('ticketOrder.nationality')}</InputLabel>
+            <Select
+              label={t('ticketOrder.nationality')}
+              value={form.nationality || ''}
+              onChange={e => setForm(f => ({ ...f, nationality: e.target.value }))}
+            >
+              {countryCodeOptions.map(opt => (
+                <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="dense">
+            <InputLabel>{t('ticketOrder.countryNumber')}</InputLabel>
+            <Select
+              label={t('ticketOrder.countryNumber')}
+              value={form.countryNumber || ''}
+              onChange={e => setForm(f => ({ ...f, countryNumber: e.target.value }))}
+            >
+              {countryOptions.map(opt => (
+                <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <TextField
             margin="dense"
             label={t('ticketOrder.ticketNo')}

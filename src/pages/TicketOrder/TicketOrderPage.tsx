@@ -3,7 +3,7 @@ import type { TicketOrder } from '../../api/ticket-order/types';
 import { getTicketOrderList, addTicketOrder, updateTicketOrder } from '../../api/ticket-order';
 import { getSupplierList } from '../../api/supplier';
 import type { Supplier } from '../../api/supplier/types';
-import { getCertificateOptions } from '../../api/basic';
+import { getCertificateOptions, getCountryOptions, getCountryCodeOptions } from '../../api/basic';
 import type { IOption } from '../../api/basic/types';
 import {
   Box,
@@ -33,6 +33,8 @@ const TicketOrderPage: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingOrder, setEditingOrder] = useState<TicketOrder | null>(null);
   const [certificateOptions, setCertificateOptions] = useState<IOption[]>([]);
+  const [countryOptions, setCountryOptions] = useState<IOption[]>([]);
+  const [countryCodeOptions, setCountryCodeOptions] = useState<IOption[]>([]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -57,10 +59,24 @@ const TicketOrderPage: React.FC = () => {
     setCertificateOptions(res || []);
   };
 
+  // 获取国家下拉
+  const fetchCountryOptions = async () => {
+    const res = await getCountryOptions();
+    setCountryOptions(res || []);
+  };
+
+  // 获取国家手机编码下拉
+  const fetchCountryCodeOptions = async () => {
+    const res = await getCountryCodeOptions();
+    setCountryCodeOptions(res || []);
+  };
+
   useEffect(() => {
     fetchData();
     fetchSuppliers();
     fetchCertificateOptions();
+    fetchCountryOptions();
+    fetchCountryCodeOptions();
   }, [pageIndex, pageSize]);
 
   const handleAdd = () => {
@@ -171,6 +187,8 @@ const TicketOrderPage: React.FC = () => {
         editingId={editingOrder?.id || null}
         suppliers={suppliers}
         certificateOptions={certificateOptions}
+        countryOptions={countryOptions}
+        countryCodeOptions={countryCodeOptions}
       />
     </Box>
   );

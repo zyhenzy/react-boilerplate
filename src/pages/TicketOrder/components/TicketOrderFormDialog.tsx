@@ -28,18 +28,22 @@ interface TicketOrderFormDialogProps {
   editingId: string | null;
   suppliers: Supplier[];
   certificateOptions: IOption[];
+  countryOptions: IOption[];
+  countryCodeOptions: IOption[];
 }
 
 const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
-                                                                       open,
-                                                                       onClose,
-                                                                       onSubmit,
-                                                                       form,
-                                                                       setForm,
-                                                                       editingId,
-                                                                       suppliers,
-                                                                       certificateOptions
-                                                                     }) => {
+  open,
+  onClose,
+  onSubmit,
+  form,
+  setForm,
+  editingId,
+  suppliers,
+  certificateOptions,
+  countryOptions,
+  countryCodeOptions
+}) => {
   const { t } = useTranslation();
   const [passengerDialogOpen, setPassengerDialogOpen] = React.useState(false);
   const [editingPassenger, setEditingPassenger] = React.useState<AddTicketOrderPassengerCommand | undefined>(undefined);
@@ -233,6 +237,8 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 onSubmit={handlePassengerSubmit}
                 passenger={editingPassenger}
                 certificateOptions={certificateOptions}
+                countryOptions={countryOptions}
+                countryCodeOptions={countryCodeOptions}
             />
             <TripFormDialog
                 open={tripDialogOpen}
