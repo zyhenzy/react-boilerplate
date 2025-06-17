@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import type { TicketOrder } from '../../api/ticket-order/types';
 import { getTicketOrderList, addTicketOrder, updateTicketOrder } from '../../api/ticket-order';
+import { getSupplierList } from '../../api/supplier';
+import type { Supplier } from '../../api/supplier/types';
+import { getCertificateOptions } from '../../api/basic';
+import type { IOption } from '../../api/basic/types';
 import {
   Box,
   Button,
@@ -21,12 +25,14 @@ import { useTranslation } from 'react-i18next';
 const TicketOrderPage: React.FC = () => {
   const { t } = useTranslation();
   const [data, setData] = useState<TicketOrder[]>([]);
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingOrder, setEditingOrder] = useState<TicketOrder | null>(null);
+  const [certificateOptions, setCertificateOptions] = useState<IOption[]>([]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -39,8 +45,22 @@ const TicketOrderPage: React.FC = () => {
     }
   };
 
+  // 获取供应商列表
+  const fetchSuppliers = async () => {
+    const res = await getSupplierList({ PageIndex: 1, PageSize: 100 });
+    setSuppliers(res.data || []);
+  };
+
+  // 获取证件类型下拉
+  const fetchCertificateOptions = async () => {
+    const res = await getCertificateOptions();
+    setCertificateOptions(res || []);
+  };
+
   useEffect(() => {
     fetchData();
+    fetchSuppliers();
+    fetchCertificateOptions();
   }, [pageIndex, pageSize]);
 
   const handleAdd = () => {
@@ -144,11 +164,13 @@ const TicketOrderPage: React.FC = () => {
       />
       <TicketOrderFormDialog
         open={dialogOpen}
-        onClose={() => { setDialogOpen(false); setEditingOrder(null); }}
+        onClose={() => setDialogOpen(false)}
         onSubmit={handleSubmit}
-        form={editingOrder || { bookerName: '', bookerContact: '', pnr: '', status: 0 }}
-        setForm={f => setEditingOrder(f as TicketOrder | null)}
+        form={editingOrder || {}}
+        setForm={setEditingOrder as any}
         editingId={editingOrder?.id || null}
+        suppliers={suppliers}
+        certificateOptions={certificateOptions}
       />
     </Box>
   );

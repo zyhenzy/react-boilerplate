@@ -59,6 +59,36 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
             value={form.phoneNumber || ''}
             onChange={e => setForm(f => ({ ...f, phoneNumber: e.target.value }))}
           />
+          <TextField
+            margin="dense"
+            label={t('ticketOrder.birthday')}
+            fullWidth
+            type="date"
+            InputLabelProps={{ shrink: true }}
+            value={form.birthday || ''}
+            onChange={e => setForm(f => ({ ...f, birthday: e.target.value }))}
+          />
+          <TextField
+            margin="dense"
+            label={t('ticketOrder.nationality')}
+            fullWidth
+            value={form.nationality || ''}
+            onChange={e => setForm(f => ({ ...f, nationality: e.target.value }))}
+          />
+          <TextField
+            margin="dense"
+            label={t('ticketOrder.countryNumber')}
+            fullWidth
+            value={form.countryNumber || ''}
+            onChange={e => setForm(f => ({ ...f, countryNumber: e.target.value }))}
+          />
+          <TextField
+            margin="dense"
+            label={t('ticketOrder.ticketNo')}
+            fullWidth
+            value={form.ticketNo || ''}
+            onChange={e => setForm(f => ({ ...f, ticketNo: e.target.value }))}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="secondary">{t('cancel')}</Button>
@@ -70,4 +100,3 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
 };
 
 export default PassengerFormDialog;
-

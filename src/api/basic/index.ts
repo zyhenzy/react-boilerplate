@@ -6,9 +6,24 @@ export function getCountryOptions() {
   return http.get<IOption[]>('/v1/Data/countryOptions');
 }
 
+// 国家手机编码下拉
+export function getCountryCodeOptions() {
+  return http.get<IOption[]>('/v1/Data/countryCodeOptions');
+}
+
 // 角色下拉
 export function getRoleOptions() {
   return http.get<IOption[]>('/v1/Data/roleOptions');
+}
+
+// 证件下拉
+export function getCertificateOptions() {
+  return http.get<IOption[]>('/v1/Data/certificateOptions');
+}
+
+// 代理下拉
+export function getagentOptions() {
+  return http.get<IOption[]>('/v1/Data/agentOptions');
 }
 
 // 上传图片接口，支持自定义 headers
