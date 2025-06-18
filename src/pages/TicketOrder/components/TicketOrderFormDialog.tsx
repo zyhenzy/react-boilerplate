@@ -18,6 +18,7 @@ import TripFormDialog from './TripFormDialog';
 import type { AddTicketOrderPassengerCommand, AddTicketOrderTripCommand } from '../../../api/ticket-order/types';
 import type { Supplier } from '../../../api/supplier/types';
 import type { IOption } from '../../../api/basic/types';
+import { addTicketOrderTrip, updateTicketOrderTrip } from '../../../api/ticket-order';
 
 interface TicketOrderFormDialogProps {
   open: boolean;
@@ -87,23 +88,33 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
     setTripDialogOpen(true);
   };
 
-  const handleTripSubmit = (values: AddTicketOrderTripCommand) => {
+  const handleTripSubmit = async (values: AddTicketOrderTripCommand) => {
     setTripDialogOpen(false);
     setEditingTrip(undefined);
-    setForm(f => {
-      const list = Array.isArray(f.flightList) ? [...f.flightList] : [];
-      if ((values as any)._idx !== undefined) {
-        list[(values as any)._idx] = { ...values };
-        delete (list[(values as any)._idx] as any)._idx;
-      } else {
-        list.push(values);
-      }
-      return { ...f, flightList: list };
-    });
+    // 判断是新增还是编辑
+    let tripResult: AddTicketOrderTripCommand;
+    if ((values as any)._idx !== undefined) {
+      // 编辑
+      const { _idx, ...updateData } = values as any;
+      tripResult = await updateTicketOrderTrip(updateData) as AddTicketOrderTripCommand;
+      setForm(f => {
+        const list = Array.isArray(f.flightList) ? [...f.flightList] : [];
+        list[_idx] = tripResult;
+        return { ...f, flightList: list };
+      });
+    } else {
+      // 新增
+      tripResult = await addTicketOrderTrip(values) as AddTicketOrderTripCommand;
+      setForm(f => {
+        const list = Array.isArray(f.flightList) ? [...f.flightList] : [];
+        list.push(tripResult);
+        return { ...f, flightList: list };
+      });
+    }
   };
 
   return (
-      <Dialog open={open} onClose={onClose}>
+      <Dialog open={open} onClose={onClose} fullScreen>
         <form onSubmit={e => { e.preventDefault(); onSubmit(form); }}>
           <DialogTitle>{editingId ? t('ticketOrder.edit') : t('ticketOrder.add')}</DialogTitle>
           <DialogContent>

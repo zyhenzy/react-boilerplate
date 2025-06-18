@@ -1,7 +1,9 @@
 // src/App.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useMediaQuery, Theme } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import type { AppDispatch } from './store';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
@@ -16,12 +18,23 @@ import SupplierPage from './pages/Supplier/SupplierPage';
 import AgentOrderPage from "./pages/AgentOrder/AgentOrderPage";
 import RequestOrderPage from "./pages/RequestOrder/RequestOrderPage";
 import TicketOrderPage from "./pages/TicketOrder/TicketOrderPage";
+import { fetchCountryOptions, fetchCountryCodeOptions, fetchRoleOptions, fetchCertificateOptions, fetchAgentOptions } from './store/optionsSlice';
 
 const App: React.FC = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+    const dispatch = useDispatch<AppDispatch>();
+
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
     const handleDrawerClose = () => setMobileOpen(false);
+
+    useEffect(() => {
+        dispatch(fetchCountryOptions());
+        dispatch(fetchCountryCodeOptions());
+        dispatch(fetchRoleOptions());
+        dispatch(fetchCertificateOptions());
+        dispatch(fetchAgentOptions());
+    }, [dispatch]);
 
     return (
         <Router>

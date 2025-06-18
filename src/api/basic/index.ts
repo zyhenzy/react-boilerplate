@@ -1,12 +1,12 @@
 import http from '../../utils/http';
 import { IOption} from './types';
 
-// 国家编码下拉
+// 国家手机编码下拉
 export function getCountryOptions() {
   return http.get<IOption[]>('/v1/Data/countryOptions');
 }
 
-// 国家手机编码下拉
+// 国家编码下拉
 export function getCountryCodeOptions() {
   return http.get<IOption[]>('/v1/Data/countryCodeOptions');
 }
@@ -16,7 +16,7 @@ export function getRoleOptions() {
   return http.get<IOption[]>('/v1/Data/roleOptions');
 }
 
-// 证件下拉
+// 证件类型下拉
 export function getCertificateOptions() {
   return http.get<IOption[]>('/v1/Data/certificateOptions');
 }

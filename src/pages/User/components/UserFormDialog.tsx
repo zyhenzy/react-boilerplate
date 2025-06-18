@@ -11,6 +11,9 @@ import {
   Switch
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../../../store';
+import { sexOptions } from '../../../constants/sexOptions';
 
 interface UserFormDialogProps {
   open: boolean;
@@ -19,7 +22,6 @@ interface UserFormDialogProps {
   form: any;
   setForm: React.Dispatch<React.SetStateAction<any>>;
   editingId: string | null;
-  roleOptions: { value: string; label: string }[];
 }
 
 const UserFormDialog: React.FC<UserFormDialogProps> = ({
@@ -28,16 +30,12 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
   onSubmit,
   form,
   setForm,
-  editingId,
-  roleOptions
+  editingId
 }) => {
   const { t } = useTranslation();
-
-  const sexOptions = [
-    { value: 'M', label: t('user.sex_m', '男') },
-    { value: 'F', label: t('user.sex_f', '女') },
-    { value: 'O', label: t('user.sex_o', '其他') },
-  ];
+  const countryOptions = useSelector((state: RootState) => state.options.countryOptions);
+  const roleOptions = useSelector((state: RootState) => state.options.roleOptions);
+  const sexOpts = sexOptions.map(opt => ({ ...opt, label: t(`user.sex_${opt.value.toLowerCase()}`, opt.label) }));
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -64,6 +62,20 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
             inputProps={{ maxLength: 25 }}
           />
           <TextField
+              margin="dense"
+              label={t('user.countryNumber')}
+              select
+              fullWidth
+              value={form.countryNumber || ''}
+              onChange={e => setForm((f: any) => ({ ...f, countryNumber: e.target.value }))}
+              required
+              inputProps={{ maxLength: 5 }}
+          >
+            {countryOptions.map(option => (
+                <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+            ))}
+          </TextField>
+          <TextField
             margin="dense"
             label={t('user.phoneNumber')}
             fullWidth
@@ -74,22 +86,13 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
           />
           <TextField
             margin="dense"
-            label={t('user.countryNumber')}
-            fullWidth
-            value={form.countryNumber || ''}
-            onChange={e => setForm((f: any) => ({ ...f, countryNumber: e.target.value }))}
-            required
-            inputProps={{ maxLength: 5 }}
-          />
-          <TextField
-            margin="dense"
             label={t('user.sex')}
             select
             fullWidth
             value={form.sex || ''}
             onChange={e => setForm((f: any) => ({ ...f, sex: e.target.value }))}
           >
-            {sexOptions.map(option => (
+            {sexOpts.map(option => (
               <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
             ))}
           </TextField>

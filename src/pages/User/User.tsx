@@ -148,7 +148,6 @@ const UserPage: React.FC = () => {
         form={editingUser || { userName: '', name: '', enable: true }}
         setForm={f => setEditingUser(f as any)}
         editingId={editingUser?.id || null}
-        roleOptions={roleOptions}
       />
     </Box>
   );
