@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useMediaQuery, Theme } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import type { AppDispatch } from './store';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from './store';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
@@ -24,17 +24,20 @@ const App: React.FC = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const dispatch = useDispatch<AppDispatch>();
+    const userInfo = useSelector((state: RootState) => state.user.userInfo);
 
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
     const handleDrawerClose = () => setMobileOpen(false);
 
     useEffect(() => {
+        // fixme:判断是否已登录，使用 redux 中的 userInfo
+        if (!userInfo || !userInfo.id) return;
         dispatch(fetchCountryOptions());
         dispatch(fetchCountryCodeOptions());
         dispatch(fetchRoleOptions());
         dispatch(fetchCertificateOptions());
         dispatch(fetchAgentOptions());
-    }, [dispatch]);
+    }, [dispatch, userInfo]);
 
     return (
         <Router>

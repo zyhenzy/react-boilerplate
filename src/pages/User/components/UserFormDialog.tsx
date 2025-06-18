@@ -35,6 +35,7 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
   const { t } = useTranslation();
   const countryOptions = useSelector((state: RootState) => state.options.countryOptions);
   const roleOptions = useSelector((state: RootState) => state.options.roleOptions);
+  const agentOptions = useSelector((state: RootState) => state.options.agentOptions);
   const sexOpts = sexOptions.map(opt => ({ ...opt, label: t(`user.sex_${opt.value.toLowerCase()}`, opt.label) }));
 
   return (
@@ -106,6 +107,18 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
           >
             {roleOptions.map(option => (
               <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            margin="dense"
+            label={t('user.agentId', '代理')}
+            select
+            fullWidth
+            value={form.agentId || ''}
+            onChange={e => setForm((f: any) => ({ ...f, agentId: e.target.value }))}
+          >
+            {agentOptions.map(option => (
+              <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>
             ))}
           </TextField>
           {!editingId && (

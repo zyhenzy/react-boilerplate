@@ -5,19 +5,13 @@ import {
   SubmitAgentOrderCommand,
   ReviewFailedAgentOrderCommand,
   ConvertedAgentOrderCommand,
-  RefuseAgentOrderCommand,
-  AcceptAgentOrderCommand,
-  IssuedAgentOrderCommand, AgentOrder,
+  IssuedAgentOrderCommand,
+  AgentOrder,
 } from './types';
 
 // 获取代理订单列表
 export function getAgentOrderList(params?: AgentOrderQuery) {
   return http.get<ListResponse<AgentOrder>>('/v1/AgentOrder/list', { params });
-}
-
-// 获取代理订单用户列表
-export function getAgentOrderUserList(params?: AgentOrderQuery) {
-  return http.get<ListResponse<AgentOrder>>('/v1/AgentOrder/userList', { params });
 }
 
 // 获取代理订单详情
@@ -38,16 +32,6 @@ export function reviewFailedAgentOrder(data: ReviewFailedAgentOrderCommand) {
 // 转换成功
 export function convertedAgentOrder(data: ConvertedAgentOrderCommand) {
   return http.post('/v1/AgentOrder/converted', data);
-}
-
-// 代理人拒绝
-export function refuseAgentOrder(data: RefuseAgentOrderCommand) {
-  return http.post('/v1/AgentOrder/refuse', data);
-}
-
-// 代理人接受
-export function acceptAgentOrder(data: AcceptAgentOrderCommand) {
-  return http.post('/v1/AgentOrder/accept', data);
 }
 
 // 已出票

@@ -33,7 +33,7 @@ interface OptionsState {
   countryCodeOptions: IOption[];
   roleOptions: IOption[];
   certificateOptions: IOption[];
-  agentOptions: IOption[];
+  agentOptions: {id:string,name:string}[];
 }
 
 const initialState: OptionsState = {

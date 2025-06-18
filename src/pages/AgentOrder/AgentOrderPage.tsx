@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import type { AgentOrder } from '../../api/agent-order/types';
 import {
   getAgentOrderList,
-  // 其它操作接口可后续补充
+  reviewFailedAgentOrder,
+  convertedAgentOrder,
 } from '../../api/agent-order';
 import {
   Box,
@@ -19,6 +20,9 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import AgentOrderFormDialog from './AgentOrderFormDialog';
+import ReviewFailedDialog from './ReviewFailedDialog';
+import ConvertedDialog from './ConvertedDialog';
+import IssuedDialog from './IssuedDialog';
 import { useTranslation } from 'react-i18next';
 
 const AgentOrderPage: React.FC = () => {
@@ -30,6 +34,13 @@ const AgentOrderPage: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingOrder, setEditingOrder] = useState<AgentOrder | null>(null);
+  const [reviewFailedOpen, setReviewFailedOpen] = useState(false);
+  const [reviewFailedId, setReviewFailedId] = useState<string | null>(null);
+  const [convertedOpen, setConvertedOpen] = useState(false);
+  const [convertedId, setConvertedId] = useState<string | null>(null);
+  const [convertedOrder, setConvertedOrder] = useState<AgentOrder | null>(null);
+  const [issuedOpen, setIssuedOpen] = useState(false);
+  const [issuedOrder, setIssuedOrder] = useState<AgentOrder | null>(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -54,6 +65,47 @@ const AgentOrderPage: React.FC = () => {
   const handleEdit = (order: AgentOrder) => {
     setEditingOrder(order);
     setDialogOpen(true);
+  };
+
+  const handleReviewFailed = (id: string) => {
+    setReviewFailedId(id);
+    setReviewFailedOpen(true);
+  };
+
+  const handleReviewFailedSubmit = async (reason: string,tcRemark:string) => {
+    if (!reviewFailedId) return;
+    await reviewFailedAgentOrder({ id: reviewFailedId, reason,tcRemark });
+    setReviewFailedOpen(false);
+    setReviewFailedId(null);
+    fetchData();
+  };
+
+  const handleConverted = (item: AgentOrder) => {
+    setConvertedId(item.id!);
+    setConvertedOrder(item);
+    setConvertedOpen(true);
+  };
+
+  const handleConvertedSubmit = async (form: import('../../api/agent-order/types').ConvertedAgentOrderCommand) => {
+    if (!convertedId) return;
+    await convertedAgentOrder(form);
+    setConvertedOpen(false);
+    setConvertedId(null);
+    setConvertedOrder(null);
+    fetchData();
+  };
+
+  const handleIssued = (item: AgentOrder) => {
+    setIssuedOrder(item);
+    setIssuedOpen(true);
+  };
+
+  const handleIssuedSubmit = async (fields: { pnr: string; price: number; tax: number; serviceCharge: number; tcRemark: string }) => {
+    // 这里需要调用 issuedAgentOrder，假设你已在 api/agent-order/index.ts 实现
+    // await issuedAgentOrder({ id: issuedOrder?.id!, ...fields });
+    setIssuedOpen(false);
+    setIssuedOrder(null);
+    fetchData();
   };
 
   // 这里只做UI，实际新增/编辑需调用后端接口
@@ -100,7 +152,20 @@ const AgentOrderPage: React.FC = () => {
                   <TableCell>{item.serviceCharge}</TableCell>
                   <TableCell>{item.pnr}</TableCell>
                   <TableCell>
-                    <IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>
+                    {/*<IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>*/}
+                    {item.status===0 && (
+                        <>
+                          <Button size="small" color="error" onClick={() => handleReviewFailed(item.id!)} disabled={loading} style={{marginLeft: 8}}>
+                            {t('agentOrder.reviewFailed', '复核失败')}
+                          </Button>
+                          <Button size="small" color="primary" onClick={() => handleConverted(item)} disabled={loading} style={{marginLeft: 8}}>
+                            {t('agentOrder.converted', '转换成功')}
+                          </Button>
+                        </>
+                    )}
+                    { item.status === 1 && <Button size="small" color="success" onClick={() => handleIssued(item)} disabled={loading} style={{marginLeft: 8}}>
+                      {t('agentOrder.issued', '出票')}
+                    </Button>}
                   </TableCell>
                 </TableRow>
               ))
@@ -125,9 +190,25 @@ const AgentOrderPage: React.FC = () => {
         setForm={f => setEditingOrder(f as AgentOrder | null)}
         editingId={editingOrder?.id || null}
       />
+      <ReviewFailedDialog
+        open={reviewFailedOpen}
+        onClose={() => setReviewFailedOpen(false)}
+        onSubmit={handleReviewFailedSubmit}
+      />
+      <ConvertedDialog
+        open={convertedOpen}
+        onClose={() => { setConvertedOpen(false); setConvertedOrder(null); }}
+        onSubmit={handleConvertedSubmit}
+        order={convertedOrder}
+      />
+      <IssuedDialog
+        open={issuedOpen}
+        onClose={() => { setIssuedOpen(false); setIssuedOrder(null); }}
+        onSubmit={handleIssuedSubmit}
+        order={issuedOrder}
+      />
     </Box>
   );
 };
 
 export default AgentOrderPage;
-
