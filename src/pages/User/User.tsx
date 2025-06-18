@@ -16,7 +16,6 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import UserFormDialog from './components/UserFormDialog';
 import { getUserList, addUser, updateUser, enableUser, getUserDetail } from '../../api/user';
-import { getRoleOptions } from '../../api/basic';
 import { useTranslation } from 'react-i18next';
 
 const UserPage: React.FC = () => {
@@ -28,7 +27,6 @@ const UserPage: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<any | null>(null);
-  const [roleOptions, setRoleOptions] = useState<{ value: string; label: string }[]>([]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -41,15 +39,8 @@ const UserPage: React.FC = () => {
     }
   };
 
-  const fetchRoleOptions = async () => {
-    const res = await getRoleOptions();
-    setRoleOptions(res || []);
-  };
-
   useEffect(() => {
     fetchData();
-    fetchRoleOptions();
-    // eslint-disable-next-line
   }, [pageIndex, pageSize]);
 
   const handleAdd = () => {

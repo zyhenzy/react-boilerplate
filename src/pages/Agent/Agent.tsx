@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { Agent } from "../../api/agent/types";
 import { createAgent, enableAgent, getAgentList, updateAgent } from "../../api/agent";
-import { getCountryOptions } from '../../api/basic';
 import {
   Box,
   Button,
@@ -13,13 +12,13 @@ import {
   TableRow,
   Paper,
   Switch,
-  CircularProgress,
   IconButton,
   TablePagination
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import AgentFormDialog from './components/AgentFormDialog';
-import { IOption } from "../../api/basic/types";
+import { useSelector } from 'react-redux';
+import type { RootState } from '../../store';
 import { useTranslation } from 'react-i18next';
 
 const AgentPage: React.FC = () => {
@@ -31,7 +30,9 @@ const AgentPage: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingAgent, setEditingAgent] = useState<Partial<Agent> | null>(null);
-  const [countryOptions, setCountryOptions] = useState<IOption[]>([]);
+
+  // 不再单独请求国家选项，直接从redux获取
+  const countryOptions = useSelector((state: RootState) => state.options.countryOptions);
 
   const fetchData = async () => {
     setLoading(true);
@@ -43,16 +44,6 @@ const AgentPage: React.FC = () => {
       setLoading(false);
     }
   };
-
-  // 获取国家选项
-  const fetchCountryOptions = async () => {
-    const res = await getCountryOptions();
-    setCountryOptions(res);
-  };
-
-  useEffect(() => {
-    fetchCountryOptions();
-  }, []);
 
   useEffect(() => {
     fetchData();
@@ -116,7 +107,7 @@ const AgentPage: React.FC = () => {
                 <TableRow key={item.id}>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.contact}</TableCell>
-                  <TableCell>{countryOptions.find(opt => opt.value === item.countryCode)?.label || item.countryCode}</TableCell>
+                  <TableCell>{item.countryCode}</TableCell>
                   <TableCell>{item.cityCode}</TableCell>
                   <TableCell>{item.currency}</TableCell>
                   <TableCell>
@@ -151,7 +142,6 @@ const AgentPage: React.FC = () => {
         form={editingAgent || { name: '', contact: '', enable: true }}
         setForm={f => setEditingAgent(f as Partial<Agent> | null)}
         editingId={editingAgent?.id || null}
-        countryOptions={countryOptions}
       />
     </Box>
   );

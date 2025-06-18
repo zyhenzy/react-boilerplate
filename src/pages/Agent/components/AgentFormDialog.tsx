@@ -12,8 +12,9 @@ import {
   FormControl
 } from '@mui/material';
 import type { Agent } from '../../../api/agent/types';
-import {IOption} from "../../../api/basic/types";
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../../../store';
 
 interface AgentFormDialogProps {
   open: boolean;
@@ -22,7 +23,6 @@ interface AgentFormDialogProps {
   form: Partial<Agent>;
   setForm: React.Dispatch<React.SetStateAction<Partial<Agent>>>;
   editingId: string | null;
-  countryOptions: IOption[];
 }
 
 const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
@@ -31,10 +31,10 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
   onSubmit,
   form,
   setForm,
-  editingId,
-  countryOptions
+  editingId
 }) => {
   const { t } = useTranslation();
+  const countryOptions = useSelector((state: RootState) => state.options.countryOptions);
 
   useEffect(() => {
     if (form.enable === undefined) {
@@ -76,7 +76,7 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
               displayEmpty
             >
               {countryOptions.map(option => (
-                <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+                <MenuItem key={option.value} value={option.value}>{option.label}（{option.value}）</MenuItem>
               ))}
             </Select>
           </FormControl>

@@ -72,7 +72,7 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
               inputProps={{ maxLength: 5 }}
           >
             {countryOptions.map(option => (
-                <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+                <MenuItem key={option.value} value={option.value}>{option.label}（{option.value}）</MenuItem>
             ))}
           </TextField>
           <TextField
