@@ -17,8 +17,6 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import AgentFormDialog from './components/AgentFormDialog';
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../store';
 import { useTranslation } from 'react-i18next';
 
 const AgentPage: React.FC = () => {
@@ -30,9 +28,6 @@ const AgentPage: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingAgent, setEditingAgent] = useState<Partial<Agent> | null>(null);
-
-  // 不再单独请求国家选项，直接从redux获取
-  const countryOptions = useSelector((state: RootState) => state.options.countryOptions);
 
   const fetchData = async () => {
     setLoading(true);
