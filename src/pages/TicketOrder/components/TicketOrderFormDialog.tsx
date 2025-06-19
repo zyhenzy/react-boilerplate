@@ -227,24 +227,24 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
               </ul>
               <Button onClick={handleAddPassenger} size="small">{t('ticketOrder.addPassenger')}</Button>
             </div>
-            <PassengerFormDialog
-                open={passengerDialogOpen}
-                onClose={() => setPassengerDialogOpen(false)}
-                onPassengerSubmit={handlePassengerSubmit}
-                passenger={editingPassenger}
-            />
-            <TripFormDialog
-                open={tripDialogOpen}
-                onClose={() => setTripDialogOpen(false)}
-                onTripSubmit={handleTripSubmit}
-                trip={editingTrip}
-            />
           </DialogContent>
           <DialogActions>
             <Button onClick={onClose} color="secondary">{t('cancel')}</Button>
             <Button type="submit" variant="contained" color="primary">{editingId ? t('update') : t('add')}</Button>
           </DialogActions>
         </form>
+        <PassengerFormDialog
+            open={passengerDialogOpen}
+            onClose={() => setPassengerDialogOpen(false)}
+            onPassengerSubmit={handlePassengerSubmit}
+            passenger={editingPassenger}
+        />
+        <TripFormDialog
+            open={tripDialogOpen}
+            onClose={() => setTripDialogOpen(false)}
+            onTripSubmit={handleTripSubmit}
+            trip={editingTrip}
+        />
       </Dialog>
   );
 };
