@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { TicketOrder } from '../../api/ticket-order/types';
-import { getTicketOrderList, addTicketOrder, updateTicketOrder, getTicketOrderDetail, cancelTicketOrder } from '../../api/ticket-order';
+import { getTicketOrderList, addTicketOrder, updateTicketOrder, getTicketOrderDetail, cancelTicketOrder, payedTicketOrder } from '../../api/ticket-order';
 import { getSupplierList } from '../../api/supplier';
 import type { Supplier } from '../../api/supplier/types';
 import {
@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import TicketOrderFormDialog from './components/TicketOrderFormDialog';
+import PayDialog from './components/PayDialog';
 import { useTranslation } from 'react-i18next';
 
 const TicketOrderPage: React.FC = () => {
@@ -30,6 +31,9 @@ const TicketOrderPage: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingOrder, setEditingOrder] = useState<TicketOrder | null>(null);
+  const [payDialogOpen, setPayDialogOpen] = useState(false);
+  const [payingOrder, setPayingOrder] = useState<TicketOrder | null>(null);
+  const [payLoading, setPayLoading] = useState(false);
 
   const fetchData = async () => {
     setLoading(true);
@@ -76,6 +80,23 @@ const TicketOrderPage: React.FC = () => {
       fetchData();
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePay = (order: TicketOrder) => {
+    setPayingOrder(order);
+    setPayDialogOpen(true);
+  };
+
+  const handlePaySubmit = async (values: any) => {
+    setPayLoading(true);
+    try {
+      await payedTicketOrder(values);
+      setPayDialogOpen(false);
+      setPayingOrder(null);
+      fetchData();
+    } finally {
+      setPayLoading(false);
     }
   };
 
@@ -152,6 +173,7 @@ const TicketOrderPage: React.FC = () => {
                   <TableCell>{t(`ticketOrder.status_${item.status}`)}</TableCell>
                   <TableCell>
                     <IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>
+                    <Button size="small" color="primary" onClick={() => handlePay(item)} disabled={loading} style={{ marginLeft: 8 }}>{t('ticketOrder.pay')}</Button>
                     <Button size="small" color="error" onClick={() => handleCancel(item)} disabled={loading} style={{ marginLeft: 8 }}>{t('ticketOrder.cancel')}</Button>
                   </TableCell>
                 </TableRow>
@@ -177,6 +199,13 @@ const TicketOrderPage: React.FC = () => {
         setForm={setEditingOrder as any}
         editingId={editingOrder?.id || null}
         suppliers={suppliers}
+      />
+      <PayDialog
+        open={payDialogOpen}
+        onClose={() => setPayDialogOpen(false)}
+        onSubmit={handlePaySubmit}
+        loading={payLoading}
+        orderId={payingOrder?.id}
       />
     </Box>
   );
