@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { TicketOrder } from '../../api/ticket-order/types';
-import { getTicketOrderList, addTicketOrder, updateTicketOrder } from '../../api/ticket-order';
+import { getTicketOrderList, addTicketOrder, updateTicketOrder, getTicketOrderDetail } from '../../api/ticket-order';
 import { getSupplierList } from '../../api/supplier';
 import type { Supplier } from '../../api/supplier/types';
 import {
@@ -58,9 +58,15 @@ const TicketOrderPage: React.FC = () => {
     setDialogOpen(true);
   };
 
-  const handleEdit = (order: TicketOrder) => {
-    setEditingOrder(order);
-    setDialogOpen(true);
+  const handleEdit = async (order: TicketOrder) => {
+    setLoading(true);
+    try {
+      const res = await getTicketOrderDetail(order.id!);
+      setEditingOrder(res || order);
+      setDialogOpen(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = async (values: Partial<TicketOrder>) => {

@@ -95,7 +95,6 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
       }
       return { ...f, flightList: list };
     });
-    debugger
   };
 
   return (

@@ -28,7 +28,7 @@ export function getTicketOrderUserList(params?: TicketOrderQuery) {
 
 // 获取机票订单详情
 export function getTicketOrderDetail(id: string) {
-  return http.get(`/v1/TicketOrder/${id}`);
+  return http.get<TicketOrder>(`/v1/TicketOrder/${id}`);
 }
 
 // 添加机票订单
