@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { TicketOrder } from '../../api/ticket-order/types';
-import { getTicketOrderList, addTicketOrder, updateTicketOrder, getTicketOrderDetail } from '../../api/ticket-order';
+import { getTicketOrderList, addTicketOrder, updateTicketOrder, getTicketOrderDetail, cancelTicketOrder } from '../../api/ticket-order';
 import { getSupplierList } from '../../api/supplier';
 import type { Supplier } from '../../api/supplier/types';
 import {
@@ -64,6 +64,16 @@ const TicketOrderPage: React.FC = () => {
       const res = await getTicketOrderDetail(order.id!);
       setEditingOrder(res || order);
       setDialogOpen(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancel = async (order: TicketOrder) => {
+    setLoading(true);
+    try {
+      await cancelTicketOrder({ id: order.id! });
+      fetchData();
     } finally {
       setLoading(false);
     }
@@ -142,6 +152,7 @@ const TicketOrderPage: React.FC = () => {
                   <TableCell>{t(`ticketOrder.status_${item.status}`)}</TableCell>
                   <TableCell>
                     <IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>
+                    <Button size="small" color="error" onClick={() => handleCancel(item)} disabled={loading} style={{ marginLeft: 8 }}>{t('ticketOrder.cancel')}</Button>
                   </TableCell>
                 </TableRow>
               ))
