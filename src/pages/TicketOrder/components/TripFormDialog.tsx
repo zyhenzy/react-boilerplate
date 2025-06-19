@@ -6,11 +6,11 @@ import type { AddTicketOrderTripCommand } from '../../../api/ticket-order/types'
 interface TripFormDialogProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (values: AddTicketOrderTripCommand) => void;
+  onTripSubmit: (values: AddTicketOrderTripCommand) => void;
   trip?: AddTicketOrderTripCommand;
 }
 
-const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onSubmit, trip }) => {
+const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSubmit, trip }) => {
   const { t } = useTranslation();
   const [form, setForm] = useState<AddTicketOrderTripCommand>({});
 
@@ -20,7 +20,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onSubmit
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <form onSubmit={e => { e.preventDefault(); onSubmit(form); }}>
+      <form onSubmit={e => { e.preventDefault(); onTripSubmit(form); }}>
         <DialogTitle>{trip ? t('ticketOrder.editTrip') : t('ticketOrder.addTrip')}</DialogTitle>
         <DialogContent>
           <TextField

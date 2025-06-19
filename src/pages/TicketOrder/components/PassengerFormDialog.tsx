@@ -8,11 +8,11 @@ import type { IOption } from '../../../api/basic/types';
 interface PassengerFormDialogProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (values: AddTicketOrderPassengerCommand) => void;
+  onPassengerSubmit: (values: AddTicketOrderPassengerCommand) => void;
   passenger?: AddTicketOrderPassengerCommand;
 }
 
-const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose, onSubmit, passenger }) => {
+const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose, onPassengerSubmit, passenger }) => {
   const { t } = useTranslation();
   const certificateOptions = useSelector((state: any) => state.options.certificateOptions) as IOption[];
   const countryOptions = useSelector((state: any) => state.options.countryOptions) as IOption[];
@@ -25,7 +25,7 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <form onSubmit={e => { e.preventDefault(); onSubmit(form); }}>
+      <form onSubmit={e => { e.preventDefault(); onPassengerSubmit(form); }}>
         <DialogTitle>{passenger ? t('ticketOrder.editPassenger') : t('ticketOrder.addPassenger')}</DialogTitle>
         <DialogContent>
           <TextField

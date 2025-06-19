@@ -17,7 +17,6 @@ import PassengerFormDialog from './PassengerFormDialog';
 import TripFormDialog from './TripFormDialog';
 import type { AddTicketOrderPassengerCommand, AddTicketOrderTripCommand } from '../../../api/ticket-order/types';
 import type { Supplier } from '../../../api/supplier/types';
-import { addTicketOrderTrip, updateTicketOrderTrip } from '../../../api/ticket-order';
 
 interface TicketOrderFormDialogProps {
   open: boolean;
@@ -81,29 +80,22 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
     setTripDialogOpen(true);
   };
 
-  const handleTripSubmit = async (values: AddTicketOrderTripCommand) => {
+  const handleTripSubmit = (values: AddTicketOrderTripCommand) => {
     setTripDialogOpen(false);
     setEditingTrip(undefined);
-    // 判断是新增还是编辑
-    let tripResult: AddTicketOrderTripCommand;
-    if ((values as any)._idx !== undefined) {
-      // 编辑
-      const { _idx, ...updateData } = values as any;
-      tripResult = await updateTicketOrderTrip(updateData) as AddTicketOrderTripCommand;
-      setForm(f => {
-        const list = Array.isArray(f.flightList) ? [...f.flightList] : [];
-        list[_idx] = tripResult;
-        return { ...f, flightList: list };
-      });
-    } else {
-      // 新增
-      tripResult = await addTicketOrderTrip(values) as AddTicketOrderTripCommand;
-      setForm(f => {
-        const list = Array.isArray(f.flightList) ? [...f.flightList] : [];
-        list.push(tripResult);
-        return { ...f, flightList: list };
-      });
-    }
+    setForm(f => {
+      const list = Array.isArray(f.flightList) ? [...f.flightList] : [];
+      if ((values as any)._idx !== undefined) {
+        // 编辑
+        const { _idx, ...updateData } = values as any;
+        list[_idx] = updateData;
+      } else {
+        // 新增
+        list.push(values);
+      }
+      return { ...f, flightList: list };
+    });
+    debugger
   };
 
   return (
@@ -238,13 +230,13 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
             <PassengerFormDialog
                 open={passengerDialogOpen}
                 onClose={() => setPassengerDialogOpen(false)}
-                onSubmit={handlePassengerSubmit}
+                onPassengerSubmit={handlePassengerSubmit}
                 passenger={editingPassenger}
             />
             <TripFormDialog
                 open={tripDialogOpen}
                 onClose={() => setTripDialogOpen(false)}
-                onSubmit={handleTripSubmit}
+                onTripSubmit={handleTripSubmit}
                 trip={editingTrip}
             />
           </DialogContent>
