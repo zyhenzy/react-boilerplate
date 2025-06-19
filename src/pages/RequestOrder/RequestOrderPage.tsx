@@ -88,7 +88,7 @@ const RequestOrderPage: React.FC = () => {
     <Box p={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <h2>{t('requestOrder.title')}</h2>
-        <Button variant="contained" onClick={handleAdd}>{t('requestOrder.add')}</Button>
+        {/*<Button variant="contained" onClick={handleAdd}>{t('requestOrder.add')}</Button>*/}
       </Box>
       <TableContainer component={Paper}>
         <Table>
