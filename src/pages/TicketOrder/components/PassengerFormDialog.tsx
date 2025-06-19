@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import type { AddTicketOrderPassengerCommand } from '../../../api/ticket-order/types';
 import type { IOption } from '../../../api/basic/types';
 
@@ -9,13 +10,13 @@ interface PassengerFormDialogProps {
   onClose: () => void;
   onSubmit: (values: AddTicketOrderPassengerCommand) => void;
   passenger?: AddTicketOrderPassengerCommand;
-  certificateOptions: IOption[];
-  countryOptions: IOption[];
-  countryCodeOptions: IOption[];
 }
 
-const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose, onSubmit, passenger, certificateOptions, countryOptions, countryCodeOptions }) => {
+const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose, onSubmit, passenger }) => {
   const { t } = useTranslation();
+  const certificateOptions = useSelector((state: any) => state.options.certificateOptions) as IOption[];
+  const countryOptions = useSelector((state: any) => state.options.countryOptions) as IOption[];
+  const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
   const [form, setForm] = useState<AddTicketOrderPassengerCommand>({});
 
   useEffect(() => {
