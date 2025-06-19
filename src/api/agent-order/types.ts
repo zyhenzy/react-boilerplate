@@ -10,11 +10,11 @@ export enum AgentOrderType {
 // 订单状态
 export enum AgentOrderStatus {
   待处理 = 0,
-  TC复合失败 = 1, // TC复合失败
-  TC转换成功 = 2, // TC转换成功
-  已出票 = 3,
-  已完成 = 4,
-  已取消 = 5,
+  TC复合失败 = 1,
+  TC转换成功 = 2,
+  代理人拒绝 = 3,
+  代理人接受 = 4,
+  TC出票 = 5,
 }
 
 // 代理订单实体
