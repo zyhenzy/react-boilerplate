@@ -48,8 +48,6 @@ const TicketOrderPage: React.FC = () => {
     setSuppliers(res.data || []);
   };
 
-
-
   useEffect(() => {
     fetchData();
     fetchSuppliers();
@@ -66,8 +64,6 @@ const TicketOrderPage: React.FC = () => {
   };
 
   const handleSubmit = async (values: Partial<TicketOrder>) => {
-    console.log(values)
-    debugger
     if (values.id) {
       await updateTicketOrder({
         id: values.id,
