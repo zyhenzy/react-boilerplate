@@ -162,6 +162,12 @@
     "fuelFee": "Fuel Fee",
     "pleaseSelect": "Please select",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "pay": "Pay",
+    "currencyPay": "Currency",
+    "ratePay": "Exchange Rate",
+    "payType": "Payment Method",
+    "issued": "Issue",
+    "cancel": "Cancel Order"
   }
 }

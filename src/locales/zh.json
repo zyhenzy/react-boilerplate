@@ -162,6 +162,12 @@
     "fuelFee": "燃油费",
     "pleaseSelect": "请选择",
     "yes": "是",
-    "no": "否"
+    "no": "否",
+    "pay": "支付",
+    "currencyPay": "支付币种",
+    "ratePay": "支付汇率",
+    "payType": "支付方式",
+    "issued": "出票",
+    "cancel": "取消订单"
   }
 }
