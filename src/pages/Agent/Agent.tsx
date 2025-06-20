@@ -67,10 +67,8 @@ const AgentPage: React.FC = () => {
   };
 
   const handleEnable = async (agent: Agent) => {
-    setLoading(true);
     await enableAgent(agent.id!, !agent.enable);
-    setLoading(false);
-    fetchData();
+    setData(prevData => prevData.map(item => item.id === agent.id ? { ...item, enable: !item.enable } : item));
   };
 
   return (
