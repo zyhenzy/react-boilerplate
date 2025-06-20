@@ -57,29 +57,31 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
             required
             inputProps={{ maxLength: 50 }}
           />
-          <TextField
-            margin="dense"
-            label={t('agent.contact')}
-            fullWidth
-            value={form.contact || ''}
-            onChange={e => setForm(f => ({ ...f, contact: e.target.value }))}
-            required
-            inputProps={{ maxLength: 50 }}
-          />
-          <FormControl fullWidth margin="dense">
-            <InputLabel id="countryCode-label">{t('agent.countryCode')}</InputLabel>
-            <Select
-              labelId="countryCode-label"
-              label={t('agent.countryCode')}
-              value={form.countryCode || ''}
-              onChange={e => setForm(f => ({ ...f, countryCode: e.target.value }))}
-              displayEmpty
-            >
-              {countryOptions.map(option => (
-                <MenuItem key={option.value} value={option.value}>{option.label}（{option.value}）</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 8 }}>
+            <FormControl style={{ minWidth: 120 }}>
+              <InputLabel id="countryCode-label">{t('agent.countryCode')}</InputLabel>
+              <Select
+                labelId="countryCode-label"
+                label={t('agent.countryCode')}
+                value={form.countryCode || ''}
+                onChange={e => setForm(f => ({ ...f, countryCode: e.target.value }))}
+                displayEmpty
+              >
+                {countryOptions.map(option => (
+                  <MenuItem key={option.value} value={option.value}>{option.label}（{option.value}）</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              margin="dense"
+              label={t('agent.contact')}
+              value={form.contact || ''}
+              onChange={e => setForm(f => ({ ...f, contact: e.target.value }))}
+              required
+              inputProps={{ maxLength: 50 }}
+              style={{ flex: 1 }}
+            />
+          </div>
           <TextField
             margin="dense"
             label={t('agent.cityCode')}

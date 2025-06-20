@@ -24,7 +24,7 @@
     "title": "代理",
     "name": "名称",
     "contact": "联系方式",
-    "countryCode": "国家代码",
+    "countryCode": "国家区号",
     "cityCode": "城市代码",
     "currency": "币种",
     "enable": "启用",
