@@ -9,7 +9,7 @@
     "userName": "用户名",
     "name": "姓名",
     "phoneNumber": "手机号",
-    "countryNumber": "国家号码",
+    "countryNumber": "国家区号",
     "sex": "性别",
     "role": "角色",
     "password": "密码",

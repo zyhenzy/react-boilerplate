@@ -31,7 +31,6 @@ const SupplierPage: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line
   }, [pageIndex, pageSize]);
 
   const handlePageChange = (_: unknown, newPage: number) => {
@@ -63,7 +62,7 @@ const SupplierPage: React.FC = () => {
 
   const handleEnable = async (supplier: Supplier) => {
     await enableSupplier(supplier.id!, !supplier.enable);
-    fetchData();
+    setData(prevData => prevData.map(item => item.id === supplier.id ? { ...item, enable: !item.enable } : item));
   };
 
   return (
@@ -126,3 +125,5 @@ const SupplierPage: React.FC = () => {
 };
 
 export default SupplierPage;
+
+

@@ -23,7 +23,7 @@ export function getCertificateOptions() {
 
 // 代理下拉
 export function getagentOptions() {
-  return http.get<{id:string,name:string}[]>('/v1/Data/agentOptions');
+  return http.get<IOption[]>('/v1/Data/agentOptions');
 }
 
 // 上传图片接口，支持自定义 headers

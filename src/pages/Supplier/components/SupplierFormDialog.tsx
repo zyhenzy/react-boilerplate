@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import { useTranslation } from 'react-i18next';
 import type { Supplier } from '../../../api/supplier/types';
 import {getImage, uploadImage} from '../../../api/basic';
@@ -105,15 +106,16 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             onChange={e => handleChange('currency', e.target.value)}
             inputProps={{ maxLength: 10 }}
           />
-          <Box mb={2} display="flex" alignItems="center">
+          <Box mb={2} display="flex" alignItems="center" justifyContent="center">
             {form.logoId ? (
               <Box
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
+                  justifyContent: 'center',
                   ml: 0,
-                  height: 56,
-                  width: 56,
+                  height: 96,
+                  width: 96,
                   borderRadius: '50%',
                   overflow: 'hidden',
                   boxShadow: 1,
@@ -124,6 +126,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                     boxShadow: 4,
                     borderColor: '#1976d2',
                   },
+                  m: 2
                 }}
                 onClick={() => {
                   document.getElementById('logo-upload-input')?.click();
@@ -142,9 +145,9 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                 component="label"
                 disabled={uploading}
                 size="small"
-                sx={{ height: 56, width: 56, borderRadius: '50%', minWidth: 0, p: 0, ml: 0 }}
+                sx={{ height: 96, width: 96, borderRadius: '50%', minWidth: 0, p: 0, ml: 0, m: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >
-                <span style={{ fontSize: 12, color: '#888' }}>{uploading ? t('supplier.uploading', '上传中...') : t('supplier.upload', '上传头像')}</span>
+                <span style={{ fontSize: 14, color: '#888', textAlign: 'center', width: '100%' }}>{uploading ? t('supplier.uploading', '上传中...') : t('supplier.upload', '上传头像')}</span>
                 <input
                   id="logo-upload-input"
                   type="file"
@@ -166,9 +169,10 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
           </Box>
           <FormControlLabel
             control={
-              <Switch
-                checked={form.enable}
+              <Checkbox
+                checked={!!form.enable}
                 onChange={e => handleChange('enable', e.target.checked)}
+                color="primary"
               />
             }
             label={t('supplier.enable')}

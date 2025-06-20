@@ -44,19 +44,14 @@ const UserPage: React.FC = () => {
   }, [pageIndex, pageSize]);
 
   const handleAdd = () => {
-    setEditingUser(null);
+    setEditingUser({  enable: true });
     setDialogOpen(true);
   };
 
   const handleEdit = async (user: any) => {
-    setLoading(true);
-    try {
-      const res = await getUserDetail(user.id);
-      setEditingUser(res);
-      setDialogOpen(true);
-    } finally {
-      setLoading(false);
-    }
+    const res = await getUserDetail(user.id);
+    setEditingUser(res);
+    setDialogOpen(true);
   };
 
   const handleSubmit = async (values: any) => {
@@ -71,10 +66,8 @@ const UserPage: React.FC = () => {
   };
 
   const handleEnable = async (user: any) => {
-    setLoading(true);
     await enableUser({ id: user.id, enable: !user.enable });
-    setLoading(false);
-    fetchData();
+    setData(prevData => prevData.map(item => item.id === user.id ? { ...item, enable: !item.enable } : item));
   };
 
   return (

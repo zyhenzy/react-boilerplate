@@ -7,9 +7,9 @@ import {
   TextField,
   Button,
   MenuItem,
-  FormControlLabel,
-  Switch
+  FormControlLabel
 } from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
@@ -62,29 +62,31 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
             required
             inputProps={{ maxLength: 25 }}
           />
-          <TextField
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 8 }}>
+            <TextField
               margin="dense"
               label={t('user.countryNumber')}
               select
-              fullWidth
               value={form.countryNumber || ''}
               onChange={e => setForm((f: any) => ({ ...f, countryNumber: e.target.value }))}
               required
               inputProps={{ maxLength: 5 }}
-          >
-            {countryOptions.map(option => (
+              style={{ minWidth: 120 }}
+            >
+              {countryOptions.map(option => (
                 <MenuItem key={option.value} value={option.value}>{option.label}（{option.value}）</MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            margin="dense"
-            label={t('user.phoneNumber')}
-            fullWidth
-            value={form.phoneNumber || ''}
-            onChange={e => setForm((f: any) => ({ ...f, phoneNumber: e.target.value }))}
-            required
-            inputProps={{ maxLength: 25 }}
-          />
+              ))}
+            </TextField>
+            <TextField
+              margin="dense"
+              label={t('user.phoneNumber')}
+              value={form.phoneNumber || ''}
+              onChange={e => setForm((f: any) => ({ ...f, phoneNumber: e.target.value }))}
+              required
+              inputProps={{ maxLength: 25 }}
+              style={{ flex: 1 }}
+            />
+          </div>
           <TextField
             margin="dense"
             label={t('user.sex')}
@@ -118,7 +120,7 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
             onChange={e => setForm((f: any) => ({ ...f, agentId: e.target.value }))}
           >
             {agentOptions.map(option => (
-              <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>
+              <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
             ))}
           </TextField>
           {!editingId && (
@@ -134,9 +136,10 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
           )}
           <FormControlLabel
             control={
-              <Switch
+              <Checkbox
                 checked={form.enable ?? true}
                 onChange={e => setForm((f: any) => ({ ...f, enable: e.target.checked }))}
+                color="primary"
               />
             }
             label={t('user.enable')}
