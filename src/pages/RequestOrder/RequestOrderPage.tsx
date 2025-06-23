@@ -16,7 +16,9 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import RequestOrderFormDialog from './components/RequestOrderFormDialog';
+import RequestOrderDetailDialog from './components/RequestOrderDetailDialog';
 import { useTranslation } from 'react-i18next';
+import { getRequestOrderDetail } from '../../api/request-order';
 
 const RequestOrderPage: React.FC = () => {
   const { t } = useTranslation();
@@ -28,6 +30,8 @@ const RequestOrderPage: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingOrder, setEditingOrder] = useState<RequestOrder | null>(null);
   const [countryOptions, setCountryOptions] = useState<{ label: string; value: string }[]>([]);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [detailOrder, setDetailOrder] = useState<RequestOrder | null>(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -58,6 +62,12 @@ const RequestOrderPage: React.FC = () => {
   const handleEdit = (order: RequestOrder) => {
     setEditingOrder(order);
     setDialogOpen(true);
+  };
+
+  const handleViewDetail = async (order: RequestOrder) => {
+    setDetailDialogOpen(true);
+    const res = await getRequestOrderDetail(order.id!);
+    setDetailOrder(res || null);
   };
 
   const handleSubmit = async (values: Partial<RequestOrder>) => {
@@ -102,9 +112,9 @@ const RequestOrderPage: React.FC = () => {
           </TableHead>
           <TableBody>
             {loading ? (
-              <TableRow><TableCell colSpan={5} align="center">{t('requestOrder.loading')}</TableCell></TableRow>
+              <TableRow><TableCell colSpan={8} align="center">{t('requestOrder.loading', '加载中...')}</TableCell></TableRow>
             ) : data.length === 0 ? (
-              <TableRow><TableCell colSpan={5}>{t('requestOrder.noData')}</TableCell></TableRow>
+              <TableRow><TableCell colSpan={8}>{t('requestOrder.noData', '暂无数据')}</TableCell></TableRow>
             ) : (
               data.map(item => (
                 <TableRow key={item.id}>
@@ -113,7 +123,7 @@ const RequestOrderPage: React.FC = () => {
                   <TableCell>{item.phoneNumber}</TableCell>
                   <TableCell>{t(`requestOrder.status_${item.status}`)}</TableCell>
                   <TableCell>
-                    <IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>
+                    <IconButton size="small" onClick={() => handleViewDetail(item)} disabled={loading}><EditIcon /></IconButton>
                   </TableCell>
                 </TableRow>
               ))
@@ -138,6 +148,11 @@ const RequestOrderPage: React.FC = () => {
         setForm={f => setEditingOrder(f as RequestOrder | null)}
         editingId={editingOrder?.id || null}
         countryOptions={countryOptions}
+      />
+      <RequestOrderDetailDialog
+        open={detailDialogOpen}
+        onClose={() => { setDetailDialogOpen(false); setDetailOrder(null); }}
+        order={detailOrder}
       />
     </Box>
   );

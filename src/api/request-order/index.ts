@@ -12,14 +12,9 @@ export function getRequestOrderList(params?: RequestOrderQuery) {
   return http.get<ListResponse<RequestOrder>>('/v1/RequestOrder/list', { params });
 }
 
-// 获取需求订单用户列表
-export function getRequestOrderUserList(params?: RequestOrderQuery) {
-  return http.get('/v1/RequestOrder/userList', { params });
-}
-
 // 获取需求订单详情
 export function getRequestOrderDetail(id: string) {
-  return http.get(`/v1/RequestOrder/${id}`);
+  return http.get<RequestOrder>(`/v1/RequestOrder/${id}`);
 }
 
 // 添加需求订单
