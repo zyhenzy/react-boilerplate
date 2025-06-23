@@ -14,7 +14,7 @@ import {
   IconButton,
   TablePagination
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import RequestOrderFormDialog from './components/RequestOrderFormDialog';
 import RequestOrderDetailDialog from './components/RequestOrderDetailDialog';
 import { useTranslation } from 'react-i18next';
@@ -123,7 +123,7 @@ const RequestOrderPage: React.FC = () => {
                   <TableCell>{item.phoneNumber}</TableCell>
                   <TableCell>{t(`requestOrder.status_${item.status}`)}</TableCell>
                   <TableCell>
-                    <IconButton size="small" onClick={() => handleViewDetail(item)} disabled={loading}><EditIcon /></IconButton>
+                    <IconButton size="small" onClick={() => handleViewDetail(item)} disabled={loading}><VisibilityIcon /></IconButton>
                   </TableCell>
                 </TableRow>
               ))
