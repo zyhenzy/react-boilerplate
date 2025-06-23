@@ -76,19 +76,6 @@ export interface ConvertedAgentOrderCommand {
   tcRemark?: string;
 }
 
-// 代理人拒绝
-export interface RefuseAgentOrderCommand {
-  id: string;
-  reason: string;
-  agentRemark?: string;
-}
-
-// 代理人接受
-export interface AcceptAgentOrderCommand {
-  id: string;
-  agentRemark?: string;
-}
-
 // 已出票
 export interface IssuedAgentOrderCommand {
   id: string;

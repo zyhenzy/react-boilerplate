@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import type { AgentOrder } from '../../api/agent-order/types';
 
@@ -12,66 +12,42 @@ interface IssuedDialogProps {
 
 const IssuedDialog: React.FC<IssuedDialogProps> = ({ open, onClose, onSubmit, order }) => {
   const { t } = useTranslation();
-  const [pnr, setPnr] = useState(order?.pnr || '');
-  const [price, setPrice] = useState(order?.price || 0);
-  const [tax, setTax] = useState(order?.tax || 0);
-  const [serviceCharge, setServiceCharge] = useState(order?.serviceCharge || 0);
-  const [tcRemark, setTcRemark] = useState(order?.tcRemark || '');
-
-  useEffect(() => {
-    setPnr(order?.pnr || '');
-    setPrice(order?.price || 0);
-    setTax(order?.tax || 0);
-    setServiceCharge(order?.serviceCharge || 0);
-    setTcRemark(order?.tcRemark || '');
-  }, [order]);
 
   const handleSubmit = () => {
-    onSubmit({ pnr, price, tax, serviceCharge, tcRemark });
+    if (!order) return;
+    onSubmit({
+      pnr: order.pnr || '',
+      price: order.price || 0,
+      tax: order.tax || 0,
+      serviceCharge: order.serviceCharge || 0,
+      tcRemark: order.tcRemark || ''
+    });
   };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{t('agentOrder.issued', '出票')}</DialogTitle>
       <DialogContent>
-        <TextField
-          margin="dense"
-          label={t('agentOrder.pnr', 'PNR')}
-          fullWidth
-          value={pnr}
-          onChange={e => setPnr(e.target.value)}
-        />
-        <TextField
-          margin="dense"
-          label={t('agentOrder.price', '票面价')}
-          type="number"
-          fullWidth
-          value={price}
-          onChange={e => setPrice(Number(e.target.value))}
-        />
-        <TextField
-          margin="dense"
-          label={t('agentOrder.tax', '税费')}
-          type="number"
-          fullWidth
-          value={tax}
-          onChange={e => setTax(Number(e.target.value))}
-        />
-        <TextField
-          margin="dense"
-          label={t('agentOrder.serviceCharge', '服务费')}
-          type="number"
-          fullWidth
-          value={serviceCharge}
-          onChange={e => setServiceCharge(Number(e.target.value))}
-        />
-        <TextField
-          margin="dense"
-          label={t('agentOrder.tcRemark', '出票备注')}
-          fullWidth
-          value={tcRemark}
-          onChange={e => setTcRemark(e.target.value)}
-        />
+        <Box mb={2}>
+          <Typography variant="subtitle2" color="textSecondary">{t('agentOrder.pnr', 'PNR')}</Typography>
+          <Typography>{order?.pnr || '-'}</Typography>
+        </Box>
+        <Box mb={2}>
+          <Typography variant="subtitle2" color="textSecondary">{t('agentOrder.price', '票面价')}</Typography>
+          <Typography>{order?.price ?? '-'}</Typography>
+        </Box>
+        <Box mb={2}>
+          <Typography variant="subtitle2" color="textSecondary">{t('agentOrder.tax', '税费')}</Typography>
+          <Typography>{order?.tax ?? '-'}</Typography>
+        </Box>
+        <Box mb={2}>
+          <Typography variant="subtitle2" color="textSecondary">{t('agentOrder.serviceCharge', '服务费')}</Typography>
+          <Typography>{order?.serviceCharge ?? '-'}</Typography>
+        </Box>
+        <Box mb={2}>
+          <Typography variant="subtitle2" color="textSecondary">{t('agentOrder.tcRemark', '出票备注')}</Typography>
+          <Typography>{order?.tcRemark || '-'}</Typography>
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{t('cancel', '取消')}</Button>
@@ -82,4 +58,3 @@ const IssuedDialog: React.FC<IssuedDialogProps> = ({ open, onClose, onSubmit, or
 };
 
 export default IssuedDialog;
-

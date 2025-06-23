@@ -69,10 +69,9 @@ const ConvertedDialog: React.FC<ConvertedDialogProps> = ({ open, onClose, onSubm
           <div><b>{t('agentOrder.tax', '税费')}：</b>{order?.tax ?? '-'}</div>
           <div><b>{t('agentOrder.serviceCharge', '服务费')}：</b>{order?.serviceCharge ?? '-'}</div>
           <div><b>{t('agentOrder.pnr', 'PNR')}：</b>{order?.pnr || '-'}</div>
-          <div><b>{t('agentOrder.tcRemark', '出票备注')}：</b>{order?.tcRemark || '-'}</div>
+          <div><b>{t('agentOrder.tcRemark', '出票备注')}：</b>{order?.agentRemark || '-'}</div>
         </div>
         {/* 转换表单部分 */}
-        <TextField margin="dense" label={t('agentOrder.pnr', 'PNR')} fullWidth value={form.pnr} onChange={e => handleChange('pnr', e.target.value)} />
         <TextField margin="dense" label={t('agentOrder.price', '票面价')} type="number" fullWidth value={form.price} onChange={e => handleChange('price', Number(e.target.value))} />
         <TextField margin="dense" label={t('agentOrder.tax', '税费')} type="number" fullWidth value={form.tax} onChange={e => handleChange('tax', Number(e.target.value))} />
         <TextField margin="dense" label={t('agentOrder.serviceCharge', '服务费')} type="number" fullWidth value={form.serviceCharge} onChange={e => handleChange('serviceCharge', Number(e.target.value))} />

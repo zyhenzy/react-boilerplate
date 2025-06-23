@@ -4,6 +4,7 @@ import {
   getAgentOrderList,
   reviewFailedAgentOrder,
   convertedAgentOrder,
+  getAgentOrderDetail, issuedAgentOrder,
 } from '../../api/agent-order';
 import {
   Box,
@@ -80,10 +81,12 @@ const AgentOrderPage: React.FC = () => {
     fetchData();
   };
 
-  const handleConverted = (item: AgentOrder) => {
+  const handleConverted = async (item: AgentOrder) => {
     setConvertedId(item.id!);
-    setConvertedOrder(item);
     setConvertedOpen(true);
+    // 获取最新详情
+    const res = await getAgentOrderDetail(item.id!);
+    setConvertedOrder(res || null);
   };
 
   const handleConvertedSubmit = async (form: import('../../api/agent-order/types').ConvertedAgentOrderCommand) => {
@@ -95,14 +98,16 @@ const AgentOrderPage: React.FC = () => {
     fetchData();
   };
 
-  const handleIssued = (item: AgentOrder) => {
-    setIssuedOrder(item);
+  const handleIssued = async (item: AgentOrder) => {
+    // 获取最新详情
+    const res = await getAgentOrderDetail(item.id!);
+    setIssuedOrder(res);
     setIssuedOpen(true);
   };
 
   const handleIssuedSubmit = async (fields: { pnr: string; price: number; tax: number; serviceCharge: number; tcRemark: string }) => {
     // 这里需要调用 issuedAgentOrder，假设你已在 api/agent-order/index.ts 实现
-    // await issuedAgentOrder({ id: issuedOrder?.id!, ...fields });
+    await issuedAgentOrder({ id: issuedOrder?.id!, ...fields });
     setIssuedOpen(false);
     setIssuedOrder(null);
     fetchData();
@@ -120,7 +125,7 @@ const AgentOrderPage: React.FC = () => {
     <Box p={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <h2>{t('agentOrder.title', '代理订单管理')}</h2>
-        <Button variant="contained" onClick={handleAdd}>{t('agentOrder.add', '新增订单')}</Button>
+        {/*<Button variant="contained" onClick={handleAdd}>{t('agentOrder.add', '新增订单')}</Button>*/}
       </Box>
       <TableContainer component={Paper}>
         <Table>
@@ -163,7 +168,7 @@ const AgentOrderPage: React.FC = () => {
                           </Button>
                         </>
                     )}
-                    { item.status === 1 && <Button size="small" color="success" onClick={() => handleIssued(item)} disabled={loading} style={{marginLeft: 8}}>
+                    { item.status === 4 && <Button size="small" color="success" onClick={() => handleIssued(item)} disabled={loading} style={{marginLeft: 8}}>
                       {t('agentOrder.issued', '出票')}
                     </Button>}
                   </TableCell>
