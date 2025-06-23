@@ -52,42 +52,46 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             value={form.arrCity || ''}
             onChange={e => setForm(f => ({ ...f, arrCity: e.target.value }))}
           />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.depDate')}
-            fullWidth
-            type="date"
-            InputLabelProps={{ shrink: true }}
-            value={form.depDate || ''}
-            onChange={e => setForm(f => ({ ...f, depDate: e.target.value }))}
-          />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.arrDate')}
-            fullWidth
-            type="date"
-            InputLabelProps={{ shrink: true }}
-            value={form.arrDate || ''}
-            onChange={e => setForm(f => ({ ...f, arrDate: e.target.value }))}
-          />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.depTime')}
-            fullWidth
-            type="time"
-            InputLabelProps={{ shrink: true }}
-            value={form.depTime || ''}
-            onChange={e => setForm(f => ({ ...f, depTime: e.target.value }))}
-          />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.arrTime')}
-            fullWidth
-            type="time"
-            InputLabelProps={{ shrink: true }}
-            value={form.arrTime || ''}
-            onChange={e => setForm(f => ({ ...f, arrTime: e.target.value }))}
-          />
+          <div style={{ display: 'flex', gap: 8 }}>
+            <TextField
+              margin="dense"
+              label={t('ticketOrder.depDate')}
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              value={form.depDate || ''}
+              onChange={e => setForm(f => ({ ...f, depDate: e.target.value }))}
+              style={{ flex: 1 }}
+            />
+            <TextField
+              margin="dense"
+              label={t('ticketOrder.depTime')}
+              type="time"
+              InputLabelProps={{ shrink: true }}
+              value={form.depTime || ''}
+              onChange={e => setForm(f => ({ ...f, depTime: e.target.value }))}
+              style={{ flex: 1 }}
+            />
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <TextField
+              margin="dense"
+              label={t('ticketOrder.arrDate')}
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              value={form.arrDate || ''}
+              onChange={e => setForm(f => ({ ...f, arrDate: e.target.value }))}
+              style={{ flex: 1 }}
+            />
+            <TextField
+              margin="dense"
+              label={t('ticketOrder.arrTime')}
+              type="time"
+              InputLabelProps={{ shrink: true }}
+              value={form.arrTime || ''}
+              onChange={e => setForm(f => ({ ...f, arrTime: e.target.value }))}
+              style={{ flex: 1 }}
+            />
+          </div>
           <TextField
             margin="dense"
             label={t('ticketOrder.depAirport')}

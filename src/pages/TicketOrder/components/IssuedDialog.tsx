@@ -36,7 +36,7 @@ const IssuedDialog: React.FC<IssuedDialogProps> = ({ open, onClose, onSubmit, lo
         <DialogContent>
           <TextField
             margin="dense"
-            label={t('ticketOrder.currency')}
+            label={t('ticketOrder.currencyPay')}
             fullWidth
             value={form.currency || ''}
             onChange={e => handleChange('currency', e.target.value)}
