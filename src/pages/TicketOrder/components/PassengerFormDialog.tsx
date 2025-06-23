@@ -62,13 +62,27 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
             value={form.certificateNo || ''}
             onChange={e => setForm(f => ({ ...f, certificateNo: e.target.value }))}
           />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.phoneNumber')}
-            fullWidth
-            value={form.phoneNumber || ''}
-            onChange={e => setForm(f => ({ ...f, phoneNumber: e.target.value }))}
-          />
+          <div style={{ display: 'flex', gap: 8 }}>
+            <FormControl style={{ minWidth: 120 }} margin="dense">
+              <InputLabel>{t('ticketOrder.countryNumber')}</InputLabel>
+              <Select
+                label={t('ticketOrder.countryNumber')}
+                value={form.countryNumber || ''}
+                onChange={e => setForm(f => ({ ...f, countryNumber: e.target.value }))}
+              >
+                {countryCodeOptions.map(opt => (
+                  <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              margin="dense"
+              label={t('ticketOrder.phoneNumber')}
+              style={{ flex: 1 }}
+              value={form.phoneNumber || ''}
+              onChange={e => setForm(f => ({ ...f, phoneNumber: e.target.value }))}
+            />
+          </div>
           <TextField
             margin="dense"
             label={t('ticketOrder.birthday')}
@@ -86,18 +100,6 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
               onChange={e => setForm(f => ({ ...f, nationality: e.target.value }))}
             >
               {countryCodeOptions.map(opt => (
-                <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth margin="dense">
-            <InputLabel>{t('ticketOrder.countryNumber')}</InputLabel>
-            <Select
-              label={t('ticketOrder.countryNumber')}
-              value={form.countryNumber || ''}
-              onChange={e => setForm(f => ({ ...f, countryNumber: e.target.value }))}
-            >
-              {countryOptions.map(opt => (
                 <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
               ))}
             </Select>

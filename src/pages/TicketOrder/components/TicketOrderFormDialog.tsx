@@ -99,9 +99,9 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
 
   return (
       <Dialog open={open} onClose={onClose} fullScreen>
-        <form onSubmit={e => { e.preventDefault(); onSubmit(form); }}>
+        <form onSubmit={e => { e.preventDefault(); onSubmit(form); }} style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
           <DialogTitle>{editingId ? t('ticketOrder.edit') : t('ticketOrder.add')}</DialogTitle>
-          <DialogContent>
+          <DialogContent style={{ flex: 1, overflow: 'auto', maxHeight: 'calc(100vh - 52px)' }}>
             <TextField
                 autoFocus
                 margin="dense"
@@ -125,7 +125,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 value={form.pnr || ''}
                 onChange={e => setForm(f => ({ ...f, pnr: e.target.value }))}
             />
-            {/* 供应商下拉选择 */}
+            {/* 供应商下���选择 */}
             <FormControl fullWidth margin="dense" required>
               <InputLabel>{t('ticketOrder.supplierId')}</InputLabel>
               <Select
@@ -227,9 +227,9 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
               <Button onClick={handleAddPassenger} size="small">{t('ticketOrder.addPassenger')}</Button>
             </div>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={onClose} color="secondary">{t('cancel')}</Button>
-            <Button type="submit" variant="contained" color="primary">{editingId ? t('update') : t('add')}</Button>
+          <DialogActions style={{ position: 'sticky', bottom: 0, background: '#fff', zIndex: 1 }}>
+            <Button onClick={onClose}>{t('common.cancel')}</Button>
+            <Button type="submit" variant="contained" color="primary">{t('common.ok')}</Button>
           </DialogActions>
         </form>
         <PassengerFormDialog

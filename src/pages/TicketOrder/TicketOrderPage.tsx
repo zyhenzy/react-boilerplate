@@ -57,12 +57,15 @@ const TicketOrderPage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchData();
     fetchSuppliers();
+  }, []);
+
+  useEffect(() => {
+    fetchData();
   }, [pageIndex, pageSize]);
 
   const handleAdd = () => {
-    setEditingOrder(null);
+    setEditingOrder({passengerList:[], flightList:[]});
     setDialogOpen(true);
   };
 
