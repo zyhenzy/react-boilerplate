@@ -20,6 +20,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import TicketOrderFormDialog from './components/TicketOrderFormDialog';
 import PayDialog from './components/PayDialog';
 import IssuedDialog from './components/IssuedDialog';
+import TicketOrderDetailDialog from './components/TicketOrderDetailDialog';
 import { useTranslation } from 'react-i18next';
 
 const TicketOrderPage: React.FC = () => {
@@ -38,6 +39,8 @@ const TicketOrderPage: React.FC = () => {
   const [issuedDialogOpen, setIssuedDialogOpen] = useState(false);
   const [issuingOrder, setIssuingOrder] = useState<TicketOrder | null>(null);
   const [issuedLoading, setIssuedLoading] = useState(false);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [detailOrder, setDetailOrder] = useState<TicketOrder | null>(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -119,6 +122,12 @@ const TicketOrderPage: React.FC = () => {
     }
   };
 
+  const handleShowDetail = async (order: TicketOrder) => {
+    const res = await getTicketOrderDetail(order.id!);
+    setDetailOrder(res || order);
+    setDetailDialogOpen(true);
+  };
+
   const handleSubmit = async (values: Partial<TicketOrder>) => {
     if (values.id) {
       await updateTicketOrder({
@@ -191,6 +200,7 @@ const TicketOrderPage: React.FC = () => {
                   <TableCell>{item.pnr}</TableCell>
                   <TableCell>{t(`ticketOrder.status_${item.status}`)}</TableCell>
                   <TableCell>
+                    <Button size="small" onClick={() => handleShowDetail(item)} style={{ marginRight: 8 }}>{t('common.detail') || t('detail')}</Button>
                     {item.status===0&&<IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>}
                     {item.status===0&&<Button size="small" color="primary" onClick={() => handlePay(item)} disabled={loading} style={{ marginLeft: 8 }}>{t('ticketOrder.pay')}</Button>}
                     {item.status===2&&<Button size="small" color="success" onClick={() => handleIssued(item)} disabled={loading} style={{ marginLeft: 8 }}>{t('ticketOrder.issued')}</Button>}
@@ -233,6 +243,11 @@ const TicketOrderPage: React.FC = () => {
         onSubmit={handleIssuedSubmit}
         loading={issuedLoading}
         orderId={issuingOrder?.id}
+      />
+      <TicketOrderDetailDialog
+        open={detailDialogOpen}
+        onClose={() => setDetailDialogOpen(false)}
+        order={detailOrder}
       />
     </Box>
   );

@@ -4,6 +4,10 @@
   "logout": "退出登录",
   "settings": "设置",
   "dashboard": "仪表盘",
+  "common":{
+    "detail": "详情",
+    "close": "关闭"
+  },
   "user": {
     "title": "用户管理",
     "userName": "用户名",
