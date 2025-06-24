@@ -5,8 +5,14 @@
   "settings": "设置",
   "dashboard": "仪表盘",
   "common":{
+    "confirm": "确定",
+    "cancel": "取消",
+    "update": "修改",
+    "submitting": "提交中...",
     "detail": "详情",
-    "close": "关闭"
+    "close": "关闭",
+    "all": "全部",
+    "rowsPerPage": "每页行数"
   },
   "user": {
     "title": "用户管理",
@@ -107,11 +113,10 @@
     "bookerContact": "联系方式",
     "pnr": "PNR",
     "status": "状态",
-    "status_0": "待处理",
+    "status_0": "已预定",
     "status_1": "已取消",
-    "status_2": "已支付",
+    "status_2": "已结算",
     "status_3": "已出票",
-    "status_4": "已完成",
     "supplierId": "供应商ID",
     "rateBooking": "汇率",
     "changeRule": "改签规则",

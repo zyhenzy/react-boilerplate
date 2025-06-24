@@ -66,8 +66,8 @@ const SupplierPage: React.FC = () => {
   };
 
   return (
-    <Box p={2}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+    <Box p={1}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
         <h2>{t('supplier.title')}</h2>
         <Button variant="contained" onClick={() => { setEditingSupplier(null); setDialogOpen(true); }}>{t('supplier.add')}</Button>
       </Box>

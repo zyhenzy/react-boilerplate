@@ -8,8 +8,40 @@ import store from './store';
 import './i18n';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-const theme = createTheme();
-
+const theme = createTheme({
+    components: {
+        MuiButton: {
+            defaultProps: {
+                size: 'small',
+            },
+        },
+        MuiTextField: {
+            defaultProps: {
+                size: 'small',
+            },
+        },
+        MuiFormControl: {
+            defaultProps: {
+                size: 'small',
+            },
+        },
+        MuiSelect: {
+            defaultProps: {
+                size: 'small',
+            },
+        },
+        MuiInputBase: {
+            defaultProps: {
+                size: 'small',
+            },
+        },
+        MuiTable: {
+            defaultProps: {
+                size: 'small',
+            },
+        }
+    },
+});
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

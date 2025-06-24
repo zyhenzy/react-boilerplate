@@ -72,8 +72,8 @@ const AgentPage: React.FC = () => {
   };
 
   return (
-    <Box p={2}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+    <Box p={1}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
         <h2>{t('agent.title')}</h2>
         <Button variant="contained" onClick={handleAdd}>{t('agent.add')}</Button>
       </Box>
@@ -123,6 +123,7 @@ const AgentPage: React.FC = () => {
         rowsPerPage={pageSize}
         onRowsPerPageChange={e => { setPageSize(Number(e.target.value)); setPageIndex(0); }}
         rowsPerPageOptions={[10, 20, 50]}
+        labelRowsPerPage={t('common.rowsPerPage')}
       />
       <AgentFormDialog
         open={dialogOpen}

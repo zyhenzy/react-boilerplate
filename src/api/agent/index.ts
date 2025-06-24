@@ -4,7 +4,7 @@ import type { ListResponse } from '../types';
 
 // 获取代理列表
 export function getAgentList(params?: AgentQuery) {
-  return http.get<ListResponse<Agent>>('/v1/Agent/list', { params });
+  return http.get<ListResponse<Agent>>('/v1/Agent/list', params);
 }
 
 // 获取代理详情

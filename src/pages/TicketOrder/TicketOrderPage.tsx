@@ -204,7 +204,7 @@ const TicketOrderPage: React.FC = () => {
                     {item.status===0&&<IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>}
                     {item.status===0&&<Button size="small" color="primary" onClick={() => handlePay(item)} disabled={loading} style={{ marginLeft: 8 }}>{t('ticketOrder.pay')}</Button>}
                     {item.status===2&&<Button size="small" color="success" onClick={() => handleIssued(item)} disabled={loading} style={{ marginLeft: 8 }}>{t('ticketOrder.issued')}</Button>}
-                    {item.status!==1&&<Button size="small" color="error" onClick={() => handleCancel(item)} disabled={loading} style={{ marginLeft: 8 }}>{t('ticketOrder.cancel')}</Button>}
+                    {item.status===0&&<Button size="small" color="error" onClick={() => handleCancel(item)} disabled={loading} style={{ marginLeft: 8 }}>{t('ticketOrder.cancel')}</Button>}
                   </TableCell>
                 </TableRow>
               ))

@@ -80,7 +80,7 @@ export function enableUser(params: any) {
  * @returns Promise<any>
  */
 export function getUserList(params?: any) {
-  return http.get<ListResponse<Omit<IUser, 'role'>>>('/v1/User/list', { params });
+  return http.get<ListResponse<Omit<IUser, 'role'>>>('/v1/User/list', params);
 }
 
 /**

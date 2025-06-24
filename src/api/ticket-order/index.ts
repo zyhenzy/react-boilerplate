@@ -18,12 +18,7 @@ import {ListResponse} from "../types";
 
 // 获取机票订单列表
 export function getTicketOrderList(params?: TicketOrderQuery) {
-  return http.get<ListResponse<TicketOrder>>('/v1/TicketOrder/list', { params });
-}
-
-// 获取机票订单用户列表
-export function getTicketOrderUserList(params?: TicketOrderQuery) {
-  return http.get('/v1/TicketOrder/userList', { params });
+  return http.get<ListResponse<TicketOrder>>('/v1/TicketOrder/list', params);
 }
 
 // 获取机票订单详情
