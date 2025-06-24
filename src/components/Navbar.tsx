@@ -15,6 +15,14 @@ import { useNavigate } from 'react-router-dom';
 import { getAndStoreUserInfo } from '../api/user';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery, Theme } from '@mui/material';
+import {
+    fetchAgentOptions,
+    fetchCertificateOptions,
+    fetchCountryCodeOptions,
+    fetchCountryOptions,
+    fetchRoleOptions
+} from "../store/optionsSlice";
+import {AppDispatch} from "../store";
 
 interface NavbarProps {
   onMenuClick?: () => void;
@@ -22,22 +30,27 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
   const userInfo = useSelector((state: any) => state.user.userInfo);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
-  useEffect(() => {
-    (async () => {
-      try {
-        await getAndStoreUserInfo(dispatch);
-      } catch (e: any) {
-        if (e?.response?.status === 401) {
-          navigate('/login');
-        }
-      }
-    })();
-  }, [dispatch, navigate]);
+    useEffect(() => {
+        (async () => {
+            try {
+                await getAndStoreUserInfo(dispatch);
+                dispatch(fetchCountryOptions());
+                dispatch(fetchCountryCodeOptions());
+                dispatch(fetchRoleOptions());
+                dispatch(fetchCertificateOptions());
+                dispatch(fetchAgentOptions());
+            } catch (e: any) {
+                if (e?.response?.status === 401) {
+                    navigate('/login');
+                }
+            }
+        })();
+    }, []);
 
   const handleLogout = () => {
     dispatch(clearUserInfo());

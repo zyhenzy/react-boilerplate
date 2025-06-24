@@ -1,9 +1,6 @@
-// src/App.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useMediaQuery, Theme } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch, RootState } from './store';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
@@ -18,26 +15,13 @@ import SupplierPage from './pages/Supplier/SupplierPage';
 import AgentOrderPage from "./pages/AgentOrder/AgentOrderPage";
 import RequestOrderPage from "./pages/RequestOrder/RequestOrderPage";
 import TicketOrderPage from "./pages/TicketOrder/TicketOrderPage";
-import { fetchCountryOptions, fetchCountryCodeOptions, fetchRoleOptions, fetchCertificateOptions, fetchAgentOptions } from './store/optionsSlice';
 
 const App: React.FC = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-    const dispatch = useDispatch<AppDispatch>();
-    const userInfo = useSelector((state: RootState) => state.user.userInfo);
 
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
     const handleDrawerClose = () => setMobileOpen(false);
-
-    useEffect(() => {
-        // fixme:判断是否已登录，使用 redux 中的 userInfo
-        if (!userInfo || !userInfo.id) return;
-        dispatch(fetchCountryOptions());
-        dispatch(fetchCountryCodeOptions());
-        dispatch(fetchRoleOptions());
-        dispatch(fetchCertificateOptions());
-        dispatch(fetchAgentOptions());
-    }, [dispatch, userInfo]);
 
     return (
         <Router>
@@ -49,9 +33,9 @@ const App: React.FC = () => {
                     element={
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
                             <Navbar onMenuClick={handleDrawerToggle} />
-                            <div style={{ display: 'flex', flexGrow: 1 }}>
+                            <div style={{ display: 'flex', height: 'calc(100vh - 64px)' }}>
                                 <Sidebar mobileOpen={mobileOpen} onClose={handleDrawerClose} />
-                                <Box component="main" sx={{ flex: 1, width: '100%', ml: isMobile ? 0 : '0px', p: isMobile ? 1 : 3 }}>
+                                <Box component="main" sx={{ flex: 1, width: '100%',overflow:'scroll', ml: isMobile ? 0 : '0px', p: isMobile ? 1 : 3 }}>
                                     <Routes>
                                         <Route path="/" element={<Dashboard />} />
                                         <Route path="/user" element={<User />} />

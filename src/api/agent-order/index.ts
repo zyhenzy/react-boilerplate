@@ -11,7 +11,7 @@ import {
 
 // 获取代理订单列表
 export function getAgentOrderList(params?: AgentOrderQuery) {
-  return http.get<ListResponse<AgentOrder>>('/v1/AgentOrder/list', { params });
+  return http.get<ListResponse<AgentOrder>>('/v1/AgentOrder/list', params);
 }
 
 // 获取代理订单详情
