@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { TicketOrder } from '../../api/ticket-order/types';
-import { getTicketOrderList, addTicketOrder, updateTicketOrder, getTicketOrderDetail, cancelTicketOrder, payedTicketOrder, issuedTicketOrder } from '../../api/ticket-order';
+import { getTicketOrderList, addTicketOrder, updateTicketOrder, getTicketOrderDetail, cancelTicketOrder, payedTicketOrder, issuedTicketOrder, downloadTicketOrderWord } from '../../api/ticket-order';
 import { getSupplierList } from '../../api/supplier';
 import type { Supplier } from '../../api/supplier/types';
 import {
@@ -166,6 +166,11 @@ const TicketOrderPage: React.FC = () => {
     fetchData();
   };
 
+  const handleDownloadWord = (order: TicketOrder) => {
+    // 这里假设使用中文（zh），如需英文可改为'en'
+    downloadTicketOrderWord('zh_CN', order.id!);
+  };
+
   return (
     <Box p={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -203,6 +208,7 @@ const TicketOrderPage: React.FC = () => {
                     {item.status===0&&<Button size="small" color="primary" onClick={() => handlePay(item)} disabled={loading}>{t('ticketOrder.pay')}</Button>}
                     {item.status===2&&<Button size="small" color="success" onClick={() => handleIssued(item)} disabled={loading}>{t('ticketOrder.issued')}</Button>}
                     {item.status===0&&<Button size="small" color="error" onClick={() => handleCancel(item)} disabled={loading}>{t('ticketOrder.cancel')}</Button>}
+                    <Button size="small" color="secondary" onClick={() => handleDownloadWord(item)} style={{ marginLeft: 8 }}>{t('ticketOrder.downloadWord')}</Button>
                   </TableCell>
                 </TableRow>
               ))

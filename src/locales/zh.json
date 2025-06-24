@@ -179,6 +179,7 @@
     "ratePay": "支付汇率",
     "payType": "支付方式",
     "issued": "出票",
-    "cancel": "取消订单"
+    "cancel": "取消订单",
+    "downloadWord": "下载Word"
   }
 }

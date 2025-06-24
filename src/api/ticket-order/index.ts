@@ -86,4 +86,13 @@ export function deleteTicketOrderPassenger(data: DeleteTicketOrderPassengerComma
   return http.post('/v1/TicketOrder/deletePassenger', data);
 }
 
-
+// 下载机票订单Word
+export function downloadTicketOrderWord(lang: string, id: string, price?: boolean) {
+  // 构建下载链接
+  let url = `/api/v1/TicketOrder/word/${lang}/${id}`;
+  if (typeof price !== 'undefined') {
+    url += `?price=${price}`;
+  }
+  // 直接通过window.open下载
+  window.open(url, '_blank');
+}
