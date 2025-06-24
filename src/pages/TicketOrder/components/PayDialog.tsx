@@ -58,8 +58,8 @@ const PayDialog: React.FC<PayDialogProps> = ({ open, onClose, onSubmit, loading,
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="secondary">{t('cancel')}</Button>
-          <Button type="submit" variant="contained" color="primary" disabled={loading}>{t('ok')}</Button>
+          <Button onClick={onClose} color="secondary">{t('common.cancel')}</Button>
+          <Button type="submit" variant="contained" color="primary" disabled={loading}>{t('common.confirm')}</Button>
         </DialogActions>
       </form>
     </Dialog>

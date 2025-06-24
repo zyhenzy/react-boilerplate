@@ -43,8 +43,8 @@ const IssuedDialog: React.FC<IssuedDialogProps> = ({ open, onClose, onSubmit, lo
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="secondary">{t('cancel')}</Button>
-          <Button type="submit" variant="contained" color="primary" disabled={loading}>{t('ok')}</Button>
+          <Button onClick={onClose} color="secondary">{t('common.cancel')}</Button>
+          <Button type="submit" variant="contained" color="primary" disabled={loading}>{t('common.confirm')}</Button>
         </DialogActions>
       </form>
     </Dialog>
