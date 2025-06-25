@@ -35,33 +35,33 @@ const RequestOrderDetailDialog: React.FC<RequestOrderDetailDialogProps> = ({ ope
   return (
       <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
         <DialogTitle sx={{ fontWeight: 'bold' }}>
-          {t('requestOrder.detail', '需求订单详情')}
+          {t('common.detail')}
         </DialogTitle>
         <DialogContent dividers sx={{ p: 3 }}>
           <Box display="grid" gap={2}>
-            <InfoRow label={t('requestOrder.dep', '出发地')} value={order?.dep} />
-            <InfoRow label={t('requestOrder.arr', '目的地')} value={order?.arr} />
-            <InfoRow label={t('requestOrder.countryNumber', '国家区号')} value={order?.countryNumber} />
-            <InfoRow label={t('requestOrder.phoneNumber', '手机号')} value={order?.phoneNumber} />
+            <InfoRow label={t('requestOrder.dep')} value={order?.dep} />
+            <InfoRow label={t('requestOrder.arr')} value={order?.arr} />
+            <InfoRow label={t('requestOrder.countryNumber')} value={order?.countryNumber} />
+            <InfoRow label={t('requestOrder.phoneNumber')} value={order?.phoneNumber} />
             <InfoRow
-                label={t('requestOrder.status', '状态')}
+                label={t('requestOrder.status')}
                 value={typeof order?.status === 'number' ? t(`requestOrder.status_${order.status}`) : '-'}
             />
-            <InfoRow label={t('requestOrder.remark', '备注')} value={order?.remark} />
-            <InfoRow label={t('requestOrder.createdAt', '创建时间')} value={order?.createdAt} />
-            <InfoRow label={t('requestOrder.updatedAt', '更新时间')} value={order?.updatedAt} />
+            <InfoRow label={t('requestOrder.remark')} value={order?.remark} />
+            <InfoRow label={t('common.createdAt')} value={order?.createdAt} />
+            <InfoRow label={t('common.updatedAt')} value={order?.updatedAt} />
           </Box>
 
           {order?.passengerList && order?.passengerList?.length > 0 && (
               <Box mt={4}>
                 <Typography variant="h6" gutterBottom>
-                  {t('requestOrder.passengerList', '乘客列表')}
+                  {t('requestOrder.passengerList')}
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
                 {order.passengerList.map((p, idx) => (
                     <Paper key={idx} variant="outlined" sx={{ p: 2, mb: 2 }}>
                       <Box display="grid" gap={1}>
-                        <InfoRow label={t('requestOrder.passengerName', '姓名')} value={p.name} />
+                        <InfoRow label={t('requestOrder.passengerName')} value={p.name} />
                         <InfoRow label={t('requestOrder.englishName', '英文名')} value={p.englishName} />
                         <InfoRow label={t('requestOrder.birthday', '出生日期')} value={p.birthday} />
                         <InfoRow label={t('requestOrder.certificateType', '证件类型')} value={p.certificateType} />

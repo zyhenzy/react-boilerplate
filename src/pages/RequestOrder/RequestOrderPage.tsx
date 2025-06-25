@@ -112,9 +112,9 @@ const RequestOrderPage: React.FC = () => {
           </TableHead>
           <TableBody>
             {loading ? (
-              <TableRow><TableCell colSpan={8} align="center">{t('requestOrder.loading', '加载中...')}</TableCell></TableRow>
+              <TableRow><TableCell colSpan={8} align="center">{t('requestOrder.loading')}</TableCell></TableRow>
             ) : data.length === 0 ? (
-              <TableRow><TableCell colSpan={8}>{t('requestOrder.noData', '暂无数据')}</TableCell></TableRow>
+              <TableRow><TableCell colSpan={8}>{t('requestOrder.noData')}</TableCell></TableRow>
             ) : (
               data.map(item => (
                 <TableRow key={item.id}>
@@ -144,7 +144,7 @@ const RequestOrderPage: React.FC = () => {
         open={dialogOpen}
         onClose={() => { setDialogOpen(false); setEditingOrder(null); }}
         onSubmit={handleSubmit}
-        form={editingOrder || { dep: '', arr: '', phoneNumber: '', countryNumber: '', status: 0 }}
+        form={editingOrder || {}}
         setForm={f => setEditingOrder(f as RequestOrder | null)}
         editingId={editingOrder?.id || null}
         countryOptions={countryOptions}

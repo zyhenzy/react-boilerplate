@@ -62,26 +62,26 @@ const PassengerList: React.FC<PassengerListProps> = ({ passengerList, onChange, 
   return (
     <div style={{ marginTop: 16 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-        <span>{t('requestOrder.passengerList', '乘客列表')}</span>
-        <Button size="small" startIcon={<AddIcon />} onClick={handleAdd}>{t('add', '新增')}</Button>
+        <span>{t('requestOrder.passengerList')}</span>
+        <Button size="small" startIcon={<AddIcon />} onClick={handleAdd}>{t('add')}</Button>
       </div>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>{t('requestOrder.passengerName', '姓名')}</TableCell>
-            <TableCell>{t('requestOrder.passengerEnglishName', '英文名')}</TableCell>
-            <TableCell>{t('requestOrder.passengerCertificateType', '证件类型')}</TableCell>
-            <TableCell>{t('requestOrder.passengerCertificateNo', '证件号')}</TableCell>
-            <TableCell>{t('requestOrder.passengerBirthday', '生日')}</TableCell>
-            <TableCell>{t('requestOrder.passengerNationality', '国籍')}</TableCell>
-            <TableCell>{t('requestOrder.passengerPhoneNumber', '手机号')}</TableCell>
-            <TableCell>{t('requestOrder.passengerTicketNo', '票号')}</TableCell>
-            <TableCell>{t('requestOrder.actions', '操作')}</TableCell>
+            <TableCell>{t('requestOrder.passengerName')}</TableCell>
+            <TableCell>{t('requestOrder.passengerEnglishName')}</TableCell>
+            <TableCell>{t('requestOrder.passengerCertificateType')}</TableCell>
+            <TableCell>{t('requestOrder.passengerCertificateNo')}</TableCell>
+            <TableCell>{t('requestOrder.passengerBirthday')}</TableCell>
+            <TableCell>{t('requestOrder.passengerNationality')}</TableCell>
+            <TableCell>{t('requestOrder.passengerPhoneNumber')}</TableCell>
+            <TableCell>{t('requestOrder.passengerTicketNo')}</TableCell>
+            <TableCell>{t('requestOrder.actions')}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {passengerList.length === 0 ? (
-            <TableRow><TableCell colSpan={9}>{t('requestOrder.noData', '暂无数据')}</TableCell></TableRow>
+            <TableRow><TableCell colSpan={9}>{t('requestOrder.noData')}</TableCell></TableRow>
           ) : passengerList.map((p, idx) => (
             <TableRow key={idx}>
               <TableCell>{p.name}</TableCell>
@@ -101,11 +101,11 @@ const PassengerList: React.FC<PassengerListProps> = ({ passengerList, onChange, 
         </TableBody>
       </Table>
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <DialogTitle>{editingIndex === null ? t('add', '新增') : t('edit', '编辑')}</DialogTitle>
+        <DialogTitle>{editingIndex === null ? t('add') : t('edit')}</DialogTitle>
         <DialogContent>
           <TextField
             margin="dense"
-            label={t('requestOrder.passengerName', '姓名')}
+            label={t('requestOrder.passengerName')}
             fullWidth
             value={form.name || ''}
             onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
@@ -113,28 +113,28 @@ const PassengerList: React.FC<PassengerListProps> = ({ passengerList, onChange, 
           />
           <TextField
             margin="dense"
-            label={t('requestOrder.passengerEnglishName', '英文名')}
+            label={t('requestOrder.passengerEnglishName')}
             fullWidth
             value={form.englishName || ''}
             onChange={e => setForm(f => ({ ...f, englishName: e.target.value }))}
           />
           <TextField
             margin="dense"
-            label={t('requestOrder.passengerCertificateType', '证件类型')}
+            label={t('requestOrder.passengerCertificateType')}
             fullWidth
             value={form.certificateType || ''}
             onChange={e => setForm(f => ({ ...f, certificateType: e.target.value }))}
           />
           <TextField
             margin="dense"
-            label={t('requestOrder.passengerCertificateNo', '证件号')}
+            label={t('requestOrder.passengerCertificateNo')}
             fullWidth
             value={form.certificateNo || ''}
             onChange={e => setForm(f => ({ ...f, certificateNo: e.target.value }))}
           />
           <TextField
             margin="dense"
-            label={t('requestOrder.passengerBirthday', '生日')}
+            label={t('requestOrder.passengerBirthday')}
             fullWidth
             type="date"
             InputLabelProps={{ shrink: true }}
@@ -143,7 +143,7 @@ const PassengerList: React.FC<PassengerListProps> = ({ passengerList, onChange, 
           />
           <TextField
             margin="dense"
-            label={t('requestOrder.passengerNationality', '国籍')}
+            label={t('requestOrder.passengerNationality')}
             fullWidth
             value={form.nationality || ''}
             onChange={e => setForm(f => ({ ...f, nationality: e.target.value }))}
@@ -152,7 +152,7 @@ const PassengerList: React.FC<PassengerListProps> = ({ passengerList, onChange, 
             <TextField
               select
               margin="dense"
-              label={t('requestOrder.countryNumber', '国家号码')}
+              label={t('requestOrder.countryNumber')}
               style={{ width: 120 }}
               value={form.countryNumber || ''}
               onChange={e => setForm(f => ({ ...f, countryNumber: e.target.value }))}
@@ -163,7 +163,7 @@ const PassengerList: React.FC<PassengerListProps> = ({ passengerList, onChange, 
             </TextField>
             <TextField
               margin="dense"
-              label={t('requestOrder.passengerPhoneNumber', '手机号')}
+              label={t('requestOrder.passengerPhoneNumber')}
               fullWidth
               value={form.phoneNumber || ''}
               onChange={e => setForm(f => ({ ...f, phoneNumber: e.target.value }))}
@@ -171,15 +171,15 @@ const PassengerList: React.FC<PassengerListProps> = ({ passengerList, onChange, 
           </div>
           <TextField
             margin="dense"
-            label={t('requestOrder.passengerTicketNo', '票号')}
+            label={t('requestOrder.passengerTicketNo')}
             fullWidth
             value={form.ticketNo || ''}
             onChange={e => setForm(f => ({ ...f, ticketNo: e.target.value }))}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDialogOpen(false)} color="secondary">{t('cancel', '取消')}</Button>
-          <Button onClick={handleDialogSubmit} variant="contained" color="primary">{t('ok', '确定')}</Button>
+          <Button onClick={() => setDialogOpen(false)} color="secondary">{t('cancel')}</Button>
+          <Button onClick={handleDialogSubmit} variant="contained" color="primary">{t('ok')}</Button>
         </DialogActions>
       </Dialog>
     </div>

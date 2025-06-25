@@ -13,7 +13,9 @@
     "close": "关闭",
     "edit": "修改",
     "all": "全部",
-    "rowsPerPage": "每页行数"
+    "rowsPerPage": "每页行数",
+    "createdAt": "创建时间",
+    "updatedAt": "更新时间"
   },
   "user": {
     "title": "用户管理",
@@ -119,7 +121,19 @@
     "remark": "备注",
     "actions": "操作",
     "noData": "暂无数据",
-    "loading": "加载中..."
+    "loading": "加载中...",
+    "passengerList": "乘客列表",
+    "passengerName": "乘客姓名",
+    "passengerEnglishName": "英文名",
+    "passengerCertificateType": "证件类型",
+    "passengerCertificateNo": "证件号",
+    "passengerBirthday": "出生日期",
+    "passengerNationality": "国籍",
+    "passengerPhoneNumber": "手机号",
+    "passengerTicketNo": "票号",
+    "addPassenger": "添加乘客",
+    "editPassenger": "编辑乘客",
+    "ok": "确定"
   },
   "ticketOrder": {
     "title": "航班订单",
