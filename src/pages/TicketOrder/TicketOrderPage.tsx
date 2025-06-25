@@ -159,6 +159,7 @@ const TicketOrderPage: React.FC = () => {
         flightList: values.flightList,
         passengerList: values.passengerList,
         supplierId: values.supplierId ?? undefined,
+        customerId: values.customerId ?? undefined,
       });
     }
     setDialogOpen(false);

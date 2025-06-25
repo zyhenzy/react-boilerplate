@@ -26,6 +26,7 @@ export interface TicketOrder {
   flightList?: AddTicketOrderTripCommand[];
   passengerList?: AddTicketOrderPassengerCommand[];
   supplierId?: string;
+  customerId?: string;
   status?: TicketOrderStatus;
   createdAt?: string;
   updatedAt?: string;
@@ -62,6 +63,7 @@ export interface AddTicketOrderCommand {
   flightList?: AddTicketOrderTripCommand[];
   passengerList?: AddTicketOrderPassengerCommand[];
   supplierId?: string;
+  customerId?: string;
 }
 
 // 修改机票订单

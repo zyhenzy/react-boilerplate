@@ -17,6 +17,8 @@ import PassengerFormDialog from './PassengerFormDialog';
 import TripFormDialog from './TripFormDialog';
 import type { AddTicketOrderPassengerCommand, AddTicketOrderTripCommand } from '../../../api/ticket-order/types';
 import type { Supplier } from '../../../api/supplier/types';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../../../store';
 
 interface TicketOrderFormDialogProps {
   open: boolean;
@@ -42,6 +44,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
   const [editingPassenger, setEditingPassenger] = React.useState<AddTicketOrderPassengerCommand | undefined>(undefined);
   const [tripDialogOpen, setTripDialogOpen] = React.useState(false);
   const [editingTrip, setEditingTrip] = React.useState<AddTicketOrderTripCommand | undefined>(undefined);
+  const customerOptions = useSelector((state: RootState) => state.options.customerOptions);
 
   const handleAddPassenger = () => {
     setEditingPassenger(undefined);
@@ -135,6 +138,19 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
               >
                 {suppliers.map(s => (
                     <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            {/* 客户下拉选择 */}
+            <FormControl fullWidth margin="dense">
+              <InputLabel>{t('ticketOrder.customerId', '客户')}</InputLabel>
+              <Select
+                label={t('ticketOrder.customerId', '客户')}
+                value={form.customerId || ''}
+                onChange={e => setForm(f => ({ ...f, customerId: e.target.value }))}
+              >
+                {customerOptions.map((c: any) => (
+                  <MenuItem key={c.value} value={c.value}>{c.label}</MenuItem>
                 ))}
               </Select>
             </FormControl>
