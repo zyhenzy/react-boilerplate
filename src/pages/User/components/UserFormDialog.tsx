@@ -7,9 +7,12 @@ import {
   TextField,
   Button,
   MenuItem,
-  FormControlLabel
+  FormControlLabel,
+  InputLabel,
+  FormControl
 } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
+import Select from '@mui/material/Select';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
@@ -36,6 +39,7 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
   const countryOptions = useSelector((state: RootState) => state.options.countryOptions);
   const roleOptions = useSelector((state: RootState) => state.options.roleOptions);
   const agentOptions = useSelector((state: RootState) => state.options.agentOptions);
+  const customerOptions = useSelector((state: RootState) => state.options.customerOptions);
   const sexOpts = sexOptions.map(opt => ({ ...opt, label: t(`user.sex_${opt.value.toLowerCase()}`, opt.label) }));
 
   return (
@@ -99,18 +103,24 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
               <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
             ))}
           </TextField>
-          <TextField
-            margin="dense"
-            label={t('user.role')}
-            select
-            fullWidth
-            value={form.role || ''}
-            onChange={e => setForm((f: any) => ({ ...f, role: e.target.value }))}
-          >
-            {roleOptions.map(option => (
-              <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
-            ))}
-          </TextField>
+          <FormControl fullWidth margin="dense">
+            <InputLabel id="role-label">{t('user.role')}</InputLabel>
+            <Select
+              labelId="role-label"
+              multiple
+              value={form.role || []}
+              onChange={e => setForm((f: any) => ({ ...f, role: typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value }))}
+              renderValue={(selected) => (selected as string[]).map(val => {
+                const opt = roleOptions.find((o: any) => o.value === val);
+                return opt ? opt.label : val;
+              }).join(', ')}
+              fullWidth
+            >
+              {roleOptions.map(option => (
+                <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <TextField
             margin="dense"
             label={t('user.agentId', '代理')}
@@ -123,6 +133,19 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
               <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
             ))}
           </TextField>
+          <FormControl fullWidth margin="dense">
+            <InputLabel id="customer-label">{t('user.customer')}</InputLabel>
+            <Select
+              labelId="customer-label"
+              value={form.customerId || ''}
+              onChange={e => setForm((f: any) => ({ ...f, customerId: e.target.value }))}
+              fullWidth
+            >
+              {customerOptions.map((option: any) => (
+                <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           {!editingId && (
             <TextField
               margin="dense"

@@ -19,7 +19,7 @@ import {
     fetchAgentOptions,
     fetchCertificateOptions,
     fetchCountryCodeOptions,
-    fetchCountryOptions,
+    fetchCountryOptions, fetchCustomerOptions,
     fetchRoleOptions
 } from "../store/optionsSlice";
 import {AppDispatch} from "../store";
@@ -44,6 +44,7 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
                 dispatch(fetchRoleOptions());
                 dispatch(fetchCertificateOptions());
                 dispatch(fetchAgentOptions());
+                dispatch(fetchCustomerOptions());
             } catch (e: any) {
                 if (e?.response?.status === 401) {
                     navigate('/login');

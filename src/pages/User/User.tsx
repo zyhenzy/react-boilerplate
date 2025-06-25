@@ -84,15 +84,17 @@ const UserPage: React.FC = () => {
               <TableCell>{t('user.name')}</TableCell>
               <TableCell>{t('user.phoneNumber')}</TableCell>
               <TableCell>{t('user.countryNumber')}</TableCell>
+              <TableCell>{t('user.role')}</TableCell>
+              <TableCell>{t('user.customer')}</TableCell>
               <TableCell>{t('user.enable')}</TableCell>
               <TableCell>{t('user.actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {loading ? (
-              <TableRow><TableCell colSpan={6} align="center">{t('user.loading')}</TableCell></TableRow>
+              <TableRow><TableCell colSpan={7} align="center">{t('user.loading')}</TableCell></TableRow>
             ) : data.length === 0 ? (
-              <TableRow><TableCell colSpan={6}>{t('user.noData')}</TableCell></TableRow>
+              <TableRow><TableCell colSpan={7}>{t('user.noData')}</TableCell></TableRow>
             ) : (
               data.map(item => (
                 <TableRow key={item.id}>
@@ -100,6 +102,8 @@ const UserPage: React.FC = () => {
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.phoneNumber}</TableCell>
                   <TableCell>{item.countryNumber}</TableCell>
+                  <TableCell>{Array.isArray(item.role) ? item.role.join(', ') : ''}</TableCell>
+                  <TableCell>{item.customerName || ''}</TableCell>
                   <TableCell>
                     <Switch checked={item.enable} onChange={() => handleEnable(item)} disabled={loading} />
                   </TableCell>

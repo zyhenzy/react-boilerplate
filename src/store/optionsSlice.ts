@@ -4,7 +4,8 @@ import {
   getCountryCodeOptions,
   getRoleOptions,
   getCertificateOptions,
-  getagentOptions
+  getAgentOptions,
+  getCustomerOptions
 } from '../api/basic';
 import { IOption } from '../api/basic/types';
 
@@ -25,7 +26,11 @@ export const fetchCertificateOptions = createAsyncThunk('options/fetchCertificat
 });
 
 export const fetchAgentOptions = createAsyncThunk('options/fetchAgentOptions', async () => {
-  return await getagentOptions();
+  return await getAgentOptions();
+});
+
+export const fetchCustomerOptions = createAsyncThunk('options/fetchCustomerOptions', async () => {
+  return await getCustomerOptions();
 });
 
 interface OptionsState {
@@ -34,6 +39,7 @@ interface OptionsState {
   roleOptions: IOption[];
   certificateOptions: IOption[];
   agentOptions: IOption[];
+  customerOptions: IOption[];
 }
 
 const initialState: OptionsState = {
@@ -42,6 +48,7 @@ const initialState: OptionsState = {
   roleOptions: [],
   certificateOptions: [],
   agentOptions: [],
+  customerOptions: [],
 };
 
 const optionsSlice = createSlice({
@@ -64,9 +71,11 @@ const optionsSlice = createSlice({
       })
       .addCase(fetchAgentOptions.fulfilled, (state, action) => {
         state.agentOptions = action.payload;
+      })
+      .addCase(fetchCustomerOptions.fulfilled, (state, action) => {
+        state.customerOptions = action.payload;
       });
   },
 });
 
 export default optionsSlice.reducer;
-

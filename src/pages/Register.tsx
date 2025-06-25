@@ -5,6 +5,7 @@ import { registerUser } from '../api/user';
 import { COUNTRY_OPTIONS } from '../constants/countryCodes';
 import Autocomplete from '@mui/material/Autocomplete';
 import {RegisterParams} from "../api/user/types";
+import { SelectChangeEvent } from '@mui/material';
 
 const Register: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -16,7 +17,7 @@ const Register: React.FC = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [countryNumber, setCountryNumber] = useState('');
     const [agentId, setAgentId] = useState('');
-    const [role, setRole] = useState('');
+    const [role, setRole] = useState<string[]>([]);
     const [enable] = useState(true);
     const navigate = useNavigate();
 
@@ -38,7 +39,7 @@ const Register: React.FC = () => {
             countryNumber,
             password,
             agentId: agentId || null,
-            role: role || null,
+            role: role.length > 0 ? role : null,
             enable,
         };
         try {
@@ -47,6 +48,11 @@ const Register: React.FC = () => {
         } catch (e: any) {
             setError(e?.message || '注册失败');
         }
+    };
+
+    const handleRoleChange = (event: SelectChangeEvent<string[]>) => {
+        const value = event.target.value;
+        setRole(typeof value === 'string' ? value.split(',') : value);
     };
 
     return (
@@ -138,15 +144,22 @@ const Register: React.FC = () => {
                         value={agentId}
                         onChange={(e) => setAgentId(e.target.value)}
                     />
-                    <TextField
-                        label="角色"
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        size="small"
-                        value={role}
-                        onChange={(e) => setRole(e.target.value)}
-                    />
+                    <FormControl fullWidth margin="normal">
+                        <InputLabel id="role-label" size="small">角色</InputLabel>
+                        <Select
+                            labelId="role-label"
+                            multiple
+                            value={role}
+                            label="角色"
+                            size="small"
+                            onChange={handleRoleChange}
+                            renderValue={(selected) => (selected as string[]).join(', ')}
+                        >
+                            <MenuItem value="admin">管理员</MenuItem>
+                            <MenuItem value="user">普通用户</MenuItem>
+                            <MenuItem value="agent">代理</MenuItem>
+                        </Select>
+                    </FormControl>
                     <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }} onClick={handleRegister}>
                         注册
                     </Button>

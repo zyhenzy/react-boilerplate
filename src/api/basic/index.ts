@@ -22,9 +22,15 @@ export function getCertificateOptions() {
 }
 
 // 代理下拉
-export function getagentOptions() {
+export function getAgentOptions() {
   return http.get<IOption[]>('/v1/Data/agentOptions');
 }
+
+// 客户下拉
+export function getCustomerOptions() {
+  return http.get<IOption[]>('/v1/Data/customerOptions');
+}
+
 
 // 上传图片接口，支持自定义 headers
 export function uploadImage(formData: FormData) {
