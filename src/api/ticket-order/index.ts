@@ -15,6 +15,8 @@ import {
   DeleteTicketOrderPassengerCommand, TicketOrder,
 } from './types';
 import {ListResponse} from "../types";
+import dayjs from 'dayjs';
+
 
 // 获取机票订单列表
 export function getTicketOrderList(params?: TicketOrderQuery) {
@@ -23,7 +25,21 @@ export function getTicketOrderList(params?: TicketOrderQuery) {
 
 // 获取机票订单详情
 export function getTicketOrderDetail(id: string) {
-  return http.get<TicketOrder>(`/v1/TicketOrder/${id}`);
+  return http.get<TicketOrder>(`/v1/TicketOrder/${id}`).then(order => {
+    if (order && Array.isArray(order.flightList)) {
+      order.flightList = order.flightList.map(trip => {
+        let newTrip = { ...trip };
+        newTrip.arrDate = dayjs(newTrip.arrDate).format('YYYY-MM-DD');
+        newTrip.arrTime = dayjs(newTrip.arrTime).format('HH:mm');
+        newTrip.depDate = dayjs(newTrip.depDate).format('YYYY-MM-DD');
+        newTrip.depTime = dayjs(newTrip.depTime).format('HH:mm');
+        return newTrip;
+      });
+    }
+    console.log(order)
+    debugger
+    return order;
+  });
 }
 
 // 添加机票订单
@@ -71,7 +87,7 @@ export function deleteTicketOrderTrip(data: DeleteTicketOrderTripCommand) {
   return http.post('/v1/TicketOrder/deleteTrip', data);
 }
 
-// 新增乘客
+// 新增乘���
 export function addTicketOrderPassenger(data: AddTicketOrderPassengerCommand) {
   return http.post('/v1/TicketOrder/addPassenger', data);
 }
