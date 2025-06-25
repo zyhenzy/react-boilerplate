@@ -47,6 +47,21 @@
     "invoiceHeader": "发票抬头",
     "invoiceTaxNumber": "发票税号"
   },
+  "customer": {
+    "title": "客户管理",
+    "name": "名称",
+    "contact": "联系方式",
+    "countryCode": "国家区号",
+    "currency": "币种",
+    "invoiceHeader": "发票抬头",
+    "invoiceTaxNumber": "发票税号",
+    "enable": "启用",
+    "actions": "操作",
+    "add": "新增客户",
+    "edit": "编辑客户",
+    "noData": "暂无数据",
+    "loading": "加载中..."
+  },
   "supplier": {
     "title": "供应商管理",
     "name": "供应商名称",
