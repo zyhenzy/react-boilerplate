@@ -226,8 +226,8 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
           {/* 可根据需要继续补充更多字段 */}
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="secondary">{t('cancel')}</Button>
-          <Button type="submit" variant="contained" color="primary">{t('ok')}</Button>
+          <Button onClick={onClose} color="secondary">{t('common.cancel')}</Button>
+          <Button type="submit" variant="contained" color="primary">{t('common.confirm')}</Button>
         </DialogActions>
       </form>
     </Dialog>

@@ -207,7 +207,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 {(form.flightList || []).map((trip, idx) => (
                     <li key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
                       <span style={{ flex: 1 }}>{trip.flight || t('ticketOrder.flight') + (idx + 1)}</span>
-                      <Button size="small" onClick={() => handleEditTrip(trip, idx)}>{t('edit')}</Button>
+                      <Button size="small" onClick={() => handleEditTrip(trip, idx)}>{t('common.edit')}</Button>
                     </li>
                 ))}
               </ul>
@@ -220,7 +220,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 {(form.passengerList || []).map((p, idx) => (
                     <li key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
                       <span style={{ flex: 1 }}>{p.name || t('ticketOrder.passenger') + (idx + 1)}</span>
-                      <Button size="small" onClick={() => handleEditPassenger(p, idx)}>{t('edit')}</Button>
+                      <Button size="small" onClick={() => handleEditPassenger(p, idx)}>{t('common.edit')}</Button>
                     </li>
                 ))}
               </ul>
@@ -229,7 +229,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
           </DialogContent>
           <DialogActions style={{ position: 'sticky', bottom: 0, background: '#fff', zIndex: 1 }}>
             <Button onClick={onClose}>{t('common.cancel')}</Button>
-            <Button type="submit" variant="contained" color="primary">{t('common.ok')}</Button>
+            <Button type="submit" variant="contained" color="primary">{t('common.confirm')}</Button>
           </DialogActions>
         </form>
         <PassengerFormDialog

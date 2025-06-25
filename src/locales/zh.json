@@ -164,6 +164,8 @@
     "addTrip": "添加行程",
     "airline": "航司",
     "flight": "航班号",
+    "phoneNumber": "手机号",
+    "countryNumber": "国家号码",
     "depDate": "出发日期",
     "arrDate": "到达日期",
     "depTime": "出发时间",
