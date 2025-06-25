@@ -50,7 +50,8 @@ const UserPage: React.FC = () => {
 
   const handleEdit = async (user: any) => {
     const res = await getUserDetail(user.id);
-    setEditingUser(res);
+    const _res = Object.assign(res,{role:res.roles}) // fixme：查详情返回的是roles，新增的时候用的是role
+    setEditingUser(_res);
     setDialogOpen(true);
   };
 
@@ -84,8 +85,6 @@ const UserPage: React.FC = () => {
               <TableCell>{t('user.name')}</TableCell>
               <TableCell>{t('user.phoneNumber')}</TableCell>
               <TableCell>{t('user.countryNumber')}</TableCell>
-              <TableCell>{t('user.role')}</TableCell>
-              <TableCell>{t('user.customer')}</TableCell>
               <TableCell>{t('user.enable')}</TableCell>
               <TableCell>{t('user.actions')}</TableCell>
             </TableRow>
@@ -102,8 +101,6 @@ const UserPage: React.FC = () => {
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.phoneNumber}</TableCell>
                   <TableCell>{item.countryNumber}</TableCell>
-                  <TableCell>{Array.isArray(item.role) ? item.role.join(', ') : ''}</TableCell>
-                  <TableCell>{item.customerName || ''}</TableCell>
                   <TableCell>
                     <Switch checked={item.enable} onChange={() => handleEnable(item)} disabled={loading} />
                   </TableCell>
