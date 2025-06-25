@@ -28,7 +28,7 @@ const Login: React.FC = () => {
             // @ts-ignore
             if (res && res.token) {
                 // @ts-ignore
-                setCookie('token', res.token);
+                setCookie('pc-token', res.token);
             }
             await getAndStoreUserInfo(dispatch);
             setError('');

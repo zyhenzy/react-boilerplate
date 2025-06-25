@@ -11,7 +11,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { clearUserInfo } from '../store/userSlice';
 import { clearCookie } from '../utils/cookie';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getAndStoreUserInfo } from '../api/user';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery, Theme } from '@mui/material';
@@ -31,31 +30,24 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
   const userInfo = useSelector((state: any) => state.user.userInfo);
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
     useEffect(() => {
         (async () => {
-            try {
-                await getAndStoreUserInfo(dispatch);
-                dispatch(fetchCountryOptions());
-                dispatch(fetchCountryCodeOptions());
-                dispatch(fetchRoleOptions());
-                dispatch(fetchCertificateOptions());
-                dispatch(fetchAgentOptions());
-                dispatch(fetchCustomerOptions());
-            } catch (e: any) {
-                if (e?.response?.status === 401) {
-                    navigate('/login');
-                }
-            }
+            await getAndStoreUserInfo(dispatch);
+            dispatch(fetchCountryOptions());
+            dispatch(fetchCountryCodeOptions());
+            dispatch(fetchRoleOptions());
+            dispatch(fetchCertificateOptions());
+            dispatch(fetchAgentOptions());
+            dispatch(fetchCustomerOptions());
         })();
     }, []);
 
   const handleLogout = () => {
     dispatch(clearUserInfo());
-    clearCookie('token'); // 清除token
+    clearCookie('pc-token'); // 清除token
     window.location.reload();
   };
 

@@ -17,7 +17,7 @@ class HttpRequest {
             // @ts-ignore
             (config: AxiosRequestConfig) => {
                 // 添加 token
-                const token = getCookie('token');
+                const token = getCookie('pc-token');
                 if (token) {
                     config.headers = config.headers || {};
                     config.headers['Authorization'] = `Bearer ${token}`;
@@ -41,6 +41,7 @@ class HttpRequest {
             (error) => {
                 if (error.status === 401) {
                     console.log('未授权，请登录');
+                    debugger
                     window.location.href = '/login';
                     return Promise.resolve(error);
                 } else {
