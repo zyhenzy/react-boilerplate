@@ -104,7 +104,12 @@
     "tcRemark": "TC备注",
     "actions": "操作",
     "noData": "暂无数据",
-    "loading": "加载中..."
+    "loading": "加载中...",
+    "reviewFailed": "审核失败",
+    "converted": "转换订单",
+    "issued": "出票",
+    "reason": "原因",
+    "issuanceTimeLimit": "出票时限"
   },
   "requestOrder": {
     "title": "航班需求订单",

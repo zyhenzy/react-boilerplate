@@ -126,8 +126,8 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="secondary">{t('cancel', '取消')}</Button>
-          <Button type="submit" variant="contained" color="primary">{editingId ? t('update', '更新') : t('add', '新增')}</Button>
+          <Button onClick={onClose} color="secondary">{t('common.cancel')}</Button>
+          <Button type="submit" variant="contained" color="primary">{editingId ? t('common.update') : t('common.confirm')}</Button>
         </DialogActions>
       </form>
     </Dialog>

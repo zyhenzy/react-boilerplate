@@ -58,37 +58,37 @@ const ConvertedDialog: React.FC<ConvertedDialogProps> = ({ open, onClose, onSubm
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{t('agentOrder.converted', '转换成功')}</DialogTitle>
+      <DialogTitle>{t('agentOrder.converted')}</DialogTitle>
       <DialogContent>
         {/* 订单详情部分（只读，非表单） */}
         <div style={{marginBottom: 16, padding: 12, background: '#fafafa', borderRadius: 4, border: '1px solid #eee'}}>
-          <div><b>{t('agentOrder.orderNo', '订单号')}：</b>{order?.orderNo || '-'}</div>
-          <div><b>{t('agentOrder.type', '订单类型')}：</b>{typeof order?.type === 'number' ? t(`agentOrder.type${order.type}`) : '-'}</div>
-          <div><b>{t('agentOrder.status', '订单状态')}：</b>{typeof order?.status === 'number' ? t(`agentOrder.status${order.status}`) : '-'}</div>
-          <div><b>{t('agentOrder.price', '票面价')}：</b>{order?.price ?? '-'}</div>
-          <div><b>{t('agentOrder.tax', '税费')}：</b>{order?.tax ?? '-'}</div>
-          <div><b>{t('agentOrder.serviceCharge', '服务费')}：</b>{order?.serviceCharge ?? '-'}</div>
-          <div><b>{t('agentOrder.pnr', 'PNR')}：</b>{order?.pnr || '-'}</div>
-          <div><b>{t('agentOrder.tcRemark', '出票备注')}：</b>{order?.agentRemark || '-'}</div>
+          <div><b>{t('agentOrder.orderNo')}：</b>{order?.orderNo || '-'}</div>
+          <div><b>{t('agentOrder.type')}：</b>{typeof order?.type === 'number' ? t(`agentOrder.type${order.type}`) : '-'}</div>
+          <div><b>{t('agentOrder.status')}：</b>{typeof order?.status === 'number' ? t(`agentOrder.status${order.status}`) : '-'}</div>
+          <div><b>{t('agentOrder.price')}：</b>{order?.price ?? '-'}</div>
+          <div><b>{t('agentOrder.tax')}：</b>{order?.tax ?? '-'}</div>
+          <div><b>{t('agentOrder.serviceCharge')}：</b>{order?.serviceCharge ?? '-'}</div>
+          <div><b>{t('agentOrder.pnr')}：</b>{order?.pnr || '-'}</div>
+          <div><b>{t('agentOrder.tcRemark')}：</b>{order?.agentRemark || '-'}</div>
         </div>
         {/* 转换表单部分 */}
-        <TextField margin="dense" label={t('agentOrder.price', '票面价')} type="number" fullWidth value={form.price} onChange={e => handleChange('price', Number(e.target.value))} />
-        <TextField margin="dense" label={t('agentOrder.tax', '税费')} type="number" fullWidth value={form.tax} onChange={e => handleChange('tax', Number(e.target.value))} />
-        <TextField margin="dense" label={t('agentOrder.serviceCharge', '服务费')} type="number" fullWidth value={form.serviceCharge} onChange={e => handleChange('serviceCharge', Number(e.target.value))} />
+        <TextField margin="dense" label={t('agentOrder.price')} type="number" fullWidth value={form.price} onChange={e => handleChange('price', Number(e.target.value))} />
+        <TextField margin="dense" label={t('agentOrder.tax')} type="number" fullWidth value={form.tax} onChange={e => handleChange('tax', Number(e.target.value))} />
+        <TextField margin="dense" label={t('agentOrder.serviceCharge')} type="number" fullWidth value={form.serviceCharge} onChange={e => handleChange('serviceCharge', Number(e.target.value))} />
         <TextField
           margin="dense"
-          label={t('agentOrder.issuanceTimeLimit', '出票时限')}
+          label={t('agentOrder.issuanceTimeLimit')}
           fullWidth
           type="date"
           InputLabelProps={{ shrink: true }}
           value={form.issuanceTimeLimit || ''}
           onChange={e => handleChange('issuanceTimeLimit', e.target.value)}
         />
-        <TextField margin="dense" label={t('agentOrder.tcRemark', '出票备注')} fullWidth value={form.tcRemark} onChange={e => handleChange('tcRemark', e.target.value)} />
+        <TextField margin="dense" label={t('agentOrder.tcRemark')} fullWidth value={form.tcRemark} onChange={e => handleChange('tcRemark', e.target.value)} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>{t('cancel', '取消')}</Button>
-        <Button onClick={handleSubmit} variant="contained" color="primary">{t('confirm', '确定')}</Button>
+        <Button onClick={handleClose}>{t('cancel')}</Button>
+        <Button onClick={handleSubmit} variant="contained" color="primary">{t('confirm')}</Button>
       </DialogActions>
     </Dialog>
   );

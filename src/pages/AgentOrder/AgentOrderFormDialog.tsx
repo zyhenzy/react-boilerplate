@@ -35,12 +35,12 @@ const AgentOrderFormDialog: React.FC<AgentOrderFormDialogProps> = ({
   return (
     <Dialog open={open} onClose={onClose}>
       <form onSubmit={onSubmit}>
-        <DialogTitle>{editingId ? t('agentOrder.edit', '编辑订单') : t('agentOrder.add', '新增订单')}</DialogTitle>
+        <DialogTitle>{editingId ? t('agentOrder.edit') : t('agentOrder.add')}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            label={t('agentOrder.orderNo', '订单号')}
+            label={t('agentOrder.orderNo')}
             fullWidth
             value={form.orderNo || ''}
             onChange={e => setForm(f => ({ ...f, orderNo: e.target.value }))}
@@ -49,39 +49,39 @@ const AgentOrderFormDialog: React.FC<AgentOrderFormDialogProps> = ({
             disabled={!!editingId}
           />
           <FormControl fullWidth margin="dense">
-            <InputLabel id="type-label">{t('agentOrder.type', '订单类型')}</InputLabel>
+            <InputLabel id="type-label">{t('agentOrder.type')}</InputLabel>
             <Select
               labelId="type-label"
-              label={t('agentOrder.type', '订单类型')}
+              label={t('agentOrder.type')}
               value={form.type ?? ''}
               onChange={e => setForm(f => ({ ...f, type: e.target.value as AgentOrderType }))}
               required
             >
-              <MenuItem value={0}>{t('agentOrder.type0', '普通')}</MenuItem>
-              <MenuItem value={1}>{t('agentOrder.type1', '改期')}</MenuItem>
-              <MenuItem value={2}>{t('agentOrder.type2', '退票')}</MenuItem>
+              <MenuItem value={0}>{t('agentOrder.type0')}</MenuItem>
+              <MenuItem value={1}>{t('agentOrder.type1')}</MenuItem>
+              <MenuItem value={2}>{t('agentOrder.type2')}</MenuItem>
             </Select>
           </FormControl>
           <FormControl fullWidth margin="dense">
-            <InputLabel id="status-label">{t('agentOrder.status', '订单状态')}</InputLabel>
+            <InputLabel id="status-label">{t('agentOrder.status')}</InputLabel>
             <Select
               labelId="status-label"
-              label={t('agentOrder.status', '订单状态')}
+              label={t('agentOrder.status')}
               value={form.status ?? ''}
               onChange={e => setForm(f => ({ ...f, status: e.target.value as AgentOrderStatus }))}
               required
             >
-              <MenuItem value={0}>{t('agentOrder.status0', '待处理')}</MenuItem>
-              <MenuItem value={1}>{t('agentOrder.status1', '已接受')}</MenuItem>
-              <MenuItem value={2}>{t('agentOrder.status2', '已拒绝')}</MenuItem>
-              <MenuItem value={3}>{t('agentOrder.status3', '已出票')}</MenuItem>
-              <MenuItem value={4}>{t('agentOrder.status4', '已完成')}</MenuItem>
-              <MenuItem value={5}>{t('agentOrder.status5', '已取消')}</MenuItem>
+              <MenuItem value={0}>{t('agentOrder.status0')}</MenuItem>
+              <MenuItem value={1}>{t('agentOrder.status1')}</MenuItem>
+              <MenuItem value={2}>{t('agentOrder.status2')}</MenuItem>
+              <MenuItem value={3}>{t('agentOrder.status3')}</MenuItem>
+              <MenuItem value={4}>{t('agentOrder.status4')}</MenuItem>
+              <MenuItem value={5}>{t('agentOrder.status5')}</MenuItem>
             </Select>
           </FormControl>
           <TextField
             margin="dense"
-            label={t('agentOrder.price', '票面价')}
+            label={t('agentOrder.price')}
             fullWidth
             type="number"
             value={form.price ?? ''}
@@ -90,7 +90,7 @@ const AgentOrderFormDialog: React.FC<AgentOrderFormDialogProps> = ({
           />
           <TextField
             margin="dense"
-            label={t('agentOrder.tax', '税费')}
+            label={t('agentOrder.tax')}
             fullWidth
             type="number"
             value={form.tax ?? ''}
@@ -99,7 +99,7 @@ const AgentOrderFormDialog: React.FC<AgentOrderFormDialogProps> = ({
           />
           <TextField
             margin="dense"
-            label={t('agentOrder.serviceCharge', '服务费')}
+            label={t('agentOrder.serviceCharge')}
             fullWidth
             type="number"
             value={form.serviceCharge ?? ''}
@@ -108,29 +108,29 @@ const AgentOrderFormDialog: React.FC<AgentOrderFormDialogProps> = ({
           />
           <TextField
             margin="dense"
-            label={t('agentOrder.pnr', 'PNR')}
+            label={t('agentOrder.pnr')}
             fullWidth
             value={form.pnr || ''}
             onChange={e => setForm(f => ({ ...f, pnr: e.target.value }))}
           />
           <TextField
             margin="dense"
-            label={t('agentOrder.agentRemark', '代理备注')}
+            label={t('agentOrder.agentRemark')}
             fullWidth
             value={form.agentRemark || ''}
             onChange={e => setForm(f => ({ ...f, agentRemark: e.target.value }))}
           />
           <TextField
             margin="dense"
-            label={t('agentOrder.tcRemark', 'TC备注')}
+            label={t('agentOrder.tcRemark')}
             fullWidth
             value={form.tcRemark || ''}
             onChange={e => setForm(f => ({ ...f, tcRemark: e.target.value }))}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="secondary">{t('cancel', '取消')}</Button>
-          <Button type="submit" variant="contained" color="primary">{editingId ? t('update', '更新') : t('add', '新增')}</Button>
+          <Button onClick={onClose} color="secondary">{t('cancel')}</Button>
+          <Button type="submit" variant="contained" color="primary">{editingId ? t('update') : t('add')}</Button>
         </DialogActions>
       </form>
     </Dialog>
@@ -138,4 +138,3 @@ const AgentOrderFormDialog: React.FC<AgentOrderFormDialogProps> = ({
 };
 
 export default AgentOrderFormDialog;
-

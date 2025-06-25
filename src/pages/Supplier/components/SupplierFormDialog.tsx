@@ -131,7 +131,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                 onClick={() => {
                   document.getElementById('logo-upload-input')?.click();
                 }}
-                title={t('supplier.changeAvatar', '点击更换头像')}
+                title={t('supplier.changeAvatar')}
               >
                 <img
                   src={getImage(form.logoId)}
@@ -147,7 +147,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                 size="small"
                 sx={{ height: 96, width: 96, borderRadius: '50%', minWidth: 0, p: 0, ml: 0, m: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >
-                <span style={{ fontSize: 14, color: '#888', textAlign: 'center', width: '100%' }}>{uploading ? t('supplier.uploading', '上传中...') : t('supplier.upload', '上传头像')}</span>
+                <span style={{ fontSize: 14, color: '#888', textAlign: 'center', width: '100%' }}>{uploading ? t('supplier.uploading') : t('supplier.upload')}</span>
                 <input
                   id="logo-upload-input"
                   type="file"
@@ -179,8 +179,8 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="secondary">{t('cancel', '取消')}</Button>
-          <Button type="submit" variant="contained" color="primary">{initialValues ? t('update', '更新') : t('add', '新增')}</Button>
+          <Button onClick={onClose} color="secondary">{t('common.cancel')}</Button>
+          <Button type="submit" variant="contained" color="primary">{initialValues ? t('common.update') : t('common.confirm')}</Button>
         </DialogActions>
       </form>
     </Dialog>

@@ -73,7 +73,7 @@ const AgentOrderPage: React.FC = () => {
 
   const handleReviewFailedSubmit = async (reason: string,tcRemark:string) => {
     if (!reviewFailedId) return;
-    await reviewFailedAgentOrder({ id: reviewFailedId, reason,tcRemark });
+    await reviewFailedAgentOrder({ id: reviewFailedId, reason, tcRemark });
     setReviewFailedOpen(false);
     setReviewFailedId(null);
     fetchData();
@@ -122,34 +122,34 @@ const AgentOrderPage: React.FC = () => {
   return (
     <Box p={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <h2>{t('agentOrder.title', '代理订单管理')}</h2>
-        {/*<Button variant="contained" onClick={handleAdd}>{t('agentOrder.add', '新增订单')}</Button>*/}
+        <h2>{t('agentOrder.title')}</h2>
+        {/*<Button variant="contained" onClick={handleAdd}>{t('agentOrder.add')}</Button>*/}
       </Box>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>{t('agentOrder.orderNo', '订单号')}</TableCell>
-              <TableCell>{t('agentOrder.type', '订单类型')}</TableCell>
-              <TableCell>{t('agentOrder.status', '订单状态')}</TableCell>
-              <TableCell>{t('agentOrder.price', '票面价')}</TableCell>
-              <TableCell>{t('agentOrder.tax', '税费')}</TableCell>
-              <TableCell>{t('agentOrder.serviceCharge', '服务费')}</TableCell>
-              <TableCell>{t('agentOrder.pnr', 'PNR')}</TableCell>
-              <TableCell>{t('agentOrder.actions', '操作')}</TableCell>
+              <TableCell>{t('agentOrder.orderNo')}</TableCell>
+              <TableCell>{t('agentOrder.type')}</TableCell>
+              <TableCell>{t('agentOrder.status')}</TableCell>
+              <TableCell>{t('agentOrder.price')}</TableCell>
+              <TableCell>{t('agentOrder.tax')}</TableCell>
+              <TableCell>{t('agentOrder.serviceCharge')}</TableCell>
+              <TableCell>{t('agentOrder.pnr')}</TableCell>
+              <TableCell>{t('agentOrder.actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {loading ? (
-              <TableRow><TableCell colSpan={8} align="center">{t('agentOrder.loading', '加载中...')}</TableCell></TableRow>
+              <TableRow><TableCell colSpan={8} align="center">{t('agentOrder.loading')}</TableCell></TableRow>
             ) : data.length === 0 ? (
-              <TableRow><TableCell colSpan={8}>{t('agentOrder.noData', '暂无数据')}</TableCell></TableRow>
+              <TableRow><TableCell colSpan={8}>{t('agentOrder.noData')}</TableCell></TableRow>
             ) : (
               data.map(item => (
                 <TableRow key={item.id}>
                   <TableCell>{item.orderNo}</TableCell>
-                  <TableCell>{t(`agentOrder.type${item.type}`, String(item.type))}</TableCell>
-                  <TableCell>{t(`agentOrder.status${item.status}`, String(item.status))}</TableCell>
+                  <TableCell>{t(`agentOrder.type${item.type}`)}</TableCell>
+                  <TableCell>{t(`agentOrder.status${item.status}`)}</TableCell>
                   <TableCell>{item.price}</TableCell>
                   <TableCell>{item.tax}</TableCell>
                   <TableCell>{item.serviceCharge}</TableCell>
@@ -159,15 +159,15 @@ const AgentOrderPage: React.FC = () => {
                     {item.status===0 && (
                         <>
                           <Button size="small" color="error" onClick={() => handleReviewFailed(item.id!)} disabled={loading} style={{marginLeft: 8}}>
-                            {t('agentOrder.reviewFailed', '复核失败')}
+                            {t('agentOrder.reviewFailed')}
                           </Button>
                           <Button size="small" color="primary" onClick={() => handleConverted(item)} disabled={loading} style={{marginLeft: 8}}>
-                            {t('agentOrder.converted', '转换成功')}
+                            {t('agentOrder.converted')}
                           </Button>
                         </>
                     )}
                     { item.status === 4 && <Button size="small" color="success" onClick={() => handleIssued(item)} disabled={loading} style={{marginLeft: 8}}>
-                      {t('agentOrder.issued', '出票')}
+                      {t('agentOrder.issued')}
                     </Button>}
                   </TableCell>
                 </TableRow>

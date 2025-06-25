@@ -29,12 +29,12 @@ const ReviewFailedDialog: React.FC<ReviewFailedDialogProps> = ({ open, onClose, 
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>{t('agentOrder.reviewFailed', '复核失败')}</DialogTitle>
+      <DialogTitle>{t('agentOrder.reviewFailed')}</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
           margin="dense"
-          label={t('agentOrder.reason', '失败原因')}
+          label={t('agentOrder.reason')}
           fullWidth
           value={reason}
           onChange={e => setReason(e.target.value)}
@@ -43,7 +43,7 @@ const ReviewFailedDialog: React.FC<ReviewFailedDialogProps> = ({ open, onClose, 
         />
         <TextField
           margin="dense"
-          label={t('agentOrder.tcRemark', '出票备注')}
+          label={t('agentOrder.tcRemark')}
           fullWidth
           value={tcRemark}
           onChange={e => setTcRemark(e.target.value)}
@@ -52,8 +52,8 @@ const ReviewFailedDialog: React.FC<ReviewFailedDialogProps> = ({ open, onClose, 
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>{t('cancel', '取消')}</Button>
-        <Button onClick={handleSubmit} variant="contained" color="primary">{t('confirm', '确定')}</Button>
+        <Button onClick={handleClose}>{t('cancel')}</Button>
+        <Button onClick={handleSubmit} variant="contained" color="primary">{t('confirm')}</Button>
       </DialogActions>
     </Dialog>
   );
