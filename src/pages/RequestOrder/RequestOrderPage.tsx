@@ -12,26 +12,40 @@ import {
   TableRow,
   Paper,
   IconButton,
-  TablePagination
+  TablePagination, Button
 } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import RequestOrderFormDialog from './components/RequestOrderFormDialog';
 import RequestOrderDetailDialog from './components/RequestOrderDetailDialog';
 import { useTranslation } from 'react-i18next';
 import { getRequestOrderDetail } from '../../api/request-order';
+import TicketOrderFormDialog from "../TicketOrder/components/TicketOrderFormDialog";
+import type {Supplier} from "../../api/supplier/types";
+import {getSupplierList} from "../../api/supplier";
+import type {TicketOrder} from "../../api/ticket-order/types";
+import {addTicketOrder, updateTicketOrder} from "../../api/ticket-order";
 
 const RequestOrderPage: React.FC = () => {
   const { t } = useTranslation();
   const [data, setData] = useState<RequestOrder[]>([]);
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [editingOrder, setEditingOrder] = useState<RequestOrder | null>(null);
-  const [countryOptions, setCountryOptions] = useState<{ label: string; value: string }[]>([]);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [detailOrder, setDetailOrder] = useState<RequestOrder | null>(null);
+  const [editingOrder, setEditingOrder] = useState<TicketOrder | null>(null);
+
+  // 获取供应商列表
+  const fetchSuppliers = async () => {
+    const res = await getSupplierList({ PageIndex: 1, PageSize: 100 });
+    setSuppliers(res.data || []);
+  };
+
+  useEffect(() => {
+    fetchSuppliers();
+  }, []);
 
   const fetchData = async () => {
     setLoading(true);
@@ -48,46 +62,40 @@ const RequestOrderPage: React.FC = () => {
     fetchData();
   }, [pageIndex, pageSize]);
 
-  useEffect(() => {
-    getCountryOptions().then(res => {
-      setCountryOptions(res.map(opt => ({ label: opt.label, value: opt.value })));
-    });
-  }, []);
-
-  const handleAdd = () => {
-    setEditingOrder(null);
-    setDialogOpen(true);
-  };
-
-  const handleEdit = (order: RequestOrder) => {
-    setEditingOrder(order);
-    setDialogOpen(true);
-  };
-
   const handleViewDetail = async (order: RequestOrder) => {
     setDetailDialogOpen(true);
     const res = await getRequestOrderDetail(order.id!);
     setDetailOrder(res || null);
   };
 
-  const handleSubmit = async (values: Partial<RequestOrder>) => {
-    if (values.id) {
-      await updateRequestOrder({
-        id: values.id,
-        status: values.status ?? 0,
-        remark: values.remark ?? undefined,
-      });
-    } else {
-      await addRequestOrder({
-        dep: values.dep ?? undefined,
-        arr: values.arr ?? undefined,
-        countryNumber: values.countryNumber ?? undefined,
-        phoneNumber: values.phoneNumber ?? undefined,
-        remark: values.remark ?? undefined,
-        passengerList: values.passengerList,
-        imageList: values.imageList,
-      });
+  const handleTrans = async (order: RequestOrder) => {
+    const res:RequestOrder = await getRequestOrderDetail(order.id as string)
+    // todo: 这里将RequestOrder转换成TicketOrder
+    const ticketOrder:TicketOrder={
+
     }
+
+    setEditingOrder(ticketOrder)
+  }
+
+  const handleSubmit = async (values: Partial<TicketOrder>) => {
+    await addTicketOrder({
+      pnr: values.pnr ?? undefined,
+      bookerName: values.bookerName ?? undefined,
+      bookerContact: values.bookerContact ?? undefined,
+      rateBooking: values.rateBooking ?? undefined,
+      changeRule: values.changeRule ?? undefined,
+      refundRule: values.refundRule ?? undefined,
+      originalTicketFee: values.originalTicketFee ?? undefined,
+      ticketFee: values.ticketFee ?? undefined,
+      taxFee: values.taxFee ?? undefined,
+      insuranceFee: values.insuranceFee ?? undefined,
+      serviceFee: values.serviceFee ?? undefined,
+      flightList: values.flightList,
+      passengerList: values.passengerList,
+      supplierId: values.supplierId ?? undefined,
+      customerId: values.customerId ?? undefined,
+    });
     setDialogOpen(false);
     setEditingOrder(null);
     fetchData();
@@ -123,6 +131,7 @@ const RequestOrderPage: React.FC = () => {
                   <TableCell>{item.phoneNumber}</TableCell>
                   <TableCell>{t(`requestOrder.status_${item.status}`)}</TableCell>
                   <TableCell>
+                    {item.status===0&&<Button size="small" onClick={() => handleTrans(item)}>{t('requestOrder.trans')}</Button>}
                     <IconButton size="small" onClick={() => handleViewDetail(item)} disabled={loading}><VisibilityIcon /></IconButton>
                   </TableCell>
                 </TableRow>
@@ -140,19 +149,19 @@ const RequestOrderPage: React.FC = () => {
         onRowsPerPageChange={e => { setPageSize(Number(e.target.value)); setPageIndex(0); }}
         rowsPerPageOptions={[10, 20, 50]}
       />
-      <RequestOrderFormDialog
-        open={dialogOpen}
-        onClose={() => { setDialogOpen(false); setEditingOrder(null); }}
-        onSubmit={handleSubmit}
-        form={editingOrder || {}}
-        setForm={f => setEditingOrder(f as RequestOrder | null)}
-        editingId={editingOrder?.id || null}
-        countryOptions={countryOptions}
-      />
       <RequestOrderDetailDialog
         open={detailDialogOpen}
         onClose={() => { setDetailDialogOpen(false); setDetailOrder(null); }}
         order={detailOrder}
+      />
+      <TicketOrderFormDialog
+          open={dialogOpen}
+          onClose={() => setDialogOpen(false)}
+          onSubmit={handleSubmit}
+          form={editingOrder || {}}
+          setForm={setEditingOrder as any}
+          editingId={null}
+          suppliers={suppliers}
       />
     </Box>
   );

@@ -72,8 +72,6 @@ const TicketOrderPage: React.FC = () => {
 
   const handleEdit = async (order: TicketOrder) => {
     const res = await getTicketOrderDetail(order.id!);
-    console.log(res)
-    debugger
     setEditingOrder(res || order);
     setDialogOpen(true);
   };
