@@ -10,12 +10,12 @@ export enum RequestOrderStatus {
 // 需求订单实体
 export interface RequestOrder {
   id?: string;
-  dep?: string | null;
-  arr?: string | null;
-  countryNumber?: string | null;
-  phoneNumber?: string | null;
-  remark?: string | null;
-  passengerList?: AddRequestOrderPassengerCommand[];
+  dep?: string; // 出发地
+  arr?: string; // 到达地
+  countryNumber?: string | null; // 国家号码
+  phoneNumber?: string | null; // 手机
+  remark?: string | null; // 备注
+  passengerList?: AddRequestOrderPassengerCommand[]; // 乘客列表
   imageList?: string[];
   status?: RequestOrderStatus;
   createdAt?: string;
@@ -48,15 +48,15 @@ export interface AddRequestOrderCommand {
 
 // 乘客
 export interface AddRequestOrderPassengerCommand {
-  name?: string;
-  englishName?: string;
-  birthday?: string;
-  certificateType?: string;
-  certificateNo?: string;
-  nationality?: string;
-  countryNumber?: string;
-  phoneNumber?: string;
-  ticketNo?: string;
+  name?: string; // 姓名
+  englishName?: string; // 英文名
+  birthday?: string; // 出生日期
+  certificateType?: string; // 证件类型
+  certificateNo?: string; // 证件号
+  nationality?: string; // 国籍
+  countryNumber?: string; // 国家号码
+  phoneNumber?: string; // 手机
+  ticketNo?: string; // 票号
 }
 
 // 修改需求订单

@@ -69,14 +69,30 @@ const RequestOrderPage: React.FC = () => {
   };
 
   const handleTrans = async (order: RequestOrder) => {
-    const res:RequestOrder = await getRequestOrderDetail(order.id as string)
-    // todo: 这里将RequestOrder转换成TicketOrder
-    const ticketOrder:TicketOrder={
-
-    }
-
-    setEditingOrder(ticketOrder)
-  }
+    const res: RequestOrder = await getRequestOrderDetail(order.id as string);
+    // 字段映射，需根据实际字段调整
+    const ticketOrder: TicketOrder = {
+      flightList:[{
+        depCity:res.dep,
+        arrCity:res.arr,
+      }],
+      passengerList:res.passengerList?.map(p=>{
+        return {
+          name:p.name,
+          englishName:p.englishName,
+          birthday:p.birthday,
+          certificateType:p.certificateType,
+          certificateNo:p.certificateNo,
+          nationality:p.nationality,
+          countryNumber:p.countryNumber,
+          phoneNumber:p.phoneNumber,
+          ticketNo:p.ticketNo,
+        }
+      })
+    };
+    setEditingOrder(ticketOrder);
+    setDialogOpen(true);
+  };
 
   const handleSubmit = async (values: Partial<TicketOrder>) => {
     await addTicketOrder({

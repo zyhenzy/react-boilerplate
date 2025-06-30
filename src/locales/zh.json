@@ -155,7 +155,7 @@
     "status_1": "已取消",
     "status_2": "已结算",
     "status_3": "已出票",
-    "supplierId": "供应商",
+    "supplier": "供应商",
     "currencyBooking": "预定币种",
     "rateBooking": "汇率",
     "changeRule": "改签规则",
