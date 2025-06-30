@@ -9,6 +9,18 @@ import './i18n';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#06BA85', // 主色
+            contrastText: '#ffffff', // 按钮文字颜色
+        },
+        secondary: {
+            main: '#3ED7A0', // 次色
+        },
+        background: {
+            default: '#f5f5f5', // 背景颜色
+        },
+    },
     components: {
         MuiButton: {
             defaultProps: {
@@ -59,3 +71,4 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+

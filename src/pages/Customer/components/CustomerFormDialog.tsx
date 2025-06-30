@@ -9,7 +9,8 @@ import {
   MenuItem,
   Select,
   InputLabel,
-  FormControl
+  FormControl,
+  Checkbox
 } from '@mui/material';
 import type { Customer } from '../../../api/customer/types';
 import { useTranslation } from 'react-i18next';
@@ -109,10 +110,11 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
           <div style={{marginTop: 8}}>
             <label style={{display: 'flex', alignItems: 'center'}}>
               <span style={{marginRight: 8}}>{t('customer.enable')}</span>
-              <input
-                type="checkbox"
+              <Checkbox
                 checked={form.enable ?? true}
                 onChange={e => setForm(f => ({ ...f, enable: e.target.checked }))}
+                color="primary"
+                size="small"
               />
             </label>
           </div>

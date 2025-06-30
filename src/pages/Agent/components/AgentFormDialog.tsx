@@ -9,7 +9,8 @@ import {
   MenuItem,
   Select,
   InputLabel,
-  FormControl
+  FormControl,
+  Checkbox
 } from '@mui/material';
 import type { Agent } from '../../../api/agent/types';
 import { useTranslation } from 'react-i18next';
@@ -117,10 +118,11 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
           <div style={{marginTop: 8}}>
             <label style={{display: 'flex', alignItems: 'center'}}>
               <span style={{marginRight: 8}}>{t('agent.enable')}</span>
-              <input
-                type="checkbox"
+              <Checkbox
                 checked={form.enable ?? true}
                 onChange={e => setForm(f => ({ ...f, enable: e.target.checked }))}
+                color="primary"
+                size="small"
               />
             </label>
           </div>
