@@ -15,6 +15,7 @@ export interface TicketOrder {
   bookerName?: string;
   bookerContact?: string;
   rateBooking?: number;
+  currencyBooking?:string; // 预定币种（只有在修改的时候有）
   pnr?: string;
   changeRule?: string;
   refundRule?: string;
@@ -73,7 +74,7 @@ export interface UpdateTicketOrderCommand {
   bookerName?: string;
   bookerContact?: string;
   currency?: string;
-  currencyBooking?: string;
+  currencyBooking?: string; // 预定币种（只有在修改的时候有）
   currencyPay?: string;
   rateBooking?: number;
   ratePay?: number;

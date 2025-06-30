@@ -128,11 +128,12 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 value={form.pnr || ''}
                 onChange={e => setForm(f => ({ ...f, pnr: e.target.value }))}
             />
-            {/* 供应商下���选择 */}
+            {/* 供应商下选择 */}
+
             <FormControl fullWidth margin="dense" required>
-              <InputLabel>{t('ticketOrder.supplierId')}</InputLabel>
+              <InputLabel>{t('ticketOrder.supplier')}</InputLabel>
               <Select
-                  label={t('ticketOrder.supplierId')}
+                  label={t('ticketOrder.supplier')}
                   value={form.supplierId || ''}
                   onChange={e => setForm(f => ({ ...f, supplierId: e.target.value }))}
               >
@@ -141,6 +142,13 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 ))}
               </Select>
             </FormControl>
+            {form.id&&<TextField
+                margin="dense"
+                label={t('ticketOrder.currencyBooking')}
+                fullWidth
+                value={form.currencyBooking || ''}
+                onChange={e => setForm(f => ({ ...f, currencyBooking: e.target.value }))}
+            />}
             {/* 客户下拉选择 */}
             <FormControl fullWidth margin="dense">
               <InputLabel>{t('ticketOrder.customerId', '客户')}</InputLabel>

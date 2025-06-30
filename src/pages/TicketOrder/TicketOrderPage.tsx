@@ -72,6 +72,8 @@ const TicketOrderPage: React.FC = () => {
 
   const handleEdit = async (order: TicketOrder) => {
     const res = await getTicketOrderDetail(order.id!);
+    console.log(res)
+    debugger
     setEditingOrder(res || order);
     setDialogOpen(true);
   };
@@ -134,6 +136,7 @@ const TicketOrderPage: React.FC = () => {
         bookerName: values.bookerName ?? undefined,
         bookerContact: values.bookerContact ?? undefined,
         rateBooking: values.rateBooking ?? undefined,
+        currencyBooking: values.currencyBooking ?? undefined,
         changeRule: values.changeRule ?? undefined,
         refundRule: values.refundRule ?? undefined,
         originalTicketFee: values.originalTicketFee ?? undefined,
