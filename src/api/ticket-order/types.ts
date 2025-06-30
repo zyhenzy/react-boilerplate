@@ -62,7 +62,7 @@ export interface AddTicketOrderCommand {
   insuranceFee?: number;
   serviceFee?: number;
   flightList?: AddTicketOrderTripCommand[];
-  passengerList?: AddTicketOrderPassengerCommand[];
+  passengerList?: AddTicketOrderPassengerCommand[]|UpdateTicketOrderPassengerCommand[];
   supplierId?: string;
   customerId?: string;
 }

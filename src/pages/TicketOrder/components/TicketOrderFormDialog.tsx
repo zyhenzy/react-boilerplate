@@ -11,7 +11,7 @@ import {
   MenuItem,
   FormControl
 } from '@mui/material';
-import type { TicketOrder } from '../../../api/ticket-order/types';
+import {TicketOrder, UpdateTicketOrderPassengerCommand} from '../../../api/ticket-order/types';
 import { useTranslation } from 'react-i18next';
 import PassengerFormDialog from './PassengerFormDialog';
 import TripFormDialog from './TripFormDialog';
@@ -19,6 +19,7 @@ import type { AddTicketOrderPassengerCommand, AddTicketOrderTripCommand } from '
 import type { Supplier } from '../../../api/supplier/types';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
+import {addTicketOrderPassenger, updateTicketOrderPassenger} from "../../../api/ticket-order";
 
 interface TicketOrderFormDialogProps {
   open: boolean;
@@ -56,7 +57,19 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
     setPassengerDialogOpen(true);
   };
 
-  const handlePassengerSubmit = (values: AddTicketOrderPassengerCommand) => {
+  const handlePassengerSubmit = async (values: AddTicketOrderPassengerCommand|UpdateTicketOrderPassengerCommand) => {
+    // 如果在修改订单中，新增或者修改乘客信息，调用接口
+    if(form.id){
+      if(editingPassenger){
+        // 修改乘客信息
+        await updateTicketOrderPassenger(values as UpdateTicketOrderPassengerCommand)
+      }else{
+        const params = values as AddTicketOrderPassengerCommand;
+        params.ticketOrderId = form.id;
+        // 新增乘客信息
+        await addTicketOrderPassenger(values as AddTicketOrderPassengerCommand)
+      }
+    }
     setPassengerDialogOpen(false);
     setEditingPassenger(undefined);
     setForm(f => {
