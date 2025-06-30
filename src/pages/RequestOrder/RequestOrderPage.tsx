@@ -21,7 +21,7 @@ import TicketOrderFormDialog from "../TicketOrder/components/TicketOrderFormDial
 import type {Supplier} from "../../api/supplier/types";
 import {getSupplierList} from "../../api/supplier";
 import type {TicketOrder} from "../../api/ticket-order/types";
-import {addTicketOrder, updateTicketOrder} from "../../api/ticket-order";
+import {addTicketOrder} from "../../api/ticket-order";
 
 const RequestOrderPage: React.FC = () => {
   const { t } = useTranslation();
