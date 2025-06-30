@@ -169,7 +169,7 @@ const TicketOrderPage: React.FC = () => {
 
   const handleDownloadWord = (order: TicketOrder) => {
     // 这里假设使用中文（zh），如需英文可改为'en'
-    downloadTicketOrderWord('zh_CN', order.id!);
+    downloadTicketOrderWord('zh', order.id!);
   };
 
   return (

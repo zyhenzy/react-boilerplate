@@ -16,6 +16,8 @@ import {
 } from './types';
 import {ListResponse} from "../types";
 import dayjs from 'dayjs';
+import axios from "axios";
+import {getCookie} from "../../utils/cookie";
 
 
 // 获取机票订单列表
@@ -109,6 +111,21 @@ export function downloadTicketOrderWord(lang: string, id: string, price?: boolea
   if (typeof price !== 'undefined') {
     url += `?price=${price}`;
   }
-  // 直接通过window.open下载
-  window.open(url, '_blank');
+  const token = getCookie('pc-token');
+  axios.get(url, {
+    responseType: 'blob',
+    headers: {
+      Authorization: `Bearer ${token}` // 添加 token 到 header
+    }
+  }).then(res => {
+    const blob = new Blob([res.data]);
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    a.download = `TicketOrder_${id}.docx`; // 可自定义文件名
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(downloadUrl);
+  });
 }
