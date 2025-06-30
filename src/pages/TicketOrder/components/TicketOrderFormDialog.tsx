@@ -9,7 +9,14 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  FormControl
+  FormControl,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper
 } from '@mui/material';
 import {
   TicketOrder,
@@ -287,29 +294,67 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
             {/* 行程列表弹窗编辑版 */}
             <div style={{ margin: '16px 0' }}>
               <InputLabel>{t('ticketOrder.tripList') || t('ticketOrder.flightList')}</InputLabel>
-              <ul style={{ paddingLeft: 16 }}>
-                {(form.flightList || []).map((trip, idx) => (
-                    <li key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
-                      <span style={{ flex: 1 }}>{trip.flight || t('ticketOrder.flight') + (idx + 1)}</span>
-                      <Button size="small" onClick={() => handleEditTrip(trip, idx)}>{t('common.edit')}</Button>
-                      <Button size="small" onClick={() => handleDeleteTrip(trip, idx)}>{t('common.delete')}</Button>
-                    </li>
-                ))}
-              </ul>
+              <TableContainer component={Paper} style={{ marginTop: 8, marginBottom: 8 }}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>{t('ticketOrder.flight')}</TableCell>
+                      <TableCell>{t('ticketOrder.airline')}</TableCell>
+                      <TableCell>{t('ticketOrder.dep')}</TableCell>
+                      <TableCell>{t('ticketOrder.arr')}</TableCell>
+                      <TableCell>{t('common.actions')}</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {(form.flightList || []).map((trip, idx) => (
+                      <TableRow key={idx}>
+                        <TableCell>{trip.flight}</TableCell>
+                        <TableCell>{trip.airline || ''}</TableCell>
+                        <TableCell>{trip.depCity || ''}</TableCell>
+                        <TableCell>{trip.arrCity || ''}</TableCell>
+                        <TableCell>
+                          <Button size="small" onClick={() => handleEditTrip(trip, idx)}>{t('common.edit')}</Button>
+                          <Button size="small" onClick={() => handleDeleteTrip(trip, idx)}>{t('common.delete')}</Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
               <Button onClick={handleAddTrip} size="small">{t('ticketOrder.addFlight')}</Button>
             </div>
             {/* 乘客列表弹窗编辑版 */}
             <div style={{ margin: '16px 0' }}>
               <InputLabel>{t('ticketOrder.passengerList')}</InputLabel>
-              <ul style={{ paddingLeft: 16 }}>
-                {(form.passengerList || []).map((p, idx) => (
-                    <li key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
-                      <span style={{ flex: 1 }}>{p.name || t('ticketOrder.passenger') + (idx + 1)}</span>
-                      <Button size="small" onClick={() => handleEditPassenger(p, idx)}>{t('common.edit')}</Button>
-                      <Button size="small" onClick={() => handleDeletePassenger(p, idx)}>{t('common.delete')}</Button>
-                    </li>
-                ))}
-              </ul>
+              <TableContainer component={Paper} style={{ marginTop: 8, marginBottom: 8 }}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>{t('ticketOrder.passengerName')}</TableCell>
+                      <TableCell>{t('ticketOrder.englishName')}</TableCell>
+                      <TableCell>{t('ticketOrder.certificateType')}</TableCell>
+                      <TableCell>{t('ticketOrder.certificateNo')}</TableCell>
+                      <TableCell>{t('ticketOrder.phone')}</TableCell>
+                      <TableCell>{t('common.actions')}</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {(form.passengerList || []).map((p, idx) => (
+                      <TableRow key={idx}>
+                        <TableCell>{p.name}</TableCell>
+                        <TableCell>{p.englishName}</TableCell>
+                        <TableCell>{p.certificateType || ''}</TableCell>
+                        <TableCell>{p.certificateNo || ''}</TableCell>
+                        <TableCell>{p.phoneNumber || ''}</TableCell>
+                        <TableCell>
+                          <Button size="small" onClick={() => handleEditPassenger(p, idx)}>{t('common.edit')}</Button>
+                          <Button size="small" onClick={() => handleDeletePassenger(p, idx)}>{t('common.delete')}</Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
               <Button onClick={handleAddPassenger} size="small">{t('ticketOrder.addPassenger')}</Button>
             </div>
           </DialogContent>

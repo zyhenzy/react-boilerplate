@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { RequestOrder} from "../../api/request-order/types";
-import { getRequestOrderList, addRequestOrder, updateRequestOrder } from "../../api/request-order";
-import { getCountryOptions } from '../../api/basic';
+import { getRequestOrderList } from "../../api/request-order";
 import {
   Box,
   Table,

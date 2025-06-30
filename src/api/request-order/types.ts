@@ -20,7 +20,6 @@ export interface RequestOrder {
   status?: RequestOrderStatus;
   createdAt?: string;
   updatedAt?: string;
-  // 可根据实际接口补充字段
 }
 
 // 查询参数
@@ -35,17 +34,6 @@ export interface RequestOrderQuery {
   Ordering?: string;
 }
 
-// 添加需求订单
-export interface AddRequestOrderCommand {
-  dep?: string;
-  arr?: string;
-  countryNumber?: string;
-  phoneNumber?: string;
-  remark?: string;
-  passengerList?: AddRequestOrderPassengerCommand[];
-  imageList?: string[];
-}
-
 // 乘客
 export interface AddRequestOrderPassengerCommand {
   name?: string; // 姓名
@@ -58,11 +46,3 @@ export interface AddRequestOrderPassengerCommand {
   phoneNumber?: string; // 手机
   ticketNo?: string; // 票号
 }
-
-// 修改需求订单
-export interface UpdateRequestOrderCommand {
-  id: string;
-  status: RequestOrderStatus;
-  remark?: string;
-}
-
