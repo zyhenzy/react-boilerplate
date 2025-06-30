@@ -25,7 +25,7 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
 import {
   addTicketOrderPassenger,
-  addTicketOrderTrip,
+  addTicketOrderTrip, deleteTicketOrderPassenger, deleteTicketOrderTrip,
   updateTicketOrderPassenger,
   updateTicketOrderTrip
 } from "../../../api/ticket-order";
@@ -66,6 +66,20 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
     setPassengerDialogOpen(true);
   };
 
+  const handleDeletePassenger = async (p: AddTicketOrderPassengerCommand, idx: number) => {
+    // 如果是编辑订单，且有id，调用后端删除接口
+    if (form.id && (p as UpdateTicketOrderPassengerCommand).id) {
+      // 这里假设有deleteTicketOrderPassenger方法
+      await deleteTicketOrderPassenger({ id: (p as UpdateTicketOrderPassengerCommand).id });
+      // 你可以根据实际API调整参数
+    }
+    setForm(f => {
+      const list = Array.isArray(f.passengerList) ? [...f.passengerList] : [];
+      list.splice(idx, 1);
+      return { ...f, passengerList: list };
+    });
+  }
+
   const handlePassengerSubmit = async (values: AddTicketOrderPassengerCommand|UpdateTicketOrderPassengerCommand) => {
     // 如果在修改订单中，新增或者修改乘客信息，调用接口
     if(form.id){
@@ -104,6 +118,18 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
     setEditingTrip({ ...trip, _idx: idx } as any);
     setTripDialogOpen(true);
   };
+
+  const handleDeleteTrip=async (p: AddTicketOrderTripCommand, idx: number)=>{
+    // 如果是编辑订单，且有id，调用后端删除接口
+    if (form.id && (p as UpdateTicketOrderTripCommand).id) {
+      await deleteTicketOrderTrip({ id: (p as UpdateTicketOrderPassengerCommand).id });
+    }
+    setForm(f => {
+      const list = Array.isArray(f.flightList) ? [...f.flightList] : [];
+      list.splice(idx, 1);
+      return { ...f, flightList: list };
+    });
+  }
 
   const handleTripSubmit = async (values: AddTicketOrderTripCommand|UpdateTicketOrderTripCommand) => {
     // 如果在修改订单中，新增或者修改行程，调用接口
@@ -266,6 +292,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                     <li key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
                       <span style={{ flex: 1 }}>{trip.flight || t('ticketOrder.flight') + (idx + 1)}</span>
                       <Button size="small" onClick={() => handleEditTrip(trip, idx)}>{t('common.edit')}</Button>
+                      <Button size="small" onClick={() => handleDeleteTrip(trip, idx)}>{t('common.delete')}</Button>
                     </li>
                 ))}
               </ul>
@@ -279,6 +306,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                     <li key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
                       <span style={{ flex: 1 }}>{p.name || t('ticketOrder.passenger') + (idx + 1)}</span>
                       <Button size="small" onClick={() => handleEditPassenger(p, idx)}>{t('common.edit')}</Button>
+                      <Button size="small" onClick={() => handleDeletePassenger(p, idx)}>{t('common.delete')}</Button>
                     </li>
                 ))}
               </ul>
