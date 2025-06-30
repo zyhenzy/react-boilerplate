@@ -22,7 +22,7 @@ import TicketOrderDetailDialog from './components/TicketOrderDetailDialog';
 import { useTranslation } from 'react-i18next';
 
 const TicketOrderPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [data, setData] = useState<TicketOrder[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [total, setTotal] = useState(0);
@@ -168,8 +168,7 @@ const TicketOrderPage: React.FC = () => {
   };
 
   const handleDownloadWord = (order: TicketOrder) => {
-    // 这里假设使用中文（zh），如需英文可改为'en'
-    downloadTicketOrderWord('zh', order.id!);
+    downloadTicketOrderWord(i18n.language, order.id!);
   };
 
   return (
