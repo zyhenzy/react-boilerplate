@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getCookie } from './cookie';
+import i18n from '../i18n';
 
 class HttpRequest {
     private instance: AxiosInstance;
@@ -21,6 +22,12 @@ class HttpRequest {
                 if (token) {
                     config.headers = config.headers || {};
                     config.headers['Authorization'] = `Bearer ${token}`;
+                }
+                // 添加国际化语言
+                if (i18n && i18n.language) {
+                    const langValue = i18n.language === 'zh' ? 'zh-CN' : i18n.language;
+                    config.headers = config.headers || {};
+                    config.headers['Lang'] = langValue;
                 }
                 return config;
             },
@@ -71,4 +78,3 @@ class HttpRequest {
 const http = new HttpRequest('/api');
 
 export default http;
-
