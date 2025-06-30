@@ -4,7 +4,8 @@ import {
   getAgentOrderList,
   reviewFailedAgentOrder,
   convertedAgentOrder,
-  getAgentOrderDetail, issuedAgentOrder,
+  getAgentOrderDetail,
+  issuedAgentOrder,
 } from '../../api/agent-order';
 import {
   Box,
@@ -16,7 +17,12 @@ import {
   TableHead,
   TableRow,
   Paper,
-  TablePagination
+  TablePagination,
+  TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl
 } from '@mui/material';
 import AgentOrderFormDialog from './AgentOrderFormDialog';
 import ReviewFailedDialog from './ReviewFailedDialog';
@@ -40,11 +46,16 @@ const AgentOrderPage: React.FC = () => {
   const [convertedOrder, setConvertedOrder] = useState<AgentOrder | null>(null);
   const [issuedOpen, setIssuedOpen] = useState(false);
   const [issuedOrder, setIssuedOrder] = useState<AgentOrder | null>(null);
+  const [query, setQuery] = useState<import('../../api/agent-order/types').AgentOrderQuery>({});
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await getAgentOrderList({ PageIndex: pageIndex + 1, PageSize: pageSize });
+      const res = await getAgentOrderList({
+        PageIndex: pageIndex + 1,
+        PageSize: pageSize,
+        ...query
+      });
       setData(res.data || []);
       setTotal(res.total || 0);
     } finally {
@@ -54,7 +65,7 @@ const AgentOrderPage: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [pageIndex, pageSize]);
+  }, [pageIndex, pageSize, query]);
 
   const handleAdd = () => {
     setEditingOrder(null);
@@ -121,6 +132,67 @@ const AgentOrderPage: React.FC = () => {
 
   return (
     <Box p={2}>
+      <Box mb={2}>
+        <form style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}
+              onSubmit={e => { e.preventDefault(); setPageIndex(0); fetchData(); }}>
+          <TextField
+            label={t('agentOrder.orderNo')}
+            size="small"
+            value={query.OrderNo || ''}
+            onChange={e => setQuery(q => ({ ...q, OrderNo: e.target.value }))}
+            style={{ width: 160 }}
+          />
+          <TextField
+            label={t('common.startDate')}
+            type="date"
+            size="small"
+            InputLabelProps={{ shrink: true }}
+            value={query.StartDate || ''}
+            onChange={e => setQuery(q => ({ ...q, StartDate: e.target.value }))}
+            style={{ width: 160 }}
+          />
+          <TextField
+            label={t('common.endDate')}
+            type="date"
+            size="small"
+            InputLabelProps={{ shrink: true }}
+            value={query.EndDate || ''}
+            onChange={e => setQuery(q => ({ ...q, EndDate: e.target.value }))}
+            style={{ width: 160 }}
+          />
+          <FormControl size="small" style={{ width: 140 }}>
+            <InputLabel>{t('agentOrder.type')}</InputLabel>
+            <Select
+              label={t('agentOrder.type')}
+              value={query.Type ?? ''}
+              onChange={e => setQuery(q => ({ ...q, Type: e.target.value }))}
+            >
+              <MenuItem value="">{t('common.all')}</MenuItem>
+              <MenuItem value={0}>{t('agentOrder.type0')}</MenuItem>
+              <MenuItem value={1}>{t('agentOrder.type1')}</MenuItem>
+              <MenuItem value={2}>{t('agentOrder.type2')}</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl size="small" style={{ width: 140 }}>
+            <InputLabel>{t('agentOrder.status')}</InputLabel>
+            <Select
+              label={t('agentOrder.status')}
+              value={query.Status ?? ''}
+              onChange={e => setQuery(q => ({ ...q, Status: e.target.value }))}
+            >
+              <MenuItem value="">{t('common.all')}</MenuItem>
+              <MenuItem value={0}>{t('agentOrder.status0')}</MenuItem>
+              <MenuItem value={1}>{t('agentOrder.status1')}</MenuItem>
+              <MenuItem value={2}>{t('agentOrder.status2')}</MenuItem>
+              <MenuItem value={3}>{t('agentOrder.status3')}</MenuItem>
+              <MenuItem value={4}>{t('agentOrder.status4')}</MenuItem>
+              <MenuItem value={5}>{t('agentOrder.status5')}</MenuItem>
+            </Select>
+          </FormControl>
+          <Button type="submit" variant="contained" color="primary">{t('common.search')}</Button>
+          <Button onClick={() => { setQuery({}); setPageIndex(0); fetchData(); }} style={{ marginLeft: 8 }}>{t('common.reset')}</Button>
+        </form>
+      </Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <h2>{t('agentOrder.title')}</h2>
         {/*<Button variant="contained" onClick={handleAdd}>{t('agentOrder.add')}</Button>*/}
@@ -155,7 +227,6 @@ const AgentOrderPage: React.FC = () => {
                   <TableCell>{item.serviceCharge}</TableCell>
                   <TableCell>{item.pnr}</TableCell>
                   <TableCell>
-                    {/*<IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>*/}
                     {item.status===0 && (
                         <>
                           <Button size="small" color="error" onClick={() => handleReviewFailed(item.id!)} disabled={loading} style={{marginLeft: 8}}>
@@ -184,6 +255,7 @@ const AgentOrderPage: React.FC = () => {
         rowsPerPage={pageSize}
         onRowsPerPageChange={e => { setPageSize(Number(e.target.value)); setPageIndex(0); }}
         rowsPerPageOptions={[10, 20, 50]}
+        labelRowsPerPage={t('common.rowsPerPage')}
       />
       <AgentOrderFormDialog
         open={dialogOpen}

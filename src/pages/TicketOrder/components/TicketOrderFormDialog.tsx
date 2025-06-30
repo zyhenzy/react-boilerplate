@@ -300,9 +300,9 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                     <TableRow>
                       <TableCell>{t('ticketOrder.flight')}</TableCell>
                       <TableCell>{t('ticketOrder.airline')}</TableCell>
-                      <TableCell>{t('ticketOrder.dep')}</TableCell>
-                      <TableCell>{t('ticketOrder.arr')}</TableCell>
-                      <TableCell>{t('common.actions')}</TableCell>
+                      <TableCell>{t('ticketOrder.depCity')}</TableCell>
+                      <TableCell>{t('ticketOrder.arrCity')}</TableCell>
+                      <TableCell>{t('common.action')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -334,7 +334,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                       <TableCell>{t('ticketOrder.englishName')}</TableCell>
                       <TableCell>{t('ticketOrder.certificateType')}</TableCell>
                       <TableCell>{t('ticketOrder.certificateNo')}</TableCell>
-                      <TableCell>{t('ticketOrder.phone')}</TableCell>
+                      <TableCell>{t('ticketOrder.phoneNumber')}</TableCell>
                       <TableCell>{t('common.actions')}</TableCell>
                     </TableRow>
                   </TableHead>

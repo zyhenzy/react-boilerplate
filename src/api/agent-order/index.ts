@@ -2,7 +2,6 @@ import http from '../../utils/http';
 import type { ListResponse } from '../types';
 import {
   AgentOrderQuery,
-  SubmitAgentOrderCommand,
   ReviewFailedAgentOrderCommand,
   ConvertedAgentOrderCommand,
   IssuedAgentOrderCommand,
@@ -17,11 +16,6 @@ export function getAgentOrderList(params?: AgentOrderQuery) {
 // 获取代理订单详情
 export function getAgentOrderDetail(id: string) {
   return http.get<AgentOrder>(`/v1/AgentOrder/${id}`);
-}
-
-// 提交代理订单
-export function submitAgentOrder(data: SubmitAgentOrderCommand) {
-  return http.post('/v1/AgentOrder/submit', data);
 }
 
 // 复核失败

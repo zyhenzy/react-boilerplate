@@ -113,6 +113,7 @@ const SupplierPage: React.FC = () => {
         rowsPerPage={pageSize}
         onRowsPerPageChange={handleRowsPerPageChange}
         rowsPerPageOptions={[10, 20, 50]}
+        labelRowsPerPage={t('common.rowsPerPage')}
       />
       <SupplierFormDialog
         open={dialogOpen}

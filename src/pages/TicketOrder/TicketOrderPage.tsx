@@ -225,6 +225,7 @@ const TicketOrderPage: React.FC = () => {
         rowsPerPage={pageSize}
         onRowsPerPageChange={e => { setPageSize(Number(e.target.value)); setPageIndex(0); }}
         rowsPerPageOptions={[10, 20, 50]}
+        labelRowsPerPage={t('common.rowsPerPage')}
       />
       <TicketOrderFormDialog
         open={dialogOpen}
