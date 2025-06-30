@@ -11,7 +11,11 @@ import {
   MenuItem,
   FormControl
 } from '@mui/material';
-import {TicketOrder, UpdateTicketOrderPassengerCommand} from '../../../api/ticket-order/types';
+import {
+  TicketOrder,
+  UpdateTicketOrderPassengerCommand,
+  UpdateTicketOrderTripCommand
+} from '../../../api/ticket-order/types';
 import { useTranslation } from 'react-i18next';
 import PassengerFormDialog from './PassengerFormDialog';
 import TripFormDialog from './TripFormDialog';
@@ -19,7 +23,12 @@ import type { AddTicketOrderPassengerCommand, AddTicketOrderTripCommand } from '
 import type { Supplier } from '../../../api/supplier/types';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
-import {addTicketOrderPassenger, updateTicketOrderPassenger} from "../../../api/ticket-order";
+import {
+  addTicketOrderPassenger,
+  addTicketOrderTrip,
+  updateTicketOrderPassenger,
+  updateTicketOrderTrip
+} from "../../../api/ticket-order";
 
 interface TicketOrderFormDialogProps {
   open: boolean;
@@ -67,7 +76,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
         const params = values as AddTicketOrderPassengerCommand;
         params.ticketOrderId = form.id;
         // 新增乘客信息
-        await addTicketOrderPassenger(values as AddTicketOrderPassengerCommand)
+        await addTicketOrderPassenger(params)
       }
     }
     setPassengerDialogOpen(false);
@@ -96,7 +105,19 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
     setTripDialogOpen(true);
   };
 
-  const handleTripSubmit = (values: AddTicketOrderTripCommand) => {
+  const handleTripSubmit = async (values: AddTicketOrderTripCommand|UpdateTicketOrderTripCommand) => {
+    // 如果在修改订单中，新增或者修改行程，调用接口
+    if(form.id){
+      if(editingTrip){
+        // 修改行程
+        await updateTicketOrderTrip(values as UpdateTicketOrderTripCommand)
+      }else{
+        const params = values as AddTicketOrderTripCommand;
+        params.ticketOrderId = form.id;
+        // 新增行程
+        await addTicketOrderTrip(values as AddTicketOrderTripCommand)
+      }
+    }
     setTripDialogOpen(false);
     setEditingTrip(undefined);
     setForm(f => {

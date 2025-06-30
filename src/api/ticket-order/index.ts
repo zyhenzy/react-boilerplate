@@ -89,7 +89,7 @@ export function deleteTicketOrderTrip(data: DeleteTicketOrderTripCommand) {
   return http.post('/v1/TicketOrder/deleteTrip', data);
 }
 
-// 新增乘���
+// 新增乘客
 export function addTicketOrderPassenger(data: AddTicketOrderPassengerCommand) {
   return http.post('/v1/TicketOrder/addPassenger', data);
 }
