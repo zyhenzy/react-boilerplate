@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useMediaQuery, Theme } from '@mui/material';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
@@ -16,6 +16,7 @@ import AgentOrderPage from "./pages/AgentOrder/AgentOrderPage";
 import RequestOrderPage from "./pages/RequestOrder/RequestOrderPage";
 import TicketOrderPage from "./pages/TicketOrder/TicketOrderPage";
 import Customer from "./pages/Customer/Customer";
+import About from './pages/About';
 
 const App: React.FC = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -38,7 +39,7 @@ const App: React.FC = () => {
                                 <Sidebar mobileOpen={mobileOpen} onClose={handleDrawerClose} />
                                 <Box component="main" sx={{ flex: 1, width: '100%',overflow:'scroll', ml: isMobile ? 0 : '0px', p: isMobile ? 1 : 3 }}>
                                     <Routes>
-                                        <Route path="/" element={<Dashboard />} />
+                                        <Route path="/" element={<Navigate to="/agent" replace />} />
                                         <Route path="/user" element={<User />} />
                                         <Route path="/settings" element={<Settings />} />
                                         <Route path="/agent" element={<Agent />} />
@@ -47,6 +48,7 @@ const App: React.FC = () => {
                                         <Route path="/agentOrder" element={<AgentOrderPage />} />
                                         <Route path="/requestOrder" element={<RequestOrderPage />} />
                                         <Route path="/ticketOrder" element={<TicketOrderPage />} />
+                                        <Route path="/about" element={<About />} />
                                     </Routes>
                                 </Box>
                             </div>

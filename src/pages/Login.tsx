@@ -5,6 +5,7 @@ import {getAndStoreUserInfo, loginUser} from '../api/user';
 import type { LoginParams } from '../api/user/types';
 import { setCookie } from '../utils/cookie';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 const Login: React.FC = () => {
     const [userName, setUserName] = useState('');
@@ -12,6 +13,7 @@ const Login: React.FC = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { t } = useTranslation();
 
     const handleLogin = async () => {
         if (userName === '' || password === '') {
@@ -41,7 +43,7 @@ const Login: React.FC = () => {
     return (
         <Container component="main" maxWidth="xs">
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '100px' }}>
-                <Typography variant="h5">登录</Typography>
+                <Typography variant="h5" sx={{ mb: 2 }}>{t('welcome')}</Typography>
                 <Box sx={{ width: '100%', mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     {error && <Typography color="error">{error}</Typography>}
                     <TextField

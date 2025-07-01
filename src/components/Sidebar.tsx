@@ -33,6 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({mobileOpen, onClose}) => {
             <ListItem component={Link} to="/agentOrder" sx={getListItemStyle('/agentOrder')}><ListItemText primary={t('agentOrder.title')}/></ListItem>
             <ListItem component={Link} to="/requestOrder" sx={getListItemStyle('/requestOrder')}><ListItemText primary={t('requestOrder.title')}/></ListItem>
             <ListItem component={Link} to="/ticketOrder" sx={getListItemStyle('/ticketOrder')}><ListItemText primary={t('ticketOrder.title')}/></ListItem>
+            <ListItem component={Link} to="/about" sx={getListItemStyle('/about')}><ListItemText primary={t('about')}/></ListItem>
         </List>
     );
 
