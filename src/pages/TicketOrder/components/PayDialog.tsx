@@ -47,7 +47,7 @@ const PayDialog: React.FC<PayDialogProps> = ({ open, onClose, onSubmit, loading,
             fullWidth
             type="number"
             value={form.ratePay || ''}
-            onChange={e => handleChange('ratePay', e.target.value ? Number(e.target.value) : undefined)}
+            onChange={e => handleChange('ratePay', e.target.value )}
           />
           <TextField
             margin="dense"

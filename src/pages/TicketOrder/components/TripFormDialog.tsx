@@ -147,7 +147,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             fullWidth
             type="number"
             value={form.flyingTime || ''}
-            onChange={e => setForm(f => ({ ...f, flyingTime: e.target.value ? Number(e.target.value) : undefined }))}
+            onChange={e => setForm(f => ({ ...f, flyingTime: e.target.value }))}
           />
           <TextField
             margin="dense"
@@ -205,7 +205,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             fullWidth
             type="number"
             value={form.price || ''}
-            onChange={e => setForm(f => ({ ...f, price: e.target.value ? Number(e.target.value) : undefined }))}
+            onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
           />
           <TextField
             margin="dense"
@@ -213,7 +213,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             fullWidth
             type="number"
             value={form.airportFee || ''}
-            onChange={e => setForm(f => ({ ...f, airportFee: e.target.value ? Number(e.target.value) : undefined }))}
+            onChange={e => setForm(f => ({ ...f, airportFee: e.target.value }))}
           />
           <TextField
             margin="dense"
@@ -221,7 +221,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             fullWidth
             type="number"
             value={form.fuelFee || ''}
-            onChange={e => setForm(f => ({ ...f, fuelFee: e.target.value ? Number(e.target.value) : undefined }))}
+            onChange={e => setForm(f => ({ ...f, fuelFee: e.target.value }))}
           />
           {/* 可根据需要继续补充更多字段 */}
         </DialogContent>

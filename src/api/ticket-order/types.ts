@@ -14,16 +14,16 @@ export interface TicketOrder {
   billNo?: string; // 订单号
   bookerName?: string; // 预订人姓名
   bookerContact?: string; // 预订人联系方式
-  rateBooking?: number; // 预定汇率
+  rateBooking?: number|string; // 预定汇率
   currencyBooking?:string; // 预定币种（只有在修改的时候有）
   pnr?: string; // PNR
   changeRule?: string; // 改期规则
   refundRule?: string; // 退票规则
-  originalTicketFee?: number; // 原票价
-  ticketFee?: number; // 票价
-  taxFee?: number; // 税
-  insuranceFee?: number; // 保险费
-  serviceFee?: number; // 服务费
+  originalTicketFee?: number|string; // 原票价
+  ticketFee?: number|string; // 票价
+  taxFee?: number|string; // 税
+  insuranceFee?: number|string; // 保险费
+  serviceFee?: number|string; // 服务费
   flightList?: AddTicketOrderTripCommand[]; // 航班集合
   passengerList?: AddTicketOrderPassengerCommand[]; // 乘客集合
   supplierId?: string; // 供应商ID
@@ -99,7 +99,7 @@ export interface CancelTicketOrderCommand {
 export interface PayedTicketOrderCommand {
   id: string;
   currencyPay?: string;
-  ratePay?: number;
+  ratePay?: number|string;
   payType?: string;
 }
 
@@ -133,16 +133,16 @@ export interface AddTicketOrderTripCommand {
   cabinCode?: string; // 舱位代码
   depTerminal?: string; // 起飞航站楼
   arrTerminal?: string; // 到达航站楼
-  flyingTime?: number; // 飞行时间
+  flyingTime?: number|string; // 飞行时间
   aircraft?: string; // 机型
   meals?: string; // 餐食
   luggageTransportationRule?: string; // 行李托运规则
   luggageHandRule?: string; // 行李手提规则
   stop?: boolean; // 经停
   remark?: string; // 备注
-  price?: number; // 价格
-  airportFee?: number; // 机建费
-  fuelFee?: number; // 燃油费
+  price?: number|string; // 价格
+  airportFee?: number|string; // 机建费
+  fuelFee?: number|string; // 燃油费
 }
 
 // 修改行程

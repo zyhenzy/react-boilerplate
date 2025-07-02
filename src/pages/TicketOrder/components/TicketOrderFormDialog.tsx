@@ -235,7 +235,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 fullWidth
                 type="number"
                 value={form.rateBooking || ''}
-                onChange={e => setForm(f => ({ ...f, rateBooking: Number(e.target.value) }))}
+                onChange={e => setForm(f => ({ ...f, rateBooking: e.target.value }))}
             />
             <TextField
                 margin="dense"
@@ -257,7 +257,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 fullWidth
                 type="number"
                 value={form.originalTicketFee || ''}
-                onChange={e => setForm(f => ({ ...f, originalTicketFee: Number(e.target.value) }))}
+                onChange={e => setForm(f => ({ ...f, originalTicketFee: e.target.value }))}
             />
             <TextField
                 margin="dense"
@@ -265,7 +265,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 fullWidth
                 type="number"
                 value={form.ticketFee || ''}
-                onChange={e => setForm(f => ({ ...f, ticketFee: Number(e.target.value) }))}
+                onChange={e => setForm(f => ({ ...f, ticketFee: e.target.value }))}
             />
             <TextField
                 margin="dense"
@@ -273,7 +273,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 fullWidth
                 type="number"
                 value={form.taxFee || ''}
-                onChange={e => setForm(f => ({ ...f, taxFee: Number(e.target.value) }))}
+                onChange={e => setForm(f => ({ ...f, taxFee: e.target.value }))}
             />
             <TextField
                 margin="dense"
@@ -281,7 +281,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 fullWidth
                 type="number"
                 value={form.insuranceFee || ''}
-                onChange={e => setForm(f => ({ ...f, insuranceFee: Number(e.target.value) }))}
+                onChange={e => setForm(f => ({ ...f, insuranceFee: e.target.value }))}
             />
             <TextField
                 margin="dense"
@@ -289,7 +289,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 fullWidth
                 type="number"
                 value={form.serviceFee || ''}
-                onChange={e => setForm(f => ({ ...f, serviceFee: Number(e.target.value) }))}
+                onChange={e => setForm(f => ({ ...f, serviceFee: e.target.value }))}
             />
             {/* 行程列表弹窗编辑版 */}
             <div style={{ margin: '16px 0' }}>

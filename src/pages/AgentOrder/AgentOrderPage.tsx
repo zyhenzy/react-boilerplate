@@ -24,7 +24,6 @@ import {
   InputLabel,
   FormControl
 } from '@mui/material';
-import AgentOrderFormDialog from './AgentOrderFormDialog';
 import ReviewFailedDialog from './ReviewFailedDialog';
 import ConvertedDialog from './ConvertedDialog';
 import IssuedDialog from './IssuedDialog';
@@ -37,8 +36,6 @@ const AgentOrderPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [editingOrder, setEditingOrder] = useState<AgentOrder | null>(null);
   const [reviewFailedOpen, setReviewFailedOpen] = useState(false);
   const [reviewFailedId, setReviewFailedId] = useState<string | null>(null);
   const [convertedOpen, setConvertedOpen] = useState(false);
@@ -66,16 +63,6 @@ const AgentOrderPage: React.FC = () => {
   useEffect(() => {
     fetchData();
   }, [pageIndex, pageSize, query]);
-
-  const handleAdd = () => {
-    setEditingOrder(null);
-    setDialogOpen(true);
-  };
-
-  const handleEdit = (order: AgentOrder) => {
-    setEditingOrder(order);
-    setDialogOpen(true);
-  };
 
   const handleReviewFailed = (id: string) => {
     setReviewFailedId(id);
@@ -119,14 +106,6 @@ const AgentOrderPage: React.FC = () => {
     await issuedAgentOrder({ id: issuedOrder?.id!, ...fields });
     setIssuedOpen(false);
     setIssuedOrder(null);
-    fetchData();
-  };
-
-  // 这里只做UI，实际新增/编辑需调用后端接口
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setDialogOpen(false);
-    setEditingOrder(null);
     fetchData();
   };
 
@@ -256,14 +235,6 @@ const AgentOrderPage: React.FC = () => {
         onRowsPerPageChange={e => { setPageSize(Number(e.target.value)); setPageIndex(0); }}
         rowsPerPageOptions={[10, 20, 50]}
         labelRowsPerPage={t('common.rowsPerPage')}
-      />
-      <AgentOrderFormDialog
-        open={dialogOpen}
-        onClose={() => { setDialogOpen(false); setEditingOrder(null); }}
-        onSubmit={handleSubmit}
-        form={editingOrder || {}}
-        setForm={f => setEditingOrder(f as AgentOrder | null)}
-        editingId={editingOrder?.id || null}
       />
       <ReviewFailedDialog
         open={reviewFailedOpen}
