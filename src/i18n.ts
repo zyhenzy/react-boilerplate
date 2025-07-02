@@ -15,6 +15,7 @@ i18n
   .init({
     resources,
     fallbackLng: 'zh',
+    lng: 'zh', // 强制默认使用中文
     interpolation: {
       escapeValue: false
     }
