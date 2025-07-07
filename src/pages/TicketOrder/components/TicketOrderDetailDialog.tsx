@@ -2,6 +2,7 @@ import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Divider } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import type { TicketOrder } from '../../../api/ticket-order/types';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 interface TicketOrderDetailDialogProps {
   open: boolean;
@@ -21,6 +22,8 @@ const TicketOrderDetailDialog: React.FC<TicketOrderDetailDialogProps> = ({ open,
           <Typography variant="subtitle1">{t('ticketOrder.bookerContact')}: {order.bookerContact}</Typography>
           <Typography variant="subtitle1">PNR: {order.pnr}</Typography>
           <Typography variant="subtitle1">{t('ticketOrder.status')}: {t(`ticketOrder.status_${order.status}`)}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.supplier')}: {order.supplierId}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.customer')}: {order.customerId}</Typography>
           <Typography variant="subtitle1">{t('ticketOrder.rateBooking')}: {order.rateBooking}</Typography>
           <Typography variant="subtitle1">{t('ticketOrder.currencyBooking')}: {order.currencyBooking}</Typography>
           <Typography variant="subtitle1">{t('ticketOrder.changeRule')}: {order.changeRule}</Typography>
@@ -32,42 +35,104 @@ const TicketOrderDetailDialog: React.FC<TicketOrderDetailDialogProps> = ({ open,
           <Typography variant="subtitle1">{t('ticketOrder.serviceFee')}: {order.serviceFee}</Typography>
           <Divider sx={{ my: 2 }} />
           <Typography variant="subtitle2">{t('ticketOrder.passengerList')}:</Typography>
-          {(order.passengerList || []).map((p, idx) => (
-              <Typography key={idx} variant="body2" sx={{ ml: 2 }}>
-                {p.name} {p.englishName ? `(${p.englishName})` : ''} {p.phoneNumber ? `电话: ${p.phoneNumber}` : ''} {p.certificateType ? `证件类型: ${p.certificateType}` : ''} {p.certificateNo ? `证件号: ${p.certificateNo}` : ''} {p.nationality ? `国籍: ${p.nationality}` : ''} {p.ticketNo ? `票号: ${p.ticketNo}` : ''}
-              </Typography>
-          ))}
+          <TableContainer component={Paper} sx={{ mb: 2 }}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>{t('ticketOrder.passengerName')}</TableCell>
+                  <TableCell>{t('ticketOrder.englishName')}</TableCell>
+                  <TableCell>{t('ticketOrder.birthday')}</TableCell>
+                  <TableCell>{t('ticketOrder.certificateType')}</TableCell>
+                  <TableCell>{t('ticketOrder.certificateNo')}</TableCell>
+                  <TableCell>{t('ticketOrder.nationality')}</TableCell>
+                  <TableCell>{t('ticketOrder.countryNumber')}</TableCell>
+                  <TableCell>{t('ticketOrder.phoneNumber')}</TableCell>
+                  <TableCell>{t('ticketOrder.ticketNo')}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(order.passengerList || []).map((p, idx) => (
+                  <TableRow key={idx}>
+                    <TableCell>{p.name}</TableCell>
+                    <TableCell>{p.englishName}</TableCell>
+                    <TableCell>{p.birthday}</TableCell>
+                    <TableCell>{p.certificateType}</TableCell>
+                    <TableCell>{p.certificateNo}</TableCell>
+                    <TableCell>{p.nationality}</TableCell>
+                    <TableCell>{p.countryNumber}</TableCell>
+                    <TableCell>{p.phoneNumber}</TableCell>
+                    <TableCell>{p.ticketNo}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
           <Divider sx={{ my: 2 }} />
           <Typography variant="subtitle2">{t('ticketOrder.flightList')}:</Typography>
-          {(order.flightList || []).map((f, idx) => (
-              <Typography key={idx} variant="body2" sx={{ ml: 2, mb: 1 }}>
-                {f.airline ? `${t('ticketOrder.airline')}: ${f.airline} ` : ''}
-                {f.flight ? `${t('ticketOrder.flight')}: ${f.flight} ` : ''}
-                {f.depCity ? `${t('ticketOrder.depCity')}: ${f.depCity} ` : ''}
-                {f.arrCity ? `${t('ticketOrder.arrCity')}: ${f.arrCity} ` : ''}
-                {f.depAirport ? `${t('ticketOrder.depAirport')}: ${f.depAirport} ` : ''}
-                {f.arrAirport ? `${t('ticketOrder.arrAirport')}: ${f.arrAirport} ` : ''}
-                {f.depTerminal ? `${t('ticketOrder.depTerminal')}: ${f.depTerminal} ` : ''}
-                {f.arrTerminal ? `${t('ticketOrder.arrTerminal')}: ${f.arrTerminal} ` : ''}
-                {f.depDate ? `${t('ticketOrder.depDate')}: ${f.depDate} ` : ''}
-                {f.depTime ? `${t('ticketOrder.depTime')}: ${f.depTime} ` : ''}
-                {f.arrDate ? `${t('ticketOrder.arrDate')}: ${f.arrDate} ` : ''}
-                {f.arrTime ? `${t('ticketOrder.arrTime')}: ${f.arrTime} ` : ''}
-                {f.cabinLevel ? `${t('ticketOrder.cabinLevel')}: ${f.cabinLevel} ` : ''}
-                {f.cabinCode ? `${t('ticketOrder.cabinCode')}: ${f.cabinCode} ` : ''}
-                {f.planCabinCode ? `${t('ticketOrder.planCabinCode')}: ${f.planCabinCode} ` : ''}
-                {f.flyingTime ? `${t('ticketOrder.flyingTime')}: ${f.flyingTime} ` : ''}
-                {f.aircraft ? `${t('ticketOrder.aircraft')}: ${f.aircraft} ` : ''}
-                {f.meals ? `${t('ticketOrder.meals')}: ${f.meals} ` : ''}
-                {f.luggageTransportationRule ? `${t('ticketOrder.luggageTransportationRule')}: ${f.luggageTransportationRule} ` : ''}
-                {f.luggageHandRule ? `${t('ticketOrder.luggageHandRule')}: ${f.luggageHandRule} ` : ''}
-                {f.stop !== undefined ? `${t('ticketOrder.stop')}: ${f.stop ? t('common.yes') : t('common.no')} ` : ''}
-                {f.remark ? `${t('ticketOrder.remark')}: ${f.remark} ` : ''}
-                {f.price ? `${t('ticketOrder.price')}: ${f.price} ` : ''}
-                {f.airportFee ? `${t('ticketOrder.airportFee')}: ${f.airportFee} ` : ''}
-                {f.fuelFee ? `${t('ticketOrder.fuelFee')}: ${f.fuelFee} ` : ''}
-              </Typography>
-          ))}
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>{t('ticketOrder.airline')}</TableCell>
+                  <TableCell>{t('ticketOrder.flight')}</TableCell>
+                  <TableCell>{t('ticketOrder.depCity')}</TableCell>
+                  <TableCell>{t('ticketOrder.arrCity')}</TableCell>
+                  <TableCell>{t('ticketOrder.depAirport')}</TableCell>
+                  <TableCell>{t('ticketOrder.arrAirport')}</TableCell>
+                  <TableCell>{t('ticketOrder.depTerminal')}</TableCell>
+                  <TableCell>{t('ticketOrder.arrTerminal')}</TableCell>
+                  <TableCell>{t('ticketOrder.depDate')}</TableCell>
+                  <TableCell>{t('ticketOrder.depTime')}</TableCell>
+                  <TableCell>{t('ticketOrder.arrDate')}</TableCell>
+                  <TableCell>{t('ticketOrder.arrTime')}</TableCell>
+                  <TableCell>{t('ticketOrder.cabinLevel')}</TableCell>
+                  <TableCell>{t('ticketOrder.cabinCode')}</TableCell>
+                  <TableCell>{t('ticketOrder.planCabinCode')}</TableCell>
+                  <TableCell>{t('ticketOrder.flyingTime')}</TableCell>
+                  <TableCell>{t('ticketOrder.aircraft')}</TableCell>
+                  <TableCell>{t('ticketOrder.meals')}</TableCell>
+                  <TableCell>{t('ticketOrder.luggageTransportationRule')}</TableCell>
+                  <TableCell>{t('ticketOrder.luggageHandRule')}</TableCell>
+                  <TableCell>{t('ticketOrder.stop')}</TableCell>
+                  <TableCell>{t('ticketOrder.remark')}</TableCell>
+                  <TableCell>{t('ticketOrder.price')}</TableCell>
+                  <TableCell>{t('ticketOrder.airportFee')}</TableCell>
+                  <TableCell>{t('ticketOrder.fuelFee')}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(order.flightList || []).map((f, idx) => (
+                  <TableRow key={idx}>
+                    <TableCell>{f.airline}</TableCell>
+                    <TableCell>{f.flight}</TableCell>
+                    <TableCell>{f.depCity}</TableCell>
+                    <TableCell>{f.arrCity}</TableCell>
+                    <TableCell>{f.depAirport}</TableCell>
+                    <TableCell>{f.arrAirport}</TableCell>
+                    <TableCell>{f.depTerminal}</TableCell>
+                    <TableCell>{f.arrTerminal}</TableCell>
+                    <TableCell>{f.depDate}</TableCell>
+                    <TableCell>{f.depTime}</TableCell>
+                    <TableCell>{f.arrDate}</TableCell>
+                    <TableCell>{f.arrTime}</TableCell>
+                    <TableCell>{f.cabinLevel}</TableCell>
+                    <TableCell>{f.cabinCode}</TableCell>
+                    <TableCell>{f.planCabinCode}</TableCell>
+                    <TableCell>{f.flyingTime}</TableCell>
+                    <TableCell>{f.aircraft}</TableCell>
+                    <TableCell>{f.meals}</TableCell>
+                    <TableCell>{f.luggageTransportationRule}</TableCell>
+                    <TableCell>{f.luggageHandRule}</TableCell>
+                    <TableCell>{f.stop !== undefined ? (f.stop ? t('common.yes') : t('common.no')) : ''}</TableCell>
+                    <TableCell>{f.remark}</TableCell>
+                    <TableCell>{f.price}</TableCell>
+                    <TableCell>{f.airportFee}</TableCell>
+                    <TableCell>{f.fuelFee}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>{t('common.close') || t('close')}</Button>
