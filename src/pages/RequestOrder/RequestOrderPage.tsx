@@ -11,7 +11,7 @@ import {
   TableRow,
   Paper,
   IconButton,
-  TablePagination, Button
+  TablePagination, Button, TextField
 } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import RequestOrderDetailDialog from './components/RequestOrderDetailDialog';
@@ -35,10 +35,18 @@ const RequestOrderPage: React.FC = () => {
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [detailOrder, setDetailOrder] = useState<RequestOrder | null>(null);
   const [editingOrder, setEditingOrder] = useState<TicketOrder | null>(null);
+  const [query, setQuery] = useState({
+    Dep: '',
+    Arr: '',
+    BillNo: '',
+    SortField: '',
+    IsDesc: false,
+    Ordering: '',
+  });
 
   // 获取供应商列表
   const fetchSuppliers = async () => {
-    const res = await getSupplierList({ PageIndex: 1, PageSize: 100 });
+    const res = await getSupplierList({ PageIndex: 1, PageSize: 1000 });
     setSuppliers(res.data || []);
   };
 
@@ -49,7 +57,7 @@ const RequestOrderPage: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await getRequestOrderList({ PageIndex: pageIndex + 1, PageSize: pageSize });
+      const res = await getRequestOrderList({ PageIndex: pageIndex + 1, PageSize: pageSize, ...query });
       setData(res.data || []);
       setTotal(res.total || 0);
     } finally {
@@ -59,7 +67,7 @@ const RequestOrderPage: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [pageIndex, pageSize]);
+  }, [pageIndex, pageSize, query]);
 
   const handleViewDetail = async (order: RequestOrder) => {
     setDetailDialogOpen(true);
@@ -121,6 +129,34 @@ const RequestOrderPage: React.FC = () => {
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <h2>{t('requestOrder.title')}</h2>
         {/*<Button variant="contained" onClick={handleAdd}>{t('requestOrder.add')}</Button>*/}
+      </Box>
+      <Box mb={2}>
+        <form style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}
+              onSubmit={e => { e.preventDefault(); setPageIndex(0); }}>
+          <TextField
+            label={t('requestOrder.dep')}
+            size="small"
+            value={query.Dep}
+            onChange={e => setQuery(q => ({ ...q, Dep: e.target.value }))}
+            style={{ width: 160 }}
+          />
+          <TextField
+            label={t('requestOrder.arr')}
+            size="small"
+            value={query.Arr}
+            onChange={e => setQuery(q => ({ ...q, Arr: e.target.value }))}
+            style={{ width: 160 }}
+          />
+          <TextField
+            label={t('requestOrder.billNo')}
+            size="small"
+            value={query.BillNo}
+            onChange={e => setQuery(q => ({ ...q, BillNo: e.target.value }))}
+            style={{ width: 160 }}
+          />
+          <Button type="submit" variant="contained" color="primary">{t('common.search')}</Button>
+          <Button onClick={() => { setQuery({ Dep: '', Arr: '', BillNo: '', SortField: '', IsDesc: false, Ordering: '' }); setPageIndex(0); }} style={{ marginLeft: 8 }}>{t('common.reset')}</Button>
+        </form>
       </Box>
       <TableContainer component={Paper}>
         <Table>
