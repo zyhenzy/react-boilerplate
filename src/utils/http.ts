@@ -8,7 +8,7 @@ class HttpRequest {
     constructor(baseURL: string) {
         this.instance = axios.create({
             baseURL,
-            timeout: 10000,
+            timeout: 20000,
             headers: {
                 'Content-Type': 'application/json',
             },

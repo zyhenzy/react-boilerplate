@@ -62,7 +62,7 @@ const App: React.FC = () => {
                                     <Sidebar mobileOpen={mobileOpen} onClose={handleDrawerClose} />
                                     <Box component="main" sx={{ flex: 1, width: '100%',overflow:'scroll', ml: isMobile ? 0 : '0px', p: isMobile ? 1 : 3 }}>
                                         <Routes>
-                                            <Route path="/" element={<Navigate to="/agent" replace />} />
+                                            <Route path="/" element={<Navigate to="/customer" replace />} />
                                             <Route path="/user" element={<User />} />
                                             <Route path="/settings" element={<Settings />} />
                                             <Route path="/agent" element={<Agent />} />

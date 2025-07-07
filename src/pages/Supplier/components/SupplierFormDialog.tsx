@@ -110,13 +110,9 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             {form.logoId ? (
               <Box
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  ml: 0,
-                  height: 96,
-                  width: 96,
-                  borderRadius: '50%',
+                  width: 300,
+                  height: 300,
+                  borderRadius: 2,
                   overflow: 'hidden',
                   boxShadow: 1,
                   border: '2px solid #e0e0e0',
@@ -126,7 +122,11 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                     boxShadow: 4,
                     borderColor: '#1976d2',
                   },
-                  m: 2
+                  m: 2,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: '#fafafa',
                 }}
                 onClick={() => {
                   document.getElementById('logo-upload-input')?.click();
@@ -136,7 +136,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                 <img
                   src={getImage(form.logoId)}
                   alt="logo"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
                 />
               </Box>
             ) : (
@@ -144,10 +144,10 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                 variant="outlined"
                 component="label"
                 disabled={uploading}
-                size="small"
-                sx={{ height: 96, width: 96, borderRadius: '50%', minWidth: 0, p: 0, ml: 0, m: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                size="large"
+                sx={{ height: 300, width: 300, borderRadius: 2, minWidth: 0, p: 0, ml: 0, m: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fafafa' }}
               >
-                <span style={{ fontSize: 14, color: '#888', textAlign: 'center', width: '100%' }}>{uploading ? t('supplier.uploading') : t('supplier.upload')}</span>
+                <span style={{ fontSize: 16, color: '#888', textAlign: 'center', width: '100%' }}>{uploading ? t('supplier.uploading') : t('supplier.upload')}</span>
                 <input
                   id="logo-upload-input"
                   type="file"
