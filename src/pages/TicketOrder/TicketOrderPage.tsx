@@ -78,7 +78,7 @@ const TicketOrderPage: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [pageIndex, pageSize]);
+  }, [pageIndex, pageSize, query]);
 
   const handleAdd = () => {
     setEditingOrder({passengerList:[], flightList:[]});
@@ -191,7 +191,7 @@ const TicketOrderPage: React.FC = () => {
     <Box p={2}>
       <Box mb={2}>
         <form style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}
-              onSubmit={e => { e.preventDefault(); setPageIndex(0); fetchData(); }}>
+              onSubmit={e => { e.preventDefault(); setPageIndex(0); }}>
           <TextField
             label={t('ticketOrder.billNo')}
             size="small"
@@ -232,7 +232,10 @@ const TicketOrderPage: React.FC = () => {
             style={{ width: 160 }}
           />
           <Button type="submit" variant="contained" color="primary">{t('common.search')}</Button>
-          <Button onClick={() => { setQuery({ BillNo: '', PassengerName: '', TicketNo: '', StartDate: '', EndDate: '', SortField: '', IsDesc: false, Ordering: '' }); setPageIndex(0); fetchData(); }} style={{ marginLeft: 8 }}>{t('common.reset')}</Button>
+          <Button onClick={() => {
+            setQuery({ BillNo: '', PassengerName: '', TicketNo: '', StartDate: '', EndDate: '', SortField: '', IsDesc: false, Ordering: '' });
+            setPageIndex(0);
+          }} style={{ marginLeft: 8 }}>{t('common.reset')}</Button>
         </form>
       </Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>

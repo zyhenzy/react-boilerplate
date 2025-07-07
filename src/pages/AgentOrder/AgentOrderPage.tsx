@@ -62,7 +62,7 @@ const AgentOrderPage: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [pageIndex, pageSize]);
+  }, [pageIndex, pageSize, query]);
 
   const handleReviewFailed = (id: string) => {
     setReviewFailedId(id);
@@ -113,7 +113,7 @@ const AgentOrderPage: React.FC = () => {
     <Box p={2}>
       <Box mb={2}>
         <form style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}
-              onSubmit={e => { e.preventDefault(); setPageIndex(0); fetchData(); }}>
+              onSubmit={e => { e.preventDefault(); setPageIndex(0); }}>
           <TextField
             label={t('agentOrder.orderNo')}
             size="small"
@@ -169,7 +169,7 @@ const AgentOrderPage: React.FC = () => {
             </Select>
           </FormControl>
           <Button type="submit" variant="contained" color="primary">{t('common.search')}</Button>
-          <Button onClick={() => { setQuery({}); setPageIndex(0); fetchData(); }} style={{ marginLeft: 8 }}>{t('common.reset')}</Button>
+          <Button onClick={() => { setQuery({}); setPageIndex(0); }} style={{ marginLeft: 8 }}>{t('common.reset')}</Button>
         </form>
       </Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
