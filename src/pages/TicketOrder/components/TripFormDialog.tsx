@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import dayjs from 'dayjs';
 import type { AddTicketOrderTripCommand } from '../../../api/ticket-order/types';
 
 interface TripFormDialogProps {
@@ -62,14 +64,12 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               onChange={e => setForm(f => ({ ...f, depDate: e.target.value }))}
               style={{ flex: 1 }}
             />
-            <TextField
-              margin="dense"
+            <TimePicker
               label={t('ticketOrder.depTime')}
-              type="time"
-              InputLabelProps={{ shrink: true }}
-              value={form.depTime || ''}
-              onChange={e => setForm(f => ({ ...f, depTime: e.target.value }))}
-              style={{ flex: 1 }}
+              value={form.depTime ? dayjs(form.depTime, 'HH:mm') : null}
+              onChange={value => setForm(f => ({ ...f, depTime: value ? value.format('HH:mm') : '' }))}
+              ampm={false}
+              slotProps={{ textField: { margin: 'dense', style: { flex: 1 }, size: 'small' } }}
             />
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
@@ -82,14 +82,12 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               onChange={e => setForm(f => ({ ...f, arrDate: e.target.value }))}
               style={{ flex: 1 }}
             />
-            <TextField
-              margin="dense"
+            <TimePicker
               label={t('ticketOrder.arrTime')}
-              type="time"
-              InputLabelProps={{ shrink: true }}
-              value={form.arrTime || ''}
-              onChange={e => setForm(f => ({ ...f, arrTime: e.target.value }))}
-              style={{ flex: 1 }}
+              value={form.arrTime ? dayjs(form.arrTime, 'HH:mm') : null}
+              onChange={value => setForm(f => ({ ...f, arrTime: value ? value.format('HH:mm') : '' }))}
+              ampm={false}
+              slotProps={{ textField: { margin: 'dense', style: { flex: 1 }, size: 'small' } }}
             />
           </div>
           <TextField

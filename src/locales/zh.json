@@ -164,6 +164,7 @@
     "status_2": "已结算",
     "status_3": "已出票",
     "supplier": "供应商",
+    "customer": "客户",
     "currencyBooking": "预定币种",
     "rateBooking": "汇率",
     "changeRule": "改签规则",
