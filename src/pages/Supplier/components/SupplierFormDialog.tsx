@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import type { Supplier } from '../../../api/supplier/types';
 import {getImage, uploadImage} from '../../../api/basic';
 import { Box } from '@mui/material';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
 
 interface SupplierFormDialogProps {
   open: boolean;
@@ -32,6 +33,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
   });
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   React.useEffect(() => {
     setForm({
@@ -127,6 +129,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                   alignItems: 'center',
                   justifyContent: 'center',
                   background: '#fafafa',
+                  position: 'relative',
                 }}
                 onClick={() => {
                   document.getElementById('logo-upload-input')?.click();
@@ -138,6 +141,14 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                   alt="logo"
                   style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
                 />
+                <Button
+                  size="small"
+                  sx={{ position: 'absolute', right: 8, bottom: 8, minWidth: 0, p: 0.5, bgcolor: 'rgba(0,0,0,0.5)', color: '#fff', borderRadius: '50%' }}
+                  onClick={e => { e.stopPropagation(); setPreviewOpen(true); }}
+                  title="放大预览"
+                >
+                  <ZoomInIcon fontSize="small" />
+                </Button>
               </Box>
             ) : (
               <Button
@@ -183,6 +194,13 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
           <Button type="submit" variant="contained" color="primary">{initialValues ? t('common.update') : t('common.confirm')}</Button>
         </DialogActions>
       </form>
+      <Dialog open={previewOpen} onClose={() => setPreviewOpen(false)} maxWidth="md">
+        <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', bgcolor: '#222' }}>
+          {/*@ts-ignore*/}
+          <img src={getImage(form.logoId)} alt="营业执照大图" style={{ maxWidth: '80vw', maxHeight: '80vh', background: '#fff', borderRadius: 8 }} />
+          <Button onClick={() => setPreviewOpen(false)} sx={{ mt: 2 }} variant="contained">关闭</Button>
+        </Box>
+      </Dialog>
     </Dialog>
   );
 };
