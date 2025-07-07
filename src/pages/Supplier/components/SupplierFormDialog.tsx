@@ -195,8 +195,8 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
       </form>
       <Dialog open={previewOpen} onClose={() => setPreviewOpen(false)} maxWidth="xl">
         <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', bgcolor: '#222' }}>
-          <img src={getImage(form.logoId as string)} alt="营业执照大图" style={{ width: '80vw', height: '80vh', background: '#fff', borderRadius: 8 }} />
-          <Button onClick={() => setPreviewOpen(false)} sx={{ mt: 2 }} variant="contained">关闭</Button>
+          <img src={getImage(form.logoId as string)} alt={t('supplier.upload') as string} style={{ width: '80vw', height: '80vh', background: '#fff', borderRadius: 8 }} />
+          <Button onClick={() => setPreviewOpen(false)} sx={{ mt: 2 }} variant="contained">{t('common.close')}</Button>
         </Box>
       </Dialog>
     </Dialog>
