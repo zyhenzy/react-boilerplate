@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
 import { sexOptions } from '../../../constants/sexOptions';
+import {userTypeOptions} from "../../../constants/userTypeOptions";
 
 interface UserFormDialogProps {
   open: boolean;
@@ -42,11 +43,32 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
   const customerOptions = useSelector((state: RootState) => state.options.customerOptions);
   const sexOpts = sexOptions.map(opt => ({ ...opt, label: t(`user.sex_${opt.value.toLowerCase()}`, opt.label) }));
 
+  const handleUserTypeChange = (e:any)=>{
+    setForm((f: any) => ({
+      ...f,
+      userType: e.target.value,
+      agentId:undefined,
+      customerId: undefined,
+    }))
+  }
+
   return (
     <Dialog open={open} onClose={onClose}>
       <form onSubmit={onSubmit}>
         <DialogTitle>{editingId ? t('user.edit') : t('user.add')}</DialogTitle>
         <DialogContent>
+          <TextField
+              margin="dense"
+              label={t('user.userType')}
+              select
+              fullWidth
+              value={form.userType || ''}
+              onChange={handleUserTypeChange}
+          >
+            {userTypeOptions.map(option => (
+                <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+            ))}
+          </TextField>
           <TextField
             autoFocus
             margin="dense"
@@ -121,31 +143,31 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
               ))}
             </Select>
           </FormControl>
-          <TextField
-            margin="dense"
-            label={t('user.agentId', '代理')}
-            select
-            fullWidth
-            value={form.agentId || ''}
-            onChange={e => setForm((f: any) => ({ ...f, agentId: e.target.value }))}
+          {form.userType === '1' && <TextField
+              margin="dense"
+              label={t('user.agent')}
+              select
+              fullWidth
+              value={form.agentId || ''}
+              onChange={e => setForm((f: any) => ({ ...f, agentId: e.target.value }))}
           >
             {agentOptions.map(option => (
-              <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+                <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
             ))}
-          </TextField>
-          <FormControl fullWidth margin="dense">
+          </TextField>}
+          {form.userType === '0' && <FormControl fullWidth margin="dense">
             <InputLabel id="customer-label">{t('user.customer')}</InputLabel>
             <Select
-              labelId="customer-label"
-              value={form.customerId || ''}
-              onChange={e => setForm((f: any) => ({ ...f, customerId: e.target.value }))}
-              fullWidth
+                labelId="customer-label"
+                value={form.customerId || ''}
+                onChange={e => setForm((f: any) => ({ ...f, customerId: e.target.value }))}
+                fullWidth
             >
               {customerOptions.map((option: any) => (
-                <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+                  <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
               ))}
             </Select>
-          </FormControl>
+          </FormControl>}
           {!editingId && (
             <TextField
               margin="dense"

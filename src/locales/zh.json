@@ -26,10 +26,12 @@
   },
   "user": {
     "title": "用户管理",
+    "userType":"用户类型",
     "userName": "用户名",
     "name": "姓名",
     "phoneNumber": "手机号",
     "countryNumber": "国家区号",
+    "agent": "代理",
     "customer": "客户",
     "sex": "性别",
     "role": "角色",
@@ -42,7 +44,7 @@
     "loading": "加载中..."
   },
   "agent": {
-    "title": "代理",
+    "title": "代理管理",
     "name": "名称",
     "contact": "联系方式",
     "countryCode": "国家区号",
