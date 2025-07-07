@@ -13,7 +13,7 @@ interface TripFormDialogProps {
 }
 
 const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSubmit, trip }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [form, setForm] = useState<AddTicketOrderTripCommand>({});
 
   useEffect(() => {
@@ -69,7 +69,9 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               value={form.depTime ? dayjs(form.depTime, 'HH:mm') : null}
               onChange={value => setForm(f => ({ ...f, depTime: value ? value.format('HH:mm') : '' }))}
               ampm={false}
-              slotProps={{ textField: { margin: 'dense', style: { flex: 1 }, size: 'small' } }}
+              slotProps={{
+                textField: { margin: 'dense', style: { flex: 1 }, size: 'small' }
+              }}
             />
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
@@ -87,7 +89,9 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               value={form.arrTime ? dayjs(form.arrTime, 'HH:mm') : null}
               onChange={value => setForm(f => ({ ...f, arrTime: value ? value.format('HH:mm') : '' }))}
               ampm={false}
-              slotProps={{ textField: { margin: 'dense', style: { flex: 1 }, size: 'small' } }}
+              slotProps={{
+                textField: { margin: 'dense', style: { flex: 1 }, size: 'small' }
+              }}
             />
           </div>
           <TextField

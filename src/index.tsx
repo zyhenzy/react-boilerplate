@@ -7,8 +7,10 @@ import { Provider } from 'react-redux';
 import store from './store';
 import './i18n';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { useTranslation } from 'react-i18next';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { zhCN as pickersZhCN, enUS as pickersEnUS } from '@mui/x-date-pickers/locales';
 
 const theme = createTheme({
     palette: {
@@ -81,15 +83,31 @@ const theme = createTheme({
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-root.render(
-  <React.StrictMode>
+
+function RootApp() {
+  const { i18n, t } = useTranslation();
+  const getLocaleText = () => {
+    const base = i18n.language === 'zh' ? pickersZhCN.components.MuiLocalizationProvider.defaultProps.localeText : pickersEnUS.components.MuiLocalizationProvider.defaultProps.localeText;
+    return {
+      ...base,
+      okButtonLabel: t('common.confirm'),
+      cancelButtonLabel: t('common.cancel'),
+    };
+  };
+  return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={i18n.language === 'zh' ? 'zh-cn' : 'en'} localeText={getLocaleText()}>
           <App />
         </LocalizationProvider>
       </ThemeProvider>
     </Provider>
+  );
+}
+
+root.render(
+  <React.StrictMode>
+    <RootApp />
   </React.StrictMode>
 );
 
