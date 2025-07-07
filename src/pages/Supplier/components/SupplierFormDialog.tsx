@@ -5,7 +5,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { useTranslation } from 'react-i18next';
@@ -194,10 +193,9 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
           <Button type="submit" variant="contained" color="primary">{initialValues ? t('common.update') : t('common.confirm')}</Button>
         </DialogActions>
       </form>
-      <Dialog open={previewOpen} onClose={() => setPreviewOpen(false)} maxWidth="md">
+      <Dialog open={previewOpen} onClose={() => setPreviewOpen(false)} maxWidth="xl">
         <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', bgcolor: '#222' }}>
-          {/*@ts-ignore*/}
-          <img src={getImage(form.logoId)} alt="营业执照大图" style={{ maxWidth: '80vw', maxHeight: '80vh', background: '#fff', borderRadius: 8 }} />
+          <img src={getImage(form.logoId as string)} alt="营业执照大图" style={{ width: '80vw', height: '80vh', background: '#fff', borderRadius: 8 }} />
           <Button onClick={() => setPreviewOpen(false)} sx={{ mt: 2 }} variant="contained">关闭</Button>
         </Box>
       </Dialog>
