@@ -38,8 +38,6 @@ export function getTicketOrderDetail(id: string) {
         return newTrip;
       });
     }
-    console.log(order)
-    debugger
     return order;
   });
 }

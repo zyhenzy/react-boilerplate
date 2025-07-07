@@ -140,9 +140,9 @@ export interface AddTicketOrderTripCommand {
   luggageHandRule?: string; // 行李手提规则
   stop?: boolean; // 经停
   remark?: string; // 备注
-  price?: number|string; // 价格
-  airportFee?: number|string; // 机建费
-  fuelFee?: number|string; // 燃油费
+  // price?: number|string; // 价格
+  // airportFee?: number|string; // 机建费
+  // fuelFee?: number|string; // 燃油费
 }
 
 // 修改行程
@@ -170,9 +170,9 @@ export interface UpdateTicketOrderTripCommand {
   luggageHandRule?: string;
   stop?: boolean;
   remark?: string;
-  price?: number;
-  airportFee?: number;
-  fuelFee?: number;
+  // price?: number;
+  // airportFee?: number;
+  // fuelFee?: number;
 }
 
 // 删除行程

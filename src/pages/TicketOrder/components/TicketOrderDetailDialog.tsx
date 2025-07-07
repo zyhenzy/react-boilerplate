@@ -95,9 +95,9 @@ const TicketOrderDetailDialog: React.FC<TicketOrderDetailDialogProps> = ({ open,
                   <TableCell>{t('ticketOrder.luggageHandRule')}</TableCell>
                   <TableCell>{t('ticketOrder.stop')}</TableCell>
                   <TableCell>{t('ticketOrder.remark')}</TableCell>
-                  <TableCell>{t('ticketOrder.price')}</TableCell>
-                  <TableCell>{t('ticketOrder.airportFee')}</TableCell>
-                  <TableCell>{t('ticketOrder.fuelFee')}</TableCell>
+                  {/*<TableCell>{t('ticketOrder.price')}</TableCell>*/}
+                  {/*<TableCell>{t('ticketOrder.airportFee')}</TableCell>*/}
+                  {/*<TableCell>{t('ticketOrder.fuelFee')}</TableCell>*/}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -125,9 +125,9 @@ const TicketOrderDetailDialog: React.FC<TicketOrderDetailDialogProps> = ({ open,
                     <TableCell>{f.luggageHandRule}</TableCell>
                     <TableCell>{f.stop !== undefined ? (f.stop ? t('common.yes') : t('common.no')) : ''}</TableCell>
                     <TableCell>{f.remark}</TableCell>
-                    <TableCell>{f.price}</TableCell>
-                    <TableCell>{f.airportFee}</TableCell>
-                    <TableCell>{f.fuelFee}</TableCell>
+                    {/*<TableCell>{f.price}</TableCell>*/}
+                    {/*<TableCell>{f.airportFee}</TableCell>*/}
+                    {/*<TableCell>{f.fuelFee}</TableCell>*/}
                   </TableRow>
                 ))}
               </TableBody>

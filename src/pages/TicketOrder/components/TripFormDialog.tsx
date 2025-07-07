@@ -102,11 +102,25 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             onChange={e => setForm(f => ({ ...f, depAirport: e.target.value }))}
           />
           <TextField
+              margin="dense"
+              label={t('ticketOrder.depTerminal')}
+              fullWidth
+              value={form.depTerminal || ''}
+              onChange={e => setForm(f => ({ ...f, depTerminal: e.target.value }))}
+          />
+          <TextField
             margin="dense"
             label={t('ticketOrder.arrAirport')}
             fullWidth
             value={form.arrAirport || ''}
             onChange={e => setForm(f => ({ ...f, arrAirport: e.target.value }))}
+          />
+          <TextField
+              margin="dense"
+              label={t('ticketOrder.arrTerminal')}
+              fullWidth
+              value={form.arrTerminal || ''}
+              onChange={e => setForm(f => ({ ...f, arrTerminal: e.target.value }))}
           />
           <TextField
             margin="dense"
@@ -129,20 +143,8 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             value={form.cabinCode || ''}
             onChange={e => setForm(f => ({ ...f, cabinCode: e.target.value }))}
           />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.depTerminal')}
-            fullWidth
-            value={form.depTerminal || ''}
-            onChange={e => setForm(f => ({ ...f, depTerminal: e.target.value }))}
-          />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.arrTerminal')}
-            fullWidth
-            value={form.arrTerminal || ''}
-            onChange={e => setForm(f => ({ ...f, arrTerminal: e.target.value }))}
-          />
+
+
           <TextField
             margin="dense"
             label={t('ticketOrder.flyingTime')}
@@ -201,30 +203,30 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             value={form.remark || ''}
             onChange={e => setForm(f => ({ ...f, remark: e.target.value }))}
           />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.price')}
-            fullWidth
-            type="number"
-            value={form.price || ''}
-            onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
-          />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.airportFee')}
-            fullWidth
-            type="number"
-            value={form.airportFee || ''}
-            onChange={e => setForm(f => ({ ...f, airportFee: e.target.value }))}
-          />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.fuelFee')}
-            fullWidth
-            type="number"
-            value={form.fuelFee || ''}
-            onChange={e => setForm(f => ({ ...f, fuelFee: e.target.value }))}
-          />
+          {/*<TextField*/}
+          {/*  margin="dense"*/}
+          {/*  label={t('ticketOrder.price')}*/}
+          {/*  fullWidth*/}
+          {/*  type="number"*/}
+          {/*  value={form.price || ''}*/}
+          {/*  onChange={e => setForm(f => ({ ...f, price: e.target.value }))}*/}
+          {/*/>*/}
+          {/*<TextField*/}
+          {/*  margin="dense"*/}
+          {/*  label={t('ticketOrder.airportFee')}*/}
+          {/*  fullWidth*/}
+          {/*  type="number"*/}
+          {/*  value={form.airportFee || ''}*/}
+          {/*  onChange={e => setForm(f => ({ ...f, airportFee: e.target.value }))}*/}
+          {/*/>*/}
+          {/*<TextField*/}
+          {/*  margin="dense"*/}
+          {/*  label={t('ticketOrder.fuelFee')}*/}
+          {/*  fullWidth*/}
+          {/*  type="number"*/}
+          {/*  value={form.fuelFee || ''}*/}
+          {/*  onChange={e => setForm(f => ({ ...f, fuelFee: e.target.value }))}*/}
+          {/*/>*/}
           {/* 可根据需要继续补充更多字段 */}
         </DialogContent>
         <DialogActions>

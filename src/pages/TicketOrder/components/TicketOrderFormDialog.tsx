@@ -335,7 +335,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                       <TableCell>{t('ticketOrder.certificateType')}</TableCell>
                       <TableCell>{t('ticketOrder.certificateNo')}</TableCell>
                       <TableCell>{t('ticketOrder.phoneNumber')}</TableCell>
-                      <TableCell>{t('common.actions')}</TableCell>
+                      <TableCell>{t('common.action')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>

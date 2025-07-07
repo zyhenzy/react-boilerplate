@@ -22,7 +22,9 @@
     "updatedAt": "更新时间",
     "startDate": "开始日期",
     "endDate": "结束日期",
-    "action": "操作"
+    "action": "操作",
+    "yes": "是",
+    "no": "否"
   },
   "user": {
     "title": "用户管理",
