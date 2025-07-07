@@ -62,7 +62,7 @@ const AgentOrderPage: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [pageIndex, pageSize, query]);
+  }, [pageIndex, pageSize]);
 
   const handleReviewFailed = (id: string) => {
     setReviewFailedId(id);

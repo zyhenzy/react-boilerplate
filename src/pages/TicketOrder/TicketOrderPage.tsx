@@ -13,7 +13,8 @@ import {
   TableHead,
   TableRow,
   Paper,
-  TablePagination
+  TablePagination,
+  TextField
 } from '@mui/material';
 import TicketOrderFormDialog from './components/TicketOrderFormDialog';
 import PayDialog from './components/PayDialog';
@@ -39,11 +40,25 @@ const TicketOrderPage: React.FC = () => {
   const [issuedLoading, setIssuedLoading] = useState(false);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [detailOrder, setDetailOrder] = useState<TicketOrder | null>(null);
+  const [query, setQuery] = useState({
+    BillNo: '',
+    PassengerName: '',
+    TicketNo: '',
+    StartDate: '',
+    EndDate: '',
+    SortField: '',
+    IsDesc: false,
+    Ordering: '',
+  });
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await getTicketOrderList({ PageIndex: pageIndex + 1, PageSize: pageSize });
+      const res = await getTicketOrderList({
+        PageIndex: pageIndex + 1,
+        PageSize: pageSize,
+        ...query,
+      });
       setData(res.data || []);
       setTotal(res.total || 0);
     } finally {
@@ -53,7 +68,7 @@ const TicketOrderPage: React.FC = () => {
 
   // 获取供应商列表
   const fetchSuppliers = async () => {
-    const res = await getSupplierList({ PageIndex: 1, PageSize: 100 });
+    const res = await getSupplierList({ PageIndex: 1, PageSize: 1000 });
     setSuppliers(res.data || []);
   };
 
@@ -174,6 +189,52 @@ const TicketOrderPage: React.FC = () => {
 
   return (
     <Box p={2}>
+      <Box mb={2}>
+        <form style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}
+              onSubmit={e => { e.preventDefault(); setPageIndex(0); fetchData(); }}>
+          <TextField
+            label={t('ticketOrder.billNo')}
+            size="small"
+            value={query.BillNo}
+            onChange={e => setQuery(q => ({ ...q, BillNo: e.target.value }))}
+            style={{ width: 160 }}
+          />
+          <TextField
+            label={t('ticketOrder.passengerName')}
+            size="small"
+            value={query.PassengerName}
+            onChange={e => setQuery(q => ({ ...q, PassengerName: e.target.value }))}
+            style={{ width: 160 }}
+          />
+          <TextField
+            label={t('ticketOrder.ticketNo')}
+            size="small"
+            value={query.TicketNo}
+            onChange={e => setQuery(q => ({ ...q, TicketNo: e.target.value }))}
+            style={{ width: 160 }}
+          />
+          <TextField
+            label={t('common.startDate')}
+            type="date"
+            size="small"
+            InputLabelProps={{ shrink: true }}
+            value={query.StartDate}
+            onChange={e => setQuery(q => ({ ...q, StartDate: e.target.value }))}
+            style={{ width: 160 }}
+          />
+          <TextField
+            label={t('common.endDate')}
+            type="date"
+            size="small"
+            InputLabelProps={{ shrink: true }}
+            value={query.EndDate}
+            onChange={e => setQuery(q => ({ ...q, EndDate: e.target.value }))}
+            style={{ width: 160 }}
+          />
+          <Button type="submit" variant="contained" color="primary">{t('common.search')}</Button>
+          <Button onClick={() => { setQuery({ BillNo: '', PassengerName: '', TicketNo: '', StartDate: '', EndDate: '', SortField: '', IsDesc: false, Ordering: '' }); setPageIndex(0); fetchData(); }} style={{ marginLeft: 8 }}>{t('common.reset')}</Button>
+        </form>
+      </Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <h2>{t('ticketOrder.title')}</h2>
         <Button variant="contained" onClick={handleAdd}>{t('ticketOrder.add')}</Button>
