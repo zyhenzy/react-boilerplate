@@ -36,6 +36,7 @@ import {
   updateTicketOrderPassenger,
   updateTicketOrderTrip
 } from "../../../api/ticket-order";
+// import CloseIcon from '@mui/icons-material/Close';
 
 interface TicketOrderFormDialogProps {
   open: boolean;
@@ -168,10 +169,26 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
   };
 
   return (
-      <Dialog open={open} onClose={onClose} fullScreen>
+      <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
         <form onSubmit={e => { e.preventDefault(); onSubmit(form); }} style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
-          <DialogTitle>{editingId ? t('ticketOrder.edit') : t('ticketOrder.add')}</DialogTitle>
-          <DialogContent style={{ flex: 1, overflow: 'auto', maxHeight: 'calc(100vh - 52px)' }}>
+          {/*<DialogTitle sx={{ m: 0, p: 2, position: 'relative' }}>*/}
+          {/*  {editingId ? t('ticketOrder.edit') : t('ticketOrder.add')}*/}
+          {/*  <Button*/}
+          {/*    aria-label="close"*/}
+          {/*    onClick={onClose}*/}
+          {/*    sx={{*/}
+          {/*      position: 'absolute',*/}
+          {/*      right: 8,*/}
+          {/*      top: 8,*/}
+          {/*      minWidth: 0,*/}
+          {/*      padding: 0,*/}
+          {/*      color: (theme) => theme.palette.grey[500],*/}
+          {/*    }}*/}
+          {/*  >*/}
+          {/*    <CloseIcon />*/}
+          {/*  </Button>*/}
+          {/*</DialogTitle>*/}
+          <DialogContent>
             <TextField
                 autoFocus
                 margin="dense"
