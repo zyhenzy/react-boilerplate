@@ -79,6 +79,9 @@ const RequestOrderPage: React.FC = () => {
     const res: RequestOrder = await getRequestOrderDetail(order.id as string);
     // 字段映射，需根据实际字段调整
     const ticketOrder: TicketOrder = {
+      // bookerName:res.bookerName, // todo：订票人没有
+      customerId:res.customerId,
+      bookerContact:res.phoneNumber,
       flightList:[{
         depCity:res.dep,
         arrCity:res.arr,
@@ -165,6 +168,7 @@ const RequestOrderPage: React.FC = () => {
               <TableCell>{t('requestOrder.dep')}</TableCell>
               <TableCell>{t('requestOrder.arr')}</TableCell>
               <TableCell>{t('requestOrder.phoneNumber')}</TableCell>
+              <TableCell>{t('requestOrder.customer')}</TableCell>
               <TableCell>{t('requestOrder.status')}</TableCell>
               <TableCell>{t('requestOrder.actions')}</TableCell>
             </TableRow>
@@ -180,6 +184,7 @@ const RequestOrderPage: React.FC = () => {
                   <TableCell>{item.dep}</TableCell>
                   <TableCell>{item.arr}</TableCell>
                   <TableCell>{item.phoneNumber}</TableCell>
+                  <TableCell>{item.customerId}</TableCell>
                   <TableCell>{t(`requestOrder.status_${item.status}`)}</TableCell>
                   <TableCell>
                     {item.status===0&&<Button size="small" onClick={() => handleTrans(item)}>{t('requestOrder.trans')}</Button>}

@@ -13,11 +13,12 @@ export interface RequestOrder {
   dep?: string; // 出发地
   arr?: string; // 到达地
   countryNumber?: string | null; // 国家号码
-  phoneNumber?: string | null; // 手机
+  phoneNumber?: string; // 手机
   remark?: string | null; // 备注
   passengerList?: AddRequestOrderPassengerCommand[]; // 乘客列表
   imageList?: string[];
   status?: RequestOrderStatus;
+  customerId?:string; // 客户ID
   createdAt?: string;
   updatedAt?: string;
 }
