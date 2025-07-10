@@ -84,7 +84,7 @@ const AgentPage: React.FC = () => {
               <TableCell>{t('agent.name')}</TableCell>
               <TableCell>{t('agent.contact')}</TableCell>
               <TableCell>{t('agent.countryCode')}</TableCell>
-              <TableCell>{t('agent.cityCode')}</TableCell>
+              <TableCell>{t('agent.city')}</TableCell>
               <TableCell>{t('agent.currency')}</TableCell>
               <TableCell>{t('agent.enable')}</TableCell>
               <TableCell>{t('agent.actions')}</TableCell>

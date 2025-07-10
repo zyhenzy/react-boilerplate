@@ -11,6 +11,10 @@ export function getCountryCodeOptions() {
   return http.get<IOption[]>('/v1/Data/countryCodeOptions');
 }
 
+export function getCityOptions(country:string){
+  return http.get<IOption[]>('/v1/Data/cityOptions',{country});
+}
+
 // 角色下拉
 export function getRoleOptions() {
   return http.get<IOption[]>('/v1/Data/roleOptions');

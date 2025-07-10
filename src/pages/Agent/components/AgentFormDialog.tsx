@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dialog,
   DialogActions,
@@ -16,6 +16,8 @@ import type { Agent } from '../../../api/agent/types';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
+import type {IOption} from "../../../api/basic/types";
+import {getCityOptions} from "../../../api/basic";
 
 interface AgentFormDialogProps {
   open: boolean;
@@ -36,6 +38,8 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
 }) => {
   const { t } = useTranslation();
   const countryOptions = useSelector((state: RootState) => state.options.countryOptions);
+  const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
+  const [cityOptions,setCityOptions] = useState<any[]>([])
 
   useEffect(() => {
     if (form.enable === undefined) {
@@ -43,8 +47,20 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
     }
   }, [form.enable, setForm]);
 
+  const handleCountryChange = async (e: any) => {
+    setCityOptions([])
+    setForm(f => ({ ...f, country: e.target.value }))
+    const res = await getCityOptions(e.target.value);
+    setCityOptions(res)
+  }
+
+  const handleClose = () => {
+    setCityOptions([])
+    onClose()
+  }
+
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={handleClose}>
       <form onSubmit={onSubmit}>
         <DialogTitle>{editingId ? t('agent.edit') : t('agent.add')}</DialogTitle>
         <DialogContent>
@@ -83,14 +99,44 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
               style={{ flex: 1 }}
             />
           </div>
-          <TextField
-            margin="dense"
-            label={t('agent.cityCode')}
-            fullWidth
-            value={form.cityCode || ''}
-            onChange={e => setForm(f => ({ ...f, cityCode: e.target.value }))}
-            inputProps={{ maxLength: 3 }}
-          />
+
+          <div style={{ display: 'flex', gap: 8 }}>
+            <FormControl style={{ minWidth: 120 }} margin="dense">
+              <InputLabel>{t('agent.country')}</InputLabel>
+              <Select
+                  label={t('ticketOrder.country')}
+                  value={form.country || ''}
+                  onChange={handleCountryChange}
+              >
+                {countryCodeOptions.map(opt => (
+                    <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl style={{ flex: 1 }} margin="dense">
+              <InputLabel>{t('agent.city')}</InputLabel>
+              <Select
+                  label={t('agent.city')}
+                  value={form.cityCode || ''}
+                  disabled={cityOptions.length === 0}
+                  onChange={e => setForm(f => ({ ...f, cityCode: e.target.value }))}
+              >
+                {cityOptions.map(opt => (
+                    <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+
+          {/*原城市编码*/}
+          {/*<TextField*/}
+          {/*  margin="dense"*/}
+          {/*  label={t('agent.cityCode')}*/}
+          {/*  fullWidth*/}
+          {/*  value={form.cityCode || ''}*/}
+          {/*  onChange={e => setForm(f => ({ ...f, cityCode: e.target.value }))}*/}
+          {/*  inputProps={{ maxLength: 3 }}*/}
+          {/*/>*/}
           <TextField
             margin="dense"
             label={t('agent.currency')}
