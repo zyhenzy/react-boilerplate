@@ -4,6 +4,7 @@ export interface Customer {
   name: string; // 名称，必填，最大50
   contact: string; // 联系方式，必填，最大50
   countryCode?: string | null; // 国家代码，可空，最大2
+  cityCode?: string | null; // 城市代码
   currency?: string | null; // 币种，可空，最大3
   invoiceHeader?: string | null; // 发票抬头，可空，最大50
   invoiceTaxNumber?: string | null; // 发票税号，可空，最大50
