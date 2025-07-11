@@ -171,8 +171,8 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                   formData.append('id', String(form.id));
                 }
                 const imageId = await uploadImage(formData);
-                console.log(imageId)
-                setForm(f => ({ ...f, logoId: imageId }));
+                console.log(imageId);
+                formInstance.setFieldsValue({ logoId: imageId }); // 关键：同步 logoId 到表单
                 setFileList([{ uid: '-1', name: 'logo.png', status: 'done', url: getImage(imageId) }]);
                 onSuccess && onSuccess({ imageId });
                 message.success(t('common.uploadSuccess'));
