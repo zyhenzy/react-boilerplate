@@ -1,21 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import type { Customer } from "../../api/customer/types";
 import { createCustomer, enableCustomer, getCustomerList, updateCustomer } from "../../api/customer";
-import {
-  Box,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Switch,
-  IconButton,
-  TablePagination
-} from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { Button, Table, Switch, Pagination, Typography } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 import CustomerFormDialog from './components/CustomerFormDialog';
 import { useTranslation } from 'react-i18next';
 
@@ -71,75 +58,72 @@ const CustomerPage: React.FC = () => {
     setData(prevData => prevData.map(item => item.id === customer.id ? { ...item, enable: !item.enable } : item));
   };
 
+  const columns = [
+    { title: t('customer.name'), dataIndex: 'name', key: 'name' },
+    { title: t('customer.contact'), dataIndex: 'contact', key: 'contact' },
+    { title: t('customer.countryCode'), dataIndex: 'countryCode', key: 'countryCode' },
+    { title: t('customer.currency'), dataIndex: 'currency', key: 'currency' },
+    { title: t('customer.invoiceHeader'), dataIndex: 'invoiceHeader', key: 'invoiceHeader' },
+    { title: t('customer.invoiceTaxNumber'), dataIndex: 'invoiceTaxNumber', key: 'invoiceTaxNumber' },
+    {
+      title: t('customer.enable'),
+      dataIndex: 'enable',
+      key: 'enable',
+      render: (enable: boolean, record: Customer) => (
+        <Switch checked={enable} onChange={() => handleEnable(record)} disabled={loading} />
+      ),
+    },
+    {
+      title: t('customer.actions'),
+      key: 'actions',
+      render: (_: any, record: Customer) => (
+        <Button
+          icon={<EditOutlined />}
+          size="small"
+          onClick={() => handleEdit(record)}
+          disabled={loading}
+          type="link"
+        />
+      ),
+    },
+  ];
+
   return (
-    <Box p={1}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-        <h2>{t('customer.title')}</h2>
-        <Button variant="contained" onClick={handleAdd}>{t('customer.add')}</Button>
-      </Box>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>{t('customer.name')}</TableCell>
-              <TableCell>{t('customer.contact')}</TableCell>
-              <TableCell>{t('customer.countryCode')}</TableCell>
-              <TableCell>{t('customer.currency')}</TableCell>
-              <TableCell>{t('customer.invoiceHeader')}</TableCell>
-              <TableCell>{t('customer.invoiceTaxNumber')}</TableCell>
-              <TableCell>{t('customer.enable')}</TableCell>
-              <TableCell>{t('customer.actions')}</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {loading ? (
-              <TableRow><TableCell colSpan={7} align="center">{t('customer.loading')}</TableCell></TableRow>
-            ) : data.length === 0 ? (
-              <TableRow><TableCell colSpan={7}>{t('customer.noData')}</TableCell></TableRow>
-            ) : (
-              data.map(item => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.contact}</TableCell>
-                  <TableCell>{item.countryCode}</TableCell>
-                  <TableCell>{item.currency}</TableCell>
-                  <TableCell>{item.invoiceHeader}</TableCell>
-                  <TableCell>{item.invoiceTaxNumber}</TableCell>
-                  <TableCell>
-                    <Switch checked={item.enable} onChange={() => handleEnable(item)} disabled={loading} />
-                  </TableCell>
-                  <TableCell>
-                    <IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        component="div"
-        count={total}
-        page={pageIndex}
-        onPageChange={(_, newPage) => setPageIndex(newPage)}
-        rowsPerPage={pageSize}
-        onRowsPerPageChange={e => { setPageSize(Number(e.target.value)); setPageIndex(0); }}
-        rowsPerPageOptions={[10, 20, 50]}
-        labelRowsPerPage={t('common.rowsPerPage')}
+    <div style={{ padding: 8 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+        <Typography.Title level={4} style={{ margin: 0 }}>{t('customer.title')}</Typography.Title>
+        <Button type="primary" onClick={handleAdd}>{t('customer.add')}</Button>
+      </div>
+      <Table
+        columns={columns}
+        dataSource={data}
+        rowKey="id"
+        loading={loading}
+        pagination={false}
+        locale={{
+          emptyText: loading ? t('customer.loading') : t('customer.noData'),
+        }}
       />
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8 }}>
+        <Pagination
+          current={pageIndex + 1}
+          pageSize={pageSize}
+          total={total}
+          showSizeChanger
+          pageSizeOptions={[10, 20, 50]}
+          onChange={(page, size) => { setPageIndex(page - 1); if (size) setPageSize(size); }}
+          showTotal={total => `${t('common.rowsPerPage')}: ${total}`}
+        />
+      </div>
       <CustomerFormDialog
         open={dialogOpen}
         onClose={() => { setDialogOpen(false); setEditingCustomer(null); }}
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!editingCustomer?.name || !editingCustomer?.contact) return;
-          handleSubmit(editingCustomer as Partial<Customer>);
-        }}
+        onSubmit={handleSubmit}
         form={editingCustomer || { name: '', contact: '', enable: true }}
         setForm={f => setEditingCustomer(f as Partial<Customer> | null)}
         editingId={editingCustomer?.id || null}
       />
-    </Box>
+    </div>
   );
 };
 

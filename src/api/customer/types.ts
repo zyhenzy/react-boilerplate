@@ -7,6 +7,9 @@ export interface Customer {
   currency?: string | null; // 币种，可空，最大3
   invoiceHeader?: string | null; // 发票抬头，可空，最大50
   invoiceTaxNumber?: string | null; // 发票税号，可空，最大50
+  products?:string[]; // 产品
+  serviceFeeCountType?:0|1; // 服务费计算方式（全价/仅票价）
+  serviceFeeRatio?:number; // 服务费比例
   enable: boolean; // 启用
 }
 
