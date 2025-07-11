@@ -29,6 +29,7 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
   const countryOptions = useSelector((state: RootState) => state.options.countryOptions);
   const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
   const [cityOptions,setCityOptions] = useState<any[]>([])
+  const [formInstance] = Form.useForm();
 
   useEffect(() => {
     if (form.enable === undefined) {
@@ -38,7 +39,8 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
 
   const handleCountryChange = (value: string) => {
     setCityOptions([]);
-    setForm(f => ({ ...f, country: value }));
+    setForm(f => ({ ...f, country: value, cityCode: undefined }));
+    formInstance.setFieldsValue({ cityCode: undefined });
     if (value) {
       getCityOptions(value).then(res => setCityOptions(res));
     }
@@ -53,6 +55,7 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
       destroyOnClose
     >
       <Form
+        form={formInstance}
         onFinish={values => {
           setForm((f: any) => ({ ...f, ...values }));
           onSubmit({ ...form, ...values });
@@ -65,15 +68,19 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
         <Form.Item label={t('agent.name')} name="name" rules={[{ required: true, message: t('agent.name') + t('common.required') }]}>
           <Input maxLength={50} autoFocus />
         </Form.Item>
-        <Form.Item label={t('agent.countryCode')} name="countryCode" rules={[{ required: true, message: t('agent.countryCode') + t('common.required') }]}>
-          <Select showSearch optionFilterProp="children" placeholder={t('agent.countryCode')}>
-            {countryOptions.map(option => (
-              <Option key={option.value} value={option.value}>{option.label}（{option.value}）</Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item label={t('agent.contact')} name="contact" rules={[{ required: true, message: t('agent.contact') + t('common.required') }]}>
-          <Input maxLength={50} />
+        <Form.Item label={t('agent.contact')} required>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <Form.Item name="countryCode" rules={[{ required: true, message: t('agent.countryCode') + t('common.required') }]} noStyle>
+              <Select showSearch optionFilterProp="children" placeholder={t('agent.countryCode')} style={{ width: 160 }}>
+                {countryOptions.map(option => (
+                  <Option key={option.value} value={option.value}>{option.label}（{option.value}）</Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name="contact" rules={[{ required: true, message: t('agent.contact') + t('common.required') }]} noStyle>
+              <Input maxLength={50} placeholder={t('agent.contact') as string} style={{ width: 'calc(100% - 168px)' }} />
+            </Form.Item>
+          </div>
         </Form.Item>
         <Form.Item label={t('common.country')} name="country" rules={[{ required: true, message: t('common.country') + t('common.required') }]}>
           <Select showSearch optionFilterProp="children" placeholder={t('common.country')} onChange={handleCountryChange} value={form.country || undefined}>
