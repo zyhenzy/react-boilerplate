@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Form, Input, Select, Button, Checkbox } from 'antd';
+import { Modal, Form, Input, Select, Button, Checkbox, Upload, message } from 'antd';
 import { useTranslation } from 'react-i18next';
 import type { Supplier } from '../../../api/supplier/types';
 import { getCityOptions, getImage, uploadImage } from '../../../api/basic';
@@ -27,7 +27,6 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
     countryCode: initialValues?.countryCode || '',
     cityCode: initialValues?.cityCode || '',
   });
-  const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
   const [cityOptions, setCityOptions] = useState<any[]>([]);
@@ -47,26 +46,6 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
 
   const handleChange = (key: keyof Supplier, value: any) => {
     setForm(f => ({ ...f, [key]: value }));
-  };
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
-    setUploadError(null);
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      if (form.id) {
-        formData.append('id', String(form.id));
-      }
-      const imageId = await uploadImage(formData);
-      setForm(f => ({ ...f, logoId: imageId }));
-    } catch (err: any) {
-      setUploadError(err?.message || '上传失败');
-    } finally {
-      setUploading(false);
-    }
   };
 
   const handleCountryChange = (value: string) => {
@@ -106,14 +85,39 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
         </Form.Item>
         <Form.Item label={t('supplier.currency')} name="currency"> <Input value={form.currency} onChange={e => handleChange('currency', e.target.value)} maxLength={10} /> </Form.Item>
         <Form.Item label={t('supplier.logo')} name="logoId">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <Upload
+            name="file"
+            listType="picture-card"
+            showUploadList={false}
+            customRequest={async ({ file, onSuccess, onError }) => {
+              try {
+                const formData = new FormData();
+                formData.append('file', file);
+                if (form.id) {
+                  formData.append('id', String(form.id));
+                }
+                const imageId = await uploadImage(formData);
+                setForm(f => ({ ...f, logoId: imageId }));
+                onSuccess && onSuccess('ok');
+                message.success(t('supplier.uploadSuccess'));
+              } catch (err: any) {
+                setUploadError(err?.message || '上传失败');
+                onError && onError(err);
+                message.error(t('supplier.uploadFail'));
+              }
+            }}
+            accept="image/*"
+            style={{ width: 180, height: 180 }}
+          >
             {form.logoId ? (
-              <img src={getImage(form.logoId)} alt="logo" style={{ width: 80, height: 80, objectFit: 'contain', borderRadius: 8, border: '1px solid #eee' }} />
-            ) : null}
-            <Button type="primary" onClick={() => document.getElementById('logo-upload-input')?.click()} loading={uploading}>{t('supplier.upload')}</Button>
-            <input id="logo-upload-input" type="file" accept="image/*" hidden onChange={handleFileChange} />
-            {uploadError && <span style={{ color: 'red', fontSize: 13 }}>{uploadError}</span>}
-          </div>
+              <img src={getImage(form.logoId)} alt="logo" style={{ width: 180, height: 180, objectFit: 'cover', borderRadius: 12, border: '1px solid #eee' }} />
+            ) : (
+              <div style={{ width: 180, height: 180, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #d9d9d9', borderRadius: 12, background: '#fafafa' }}>
+                <span style={{ color: '#bbb', fontSize: 16 }}>{t('supplier.upload')}</span>
+              </div>
+            )}
+          </Upload>
+          {uploadError && <span style={{ color: 'red', fontSize: 13 }}>{uploadError}</span>}
         </Form.Item>
         <Form.Item name="enable" valuePropName="checked">
           <Checkbox checked={!!form.enable} onChange={e => handleChange('enable', e.target.checked)}>{t('supplier.enable')}</Checkbox>
