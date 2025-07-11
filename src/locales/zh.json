@@ -27,7 +27,8 @@
     "no": "否",
     "country": "国家",
     "city": "城市",
-    "required": "必填"
+    "required": "必填",
+    "remark": "备注"
   },
   "user": {
     "title": "用户管理",
@@ -91,7 +92,14 @@
     "loading": "加载中...",
     "upload": "营业执照",
     "uploading": "上传中...",
-    "changeAvatar": "点击更换图片"
+    "changeAvatar": "点击更换图片",
+    "bank": "银行",
+    "bankAddress": "银行地址",
+    "bankPostalCode": "银行邮编",
+    "bankSwiftCode": "银行SWIFT代码",
+    "bankAccount": "银行账号",
+    "bankAccountName": "银行账户名",
+    "products": "产品"
   },
   "agentOrder": {
     "title": "代理人订单管理",

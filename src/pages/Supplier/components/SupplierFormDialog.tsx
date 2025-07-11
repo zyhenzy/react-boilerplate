@@ -30,6 +30,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
   });
   const [uploadError, setUploadError] = useState<string | null>(null);
   const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
+  const productOptions = useSelector((state: any) => state.options.productOptions) || [];
   const [cityOptions, setCityOptions] = useState<any[]>([]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
@@ -117,7 +118,41 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
         <Form.Item label={t('supplier.currency')} name="currency">
           <Input value={form.currency} maxLength={10} />
         </Form.Item>
-        <Form.Item label={t('supplier.logo')} name="logoId">
+        <Form.Item label={t('supplier.bank')} name="bank">
+          <Input value={form.bank} maxLength={50} />
+        </Form.Item>
+        <Form.Item label={t('supplier.bankAddress')} name="bankAddress">
+          <Input value={form.bankAddress} maxLength={100} />
+        </Form.Item>
+        <Form.Item label={t('supplier.bankPostalCode')} name="bankPostalCode">
+          <Input value={form.bankPostalCode} maxLength={20} />
+        </Form.Item>
+        <Form.Item label={t('supplier.bankSwiftCode')} name="bankSwiftCode">
+          <Input value={form.bankSwiftCode} maxLength={20} />
+        </Form.Item>
+        <Form.Item label={t('supplier.bankAccount')} name="bankAccount">
+          <Input value={form.bankAccount} maxLength={30} />
+        </Form.Item>
+        <Form.Item label={t('supplier.bankAccountName')} name="bankAccountName">
+          <Input value={form.bankAccountName} maxLength={50} />
+        </Form.Item>
+        <Form.Item label={t('common.remark')} name="remark">
+          <Input.TextArea value={form.remark} maxLength={200} rows={2} />
+        </Form.Item>
+        <Form.Item label={t('supplier.products')} name="products">
+          <Select
+            mode="tags"
+            value={form.products}
+            onChange={value => handleChange('products', value)}
+            placeholder={t('supplier.products')}
+            style={{ width: '100%' }}
+          >
+            {productOptions.map((option: any) => (
+              <Option key={option.value} value={option.value}>{option.label}</Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item label={t('supplier.upload')} name="logoId">
           <Upload
             name="file"
             listType="picture-card"
