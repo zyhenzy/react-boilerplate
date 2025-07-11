@@ -69,15 +69,19 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({ open, onClose, onSubmit
         <Form.Item label={t('user.name')} name="name" rules={[{ required: true, message: t('user.name') + t('common.required') }]}>
           <Input />
         </Form.Item>
-        <Form.Item label={t('user.phoneNumber')} name="phoneNumber">
-          <Input />
-        </Form.Item>
-        <Form.Item label={t('user.countryNumber')} name="countryNumber">
-          <Select showSearch optionFilterProp="children" placeholder={t('user.countryNumber')}>
-            {countryOptions.map((option: any) => (
-              <Option key={option.value} value={option.value}>{option.label}</Option>
-            ))}
-          </Select>
+        <Form.Item label={t('user.phoneNumber')} required>
+          <Input.Group compact>
+            <Form.Item name="countryNumber" noStyle>
+              <Select showSearch optionFilterProp="children" placeholder={t('user.countryNumber')} style={{ width: 120 }}>
+                {countryOptions.map((option: any) => (
+                  <Option key={option.value} value={option.value}>({option.value}){option.label}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name="phoneNumber" noStyle>
+              <Input style={{ width: 'calc(100% - 120px)' }} placeholder={t('user.phoneNumber') as string} />
+            </Form.Item>
+          </Input.Group>
         </Form.Item>
         <Form.Item label={t('user.email')} name="email">
           <Input />

@@ -132,11 +132,7 @@ const UserPage: React.FC = () => {
       <UserFormDialog
         open={dialogOpen}
         onClose={() => { setDialogOpen(false); setEditingUser(null); }}
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!editingUser?.userName || !editingUser?.name) return;
-          handleSubmit(editingUser);
-        }}
+        onSubmit={handleSubmit}
         form={editingUser || { userName: '', name: '', enable: true }}
         setForm={f => setEditingUser(f as any)}
         editingId={editingUser?.id || null}
