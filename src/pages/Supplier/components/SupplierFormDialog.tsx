@@ -9,9 +9,12 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { useTranslation } from 'react-i18next';
 import type { Supplier } from '../../../api/supplier/types';
-import {getImage, uploadImage} from '../../../api/basic';
-import { Box } from '@mui/material';
+import {getCityOptions, getImage, uploadImage} from '../../../api/basic';
+import {Box, FormControl} from '@mui/material';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import Autocomplete from "@mui/material/Autocomplete";
+import {useSelector} from "react-redux";
+import type {IOption} from "../../../api/basic/types";
 
 interface SupplierFormDialogProps {
   open: boolean;
@@ -33,6 +36,8 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
+  const [cityOptions,setCityOptions] = useState<any[]>([])
 
   React.useEffect(() => {
     setForm({
@@ -99,6 +104,42 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             required
             inputProps={{ maxLength: 50 }}
           />
+
+
+          <div style={{ display: 'flex', gap: 8 }}>
+            <FormControl style={{ minWidth: 120 }} margin="dense">
+              <Autocomplete
+                  options={countryCodeOptions}
+                  getOptionLabel={opt => opt.label || ''}
+                  value={countryCodeOptions.find(opt => opt.value === form.countryCode) || null}
+                  onChange={(_, newValue) => {
+                    setCityOptions([]);
+                    setForm(f => ({ ...f, country: newValue ? newValue.value : '' }));
+                    if (newValue) {
+                      getCityOptions(newValue.value).then(res => setCityOptions(res));
+                    }
+                  }}
+                  renderInput={(params) => (
+                      <TextField {...params} label={t('common.country')} margin="dense" />
+                  )}
+                  isOptionEqualToValue={(option, value) => option.value === value.value}
+              />
+            </FormControl>
+            <FormControl style={{ flex: 1 }} margin="dense">
+              <Autocomplete
+                  options={cityOptions}
+                  getOptionLabel={opt => opt.label || ''}
+                  value={cityOptions.find(opt => opt.value === form.cityCode) || null}
+                  onChange={(_, newValue) => setForm(f => ({ ...f, cityCode: newValue ? newValue.value : '' }))}
+                  renderInput={(params) => (
+                      <TextField {...params} label={t('common.city')} margin="dense" />
+                  )}
+                  isOptionEqualToValue={(option, value) => option.value === value.value}
+                  disabled={cityOptions.length === 0}
+              />
+            </FormControl>
+          </div>
+
           <TextField
             margin="dense"
             label={t('supplier.currency')}

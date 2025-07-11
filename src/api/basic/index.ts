@@ -35,7 +35,6 @@ export function getCustomerOptions() {
   return http.get<IOption[]>('/v1/Data/customerOptions');
 }
 
-
 // 上传图片接口，支持自定义 headers
 export function uploadImage(formData: FormData) {
   return http.post<string>('/v1/Image/upload', formData, {

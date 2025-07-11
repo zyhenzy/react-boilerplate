@@ -24,7 +24,9 @@
     "endDate": "结束日期",
     "action": "操作",
     "yes": "是",
-    "no": "否"
+    "no": "否",
+    "country": "国家",
+    "city": "城市"
   },
   "user": {
     "title": "用户管理",
@@ -50,8 +52,6 @@
     "name": "名称",
     "contact": "联系方式",
     "countryCode": "国家区号",
-    "country": "国家",
-    "city": "城市",
     "currency": "币种",
     "enable": "启用",
     "actions": "操作",

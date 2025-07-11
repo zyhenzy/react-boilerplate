@@ -12,6 +12,7 @@ import {
   FormControl,
   Checkbox
 } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
 import type { Agent } from '../../../api/agent/types';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -46,13 +47,6 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
       setForm(f => ({ ...f, enable: true }));
     }
   }, [form.enable, setForm]);
-
-  const handleCountryChange = async (e: any) => {
-    setCityOptions([])
-    setForm(f => ({ ...f, country: e.target.value }))
-    const res = await getCityOptions(e.target.value);
-    setCityOptions(res)
-  }
 
   const handleClose = () => {
     setCityOptions([])
@@ -102,29 +96,35 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
 
           <div style={{ display: 'flex', gap: 8 }}>
             <FormControl style={{ minWidth: 120 }} margin="dense">
-              <InputLabel>{t('agent.country')}</InputLabel>
-              <Select
-                  label={t('ticketOrder.country')}
-                  value={form.country || ''}
-                  onChange={handleCountryChange}
-              >
-                {countryCodeOptions.map(opt => (
-                    <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
-                ))}
-              </Select>
+              <Autocomplete
+                options={countryCodeOptions}
+                getOptionLabel={opt => opt.label || ''}
+                value={countryCodeOptions.find(opt => opt.value === form.country) || null}
+                onChange={(_, newValue) => {
+                  setCityOptions([]);
+                  setForm(f => ({ ...f, country: newValue ? newValue.value : '' }));
+                  if (newValue) {
+                    getCityOptions(newValue.value).then(res => setCityOptions(res));
+                  }
+                }}
+                renderInput={(params) => (
+                  <TextField {...params} label={t('common.country')} margin="dense" />
+                )}
+                isOptionEqualToValue={(option, value) => option.value === value.value}
+              />
             </FormControl>
             <FormControl style={{ flex: 1 }} margin="dense">
-              <InputLabel>{t('agent.city')}</InputLabel>
-              <Select
-                  label={t('agent.city')}
-                  value={form.cityCode || ''}
-                  disabled={cityOptions.length === 0}
-                  onChange={e => setForm(f => ({ ...f, cityCode: e.target.value }))}
-              >
-                {cityOptions.map(opt => (
-                    <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
-                ))}
-              </Select>
+              <Autocomplete
+                options={cityOptions}
+                getOptionLabel={opt => opt.label || ''}
+                value={cityOptions.find(opt => opt.value === form.cityCode) || null}
+                onChange={(_, newValue) => setForm(f => ({ ...f, cityCode: newValue ? newValue.value : '' }))}
+                renderInput={(params) => (
+                  <TextField {...params} label={t('common.city')} margin="dense" />
+                )}
+                isOptionEqualToValue={(option, value) => option.value === value.value}
+                disabled={cityOptions.length === 0}
+              />
             </FormControl>
           </div>
 

@@ -70,8 +70,8 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
                 value={form.countryNumber || ''}
                 onChange={e => setForm(f => ({ ...f, countryNumber: e.target.value }))}
               >
-                {countryCodeOptions.map(opt => (
-                  <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+                {countryOptions.map(opt => (
+                  <MenuItem key={opt.value} value={opt.value}>({opt.value}){opt.label}</MenuItem>
                 ))}
               </Select>
             </FormControl>
