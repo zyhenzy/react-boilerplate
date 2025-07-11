@@ -9,7 +9,7 @@ export function getSupplierList(params?: SupplierQuery) {
 
 // 获取供应商详情
 export function getSupplierDetail(id: string) {
-  return http.get(`/v1/Supplier/${id}`);
+  return http.get<Supplier>(`/v1/Supplier/${id}`);
 }
 
 // 新增供应商

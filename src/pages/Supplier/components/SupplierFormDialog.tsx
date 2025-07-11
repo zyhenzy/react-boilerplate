@@ -43,16 +43,25 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
   }] : []);
 
   React.useEffect(() => {
-    setForm({
-      id: initialValues?.id,
-      name: initialValues?.name || '',
-      contact: initialValues?.contact || '',
-      currency: initialValues?.currency || '',
-      enable: initialValues?.enable ?? true,
-      logoId: initialValues?.logoId || '',
-      countryCode: initialValues?.countryCode || '',
-      cityCode: initialValues?.cityCode || '',
-    });
+    if (open) {
+      formInstance.setFieldsValue({
+        id: initialValues?.id,
+        name: initialValues?.name || '',
+        contact: initialValues?.contact || '',
+        currency: initialValues?.currency || '',
+        enable: initialValues?.enable ?? true,
+        logoId: initialValues?.logoId || '',
+        countryCode: initialValues?.countryCode || '',
+        cityCode: initialValues?.cityCode || '',
+      });
+    } else {
+      formInstance.resetFields(); // 关闭时清空表单
+      setFileList([]); // 清空上传图片
+      setUploadError(null); // 清空上传错误
+      setCityOptions([]); // 清空城市选项
+      setPreviewImage('');
+      setPreviewOpen(false);
+    }
   }, [initialValues, open]);
 
   const handleChange = (key: keyof Supplier, value: any) => {
