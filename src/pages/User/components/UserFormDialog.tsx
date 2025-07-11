@@ -48,12 +48,12 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({ open, onClose, onSubmit
     >
       <Form
         form={formInstance}
-        layout="horizontal"
         onFinish={values => {
           setForm((f: any) => ({ ...f, ...values }));
           onSubmit({ ...form, ...values });
         }}
         initialValues={form}
+        layout="horizontal"
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 18 }}
       >

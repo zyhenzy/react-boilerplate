@@ -1,21 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import type { Agent } from "../../api/agent/types";
 import { createAgent, enableAgent, getAgentList, updateAgent } from "../../api/agent";
-import {
-  Box,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Switch,
-  IconButton,
-  TablePagination
-} from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { Button, Table, Switch, Pagination, Typography } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 import AgentFormDialog from './components/AgentFormDialog';
 import { useTranslation } from 'react-i18next';
 
@@ -71,60 +58,62 @@ const AgentPage: React.FC = () => {
     setData(prevData => prevData.map(item => item.id === agent.id ? { ...item, enable: !item.enable } : item));
   };
 
+  const columns = [
+    { title: t('agent.name'), dataIndex: 'name', key: 'name' },
+    { title: t('agent.contact'), dataIndex: 'contact', key: 'contact' },
+    { title: t('agent.countryCode'), dataIndex: 'countryCode', key: 'countryCode' },
+    { title: t('common.city'), dataIndex: 'cityCode', key: 'cityCode' },
+    { title: t('agent.currency'), dataIndex: 'currency', key: 'currency' },
+    {
+      title: t('agent.enable'),
+      dataIndex: 'enable',
+      key: 'enable',
+      render: (enable: boolean, record: Agent) => (
+        <Switch checked={enable} onChange={() => handleEnable(record)} disabled={loading} />
+      ),
+    },
+    {
+      title: t('agent.actions'),
+      key: 'actions',
+      render: (_: any, record: Agent) => (
+        <Button
+          icon={<EditOutlined />}
+          size="small"
+          onClick={() => handleEdit(record)}
+          disabled={loading}
+          type="link"
+        />
+      ),
+    },
+  ];
+
   return (
-    <Box p={1}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-        <h2>{t('agent.title')}</h2>
-        <Button variant="contained" onClick={handleAdd}>{t('agent.add')}</Button>
-      </Box>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>{t('agent.name')}</TableCell>
-              <TableCell>{t('agent.contact')}</TableCell>
-              <TableCell>{t('agent.countryCode')}</TableCell>
-              <TableCell>{t('common.city')}</TableCell>
-              <TableCell>{t('agent.currency')}</TableCell>
-              <TableCell>{t('agent.enable')}</TableCell>
-              <TableCell>{t('agent.actions')}</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {loading ? (
-              <TableRow><TableCell colSpan={7} align="center">{t('agent.loading')}</TableCell></TableRow>
-            ) : data.length === 0 ? (
-              <TableRow><TableCell colSpan={7}>{t('agent.noData')}</TableCell></TableRow>
-            ) : (
-              data.map(item => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.contact}</TableCell>
-                  <TableCell>{item.countryCode}</TableCell>
-                  <TableCell>{item.cityCode}</TableCell>
-                  <TableCell>{item.currency}</TableCell>
-                  <TableCell>
-                    <Switch checked={item.enable} onChange={() => handleEnable(item)} disabled={loading} />
-                  </TableCell>
-                  <TableCell>
-                    <IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        component="div"
-        count={total}
-        page={pageIndex}
-        onPageChange={(_, newPage) => setPageIndex(newPage)}
-        rowsPerPage={pageSize}
-        onRowsPerPageChange={e => { setPageSize(Number(e.target.value)); setPageIndex(0); }}
-        rowsPerPageOptions={[10, 20, 50]}
-        labelRowsPerPage={t('common.rowsPerPage')}
+    <div style={{ padding: 8 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+        <Typography.Title level={4} style={{ margin: 0 }}>{t('agent.title')}</Typography.Title>
+        <Button type="primary" onClick={handleAdd}>{t('agent.add')}</Button>
+      </div>
+      <Table
+        columns={columns}
+        dataSource={data}
+        rowKey="id"
+        loading={loading}
+        pagination={false}
+        locale={{
+          emptyText: loading ? t('agent.loading') : t('agent.noData'),
+        }}
       />
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8 }}>
+        <Pagination
+          current={pageIndex + 1}
+          pageSize={pageSize}
+          total={total}
+          showSizeChanger
+          pageSizeOptions={[10, 20, 50]}
+          onChange={(page, size) => { setPageIndex(page - 1); setPageSize(size); }}
+          showTotal={total => `${t('common.rowsPerPage')}: ${total}`}
+        />
+      </div>
       <AgentFormDialog
         open={dialogOpen}
         onClose={() => { setDialogOpen(false); setEditingAgent(null); }}
@@ -137,7 +126,7 @@ const AgentPage: React.FC = () => {
         setForm={f => setEditingAgent(f as Partial<Agent> | null)}
         editingId={editingAgent?.id || null}
       />
-    </Box>
+    </div>
   );
 };
 

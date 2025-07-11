@@ -1,24 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  Button,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-  Checkbox
-} from '@mui/material';
-import Autocomplete from '@mui/material/Autocomplete';
+import { Modal, Form, Input, Button, Select, Checkbox } from 'antd';
 import type { Agent } from '../../../api/agent/types';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
 import type {IOption} from "../../../api/basic/types";
 import {getCityOptions} from "../../../api/basic";
+const { Option } = Select;
 
 interface AgentFormDialogProps {
   open: boolean;
@@ -48,137 +36,81 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
     }
   }, [form.enable, setForm]);
 
-  const handleClose = () => {
-    setCityOptions([])
-    onClose()
-  }
+  const handleCountryChange = (value: string) => {
+    setCityOptions([]);
+    setForm(f => ({ ...f, country: value }));
+    if (value) {
+      getCityOptions(value).then(res => setCityOptions(res));
+    }
+  };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <form onSubmit={onSubmit}>
-        <DialogTitle>{editingId ? t('agent.edit') : t('agent.add')}</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label={t('agent.name')}
-            fullWidth
-            value={form.name || ''}
-            onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-            required
-            inputProps={{ maxLength: 50 }}
-          />
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 8 }}>
-            <FormControl style={{ minWidth: 120 }}>
-              <InputLabel id="countryCode-label">{t('agent.countryCode')}</InputLabel>
-              <Select
-                labelId="countryCode-label"
-                label={t('agent.countryCode')}
-                value={form.countryCode || ''}
-                onChange={e => setForm(f => ({ ...f, countryCode: e.target.value }))}
-                displayEmpty
-              >
-                {countryOptions.map(option => (
-                  <MenuItem key={option.value} value={option.value}>{option.label}（{option.value}）</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <TextField
-              margin="dense"
-              label={t('agent.contact')}
-              value={form.contact || ''}
-              onChange={e => setForm(f => ({ ...f, contact: e.target.value }))}
-              required
-              inputProps={{ maxLength: 50 }}
-              style={{ flex: 1 }}
-            />
-          </div>
-
-          <div style={{ display: 'flex', gap: 8 }}>
-            <FormControl style={{ minWidth: 120 }} margin="dense">
-              <Autocomplete
-                options={countryCodeOptions}
-                getOptionLabel={opt => opt.label || ''}
-                value={countryCodeOptions.find(opt => opt.value === form.country) || null}
-                onChange={(_, newValue) => {
-                  setCityOptions([]);
-                  setForm(f => ({ ...f, country: newValue ? newValue.value : '' }));
-                  if (newValue) {
-                    getCityOptions(newValue.value).then(res => setCityOptions(res));
-                  }
-                }}
-                renderInput={(params) => (
-                  <TextField {...params} label={t('common.country')} margin="dense" />
-                )}
-                isOptionEqualToValue={(option, value) => option.value === value.value}
-              />
-            </FormControl>
-            <FormControl style={{ flex: 1 }} margin="dense">
-              <Autocomplete
-                options={cityOptions}
-                getOptionLabel={opt => opt.label || ''}
-                value={cityOptions.find(opt => opt.value === form.cityCode) || null}
-                onChange={(_, newValue) => setForm(f => ({ ...f, cityCode: newValue ? newValue.value : '' }))}
-                renderInput={(params) => (
-                  <TextField {...params} label={t('common.city')} margin="dense" />
-                )}
-                isOptionEqualToValue={(option, value) => option.value === value.value}
-                disabled={cityOptions.length === 0}
-              />
-            </FormControl>
-          </div>
-
-          {/*原城市编码*/}
-          {/*<TextField*/}
-          {/*  margin="dense"*/}
-          {/*  label={t('agent.cityCode')}*/}
-          {/*  fullWidth*/}
-          {/*  value={form.cityCode || ''}*/}
-          {/*  onChange={e => setForm(f => ({ ...f, cityCode: e.target.value }))}*/}
-          {/*  inputProps={{ maxLength: 3 }}*/}
-          {/*/>*/}
-          <TextField
-            margin="dense"
-            label={t('agent.currency')}
-            fullWidth
-            value={form.currency || ''}
-            onChange={e => setForm(f => ({ ...f, currency: e.target.value }))}
-            inputProps={{ maxLength: 3 }}
-          />
-          <TextField
-            margin="dense"
-            label={t('agent.invoiceHeader')}
-            fullWidth
-            value={form.invoiceHeader || ''}
-            onChange={e => setForm(f => ({ ...f, invoiceHeader: e.target.value }))}
-            inputProps={{ maxLength: 50 }}
-          />
-          <TextField
-            margin="dense"
-            label={t('agent.invoiceTaxNumber')}
-            fullWidth
-            value={form.invoiceTaxNumber || ''}
-            onChange={e => setForm(f => ({ ...f, invoiceTaxNumber: e.target.value }))}
-            inputProps={{ maxLength: 50 }}
-          />
-          <div style={{marginTop: 8}}>
-            <label style={{display: 'flex', alignItems: 'center'}}>
-              <span style={{marginRight: 8}}>{t('agent.enable')}</span>
-              <Checkbox
-                checked={form.enable ?? true}
-                onChange={e => setForm(f => ({ ...f, enable: e.target.checked }))}
-                color="primary"
-                size="small"
-              />
-            </label>
-          </div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose} color="secondary">{t('common.cancel')}</Button>
-          <Button type="submit" variant="contained" color="primary">{editingId ? t('common.update') : t('common.confirm')}</Button>
-        </DialogActions>
-      </form>
-    </Dialog>
+    <Modal
+      open={open}
+      onCancel={() => { setCityOptions([]); onClose(); }}
+      footer={null}
+      title={editingId ? t('agent.edit') : t('agent.add')}
+      destroyOnClose
+    >
+      <Form
+        onFinish={values => {
+          setForm((f: any) => ({ ...f, ...values }));
+          onSubmit({ ...form, ...values });
+        }}
+        initialValues={form}
+        layout="horizontal"
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 18 }}
+      >
+        <Form.Item label={t('agent.name')} name="name" rules={[{ required: true, message: t('agent.name') + t('common.required') }]}>
+          <Input maxLength={50} autoFocus />
+        </Form.Item>
+        <div>
+          <Form.Item label={t('agent.countryCode')} name="countryCode" style={{ flex: 1, marginBottom: 0 }} labelCol={{ flex: '100px' }} wrapperCol={{ flex: 1 }}>
+            <Select showSearch optionFilterProp="children" placeholder={t('agent.countryCode')}>
+              {countryOptions.map(option => (
+                <Option key={option.value} value={option.value}>{option.label}（{option.value}）</Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item label={t('agent.contact')} name="contact" rules={[{ required: true, message: t('agent.contact') + t('common.required') }]} style={{ flex: 2, marginBottom: 0 }} labelCol={{ flex: '100px' }} wrapperCol={{ flex: 1 }}>
+            <Input maxLength={50} />
+          </Form.Item>
+        </div>
+        <div>
+          <Form.Item label={t('common.country')} name="country" style={{ flex: 1, marginBottom: 0 }} labelCol={{ flex: '100px' }} wrapperCol={{ flex: 1 }}>
+            <Select showSearch optionFilterProp="children" placeholder={t('common.country')} onChange={handleCountryChange} value={form.country || undefined}>
+              {countryCodeOptions.map(option => (
+                <Option key={option.value} value={option.value}>{option.label}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item label={t('common.city')} name="cityCode" style={{ flex: 2, marginBottom: 0 }} labelCol={{ flex: '100px' }} wrapperCol={{ flex: 1 }}>
+            <Select showSearch optionFilterProp="children" placeholder={t('common.city')} disabled={cityOptions.length === 0} value={form.cityCode || undefined}>
+              {cityOptions.map(option => (
+                <Option key={option.value} value={option.value}>{option.label}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </div>
+        <Form.Item label={t('agent.currency')} name="currency">
+          <Input maxLength={3} />
+        </Form.Item>
+        <Form.Item label={t('agent.invoiceHeader')} name="invoiceHeader">
+          <Input maxLength={50} />
+        </Form.Item>
+        <Form.Item label={t('agent.invoiceTaxNumber')} name="invoiceTaxNumber">
+          <Input maxLength={50} />
+        </Form.Item>
+        <Form.Item name="enable" valuePropName="checked">
+          <Checkbox>{t('agent.enable')}</Checkbox>
+        </Form.Item>
+        <Form.Item style={{ textAlign: 'right', marginBottom: 0 }}>
+          <Button onClick={onClose} style={{ marginRight: 8 }}>{t('common.cancel')}</Button>
+          <Button type="primary" htmlType="submit">{editingId ? t('common.update') : t('common.confirm')}</Button>
+        </Form.Item>
+      </Form>
+    </Modal>
   );
 };
 
