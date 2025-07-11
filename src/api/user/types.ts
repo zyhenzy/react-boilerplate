@@ -36,6 +36,7 @@ export interface IUser {
   createTime?: string;
   countryNumber: string;
   phoneNumber: string;
+  email:string;
   createUserName?: string;
   agentId?: string | null;
   role?: string[] | null;

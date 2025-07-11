@@ -39,6 +39,7 @@
     "name": "姓名",
     "phoneNumber": "手机号",
     "countryNumber": "国家区号",
+    "email": "邮箱",
     "agent": "代理",
     "customer": "客户",
     "sex": "性别",

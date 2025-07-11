@@ -44,7 +44,6 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({ open, onClose, onSubmit
       onCancel={onClose}
       footer={null}
       title={editingId ? t('update', '更新') : t('add', '新增')}
-      destroyOnClose
     >
       <Form
         form={formInstance}
@@ -79,6 +78,9 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({ open, onClose, onSubmit
               <Option key={option.value} value={option.value}>{option.label}</Option>
             ))}
           </Select>
+        </Form.Item>
+        <Form.Item label={t('user.email')} name="email">
+          <Input />
         </Form.Item>
         <Form.Item label={t('user.sex')} name="sex">
           <Select>
