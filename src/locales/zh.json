@@ -72,6 +72,8 @@
     "contact": "联系方式",
     "countryCode": "国家区号",
     "currency": "币种",
+    "serviceFeeCountType": "服务费计算方式",
+    "serviceFeeRatio": "服务费比例",
     "invoiceHeader": "发票抬头",
     "invoiceTaxNumber": "发票税号",
     "enable": "启用",

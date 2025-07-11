@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { Customer } from "../../api/customer/types";
-import { createCustomer, enableCustomer, getCustomerList, updateCustomer } from "../../api/customer";
+import {createCustomer, enableCustomer, getCustomerDetail, getCustomerList, updateCustomer} from "../../api/customer";
 import { Button, Table, Switch, Pagination, Typography } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import CustomerFormDialog from './components/CustomerFormDialog';
@@ -36,8 +36,9 @@ const CustomerPage: React.FC = () => {
     setDialogOpen(true);
   };
 
-  const handleEdit = (customer: Customer) => {
-    setEditingCustomer(customer);
+  const handleEdit = async (customer: Customer) => {
+    const detail = await getCustomerDetail(customer.id!);
+    setEditingCustomer(detail);
     setDialogOpen(true);
   };
 

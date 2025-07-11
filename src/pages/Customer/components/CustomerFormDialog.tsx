@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
 import type {IOption} from "../../../api/basic/types";
 import {getCityOptions} from "../../../api/basic";
+import type {Supplier} from "../../../api/supplier/types";
+import {serviceFeeCountTypeOptions} from "../../../constants/serviceFeeCountOptions";
 const { Option } = Select;
 
 interface CustomerFormDialogProps {
@@ -27,6 +29,7 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
 }) => {
   const { t } = useTranslation();
   const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
+  const productOptions = useSelector((state: any) => state.options.productOptions) || [];
   const [cityOptions,setCityOptions] = useState<any[]>([])
   const [antdForm] = Form.useForm();
   const [formInstance] = Form.useForm();
@@ -39,6 +42,7 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
       antdForm.setFieldsValue(form);
     } else {
       antdForm.resetFields();
+      setForm({}); // 关闭弹窗时清空表单数据
     }
   }, [form.enable, setForm, open, antdForm]);
 
@@ -49,6 +53,10 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
     if (value) {
       getCityOptions(value).then(res => setCityOptions(res));
     }
+  };
+
+  const handleChange = (key: keyof Supplier, value: any) => {
+    setForm(f => ({ ...f, [key]: value }));
   };
 
   return (
@@ -92,6 +100,29 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
         </Form.Item>
         <Form.Item label={t('customer.invoiceTaxNumber')} name="invoiceTaxNumber">
           <Input maxLength={30} />
+        </Form.Item>
+        <Form.Item label={t('supplier.products')} name="products">
+          <Select
+              mode="tags"
+              value={form.products}
+              onChange={value => handleChange('products', value)}
+              placeholder={t('supplier.products')}
+              style={{ width: '100%' }}
+          >
+            {productOptions.map((option: any) => (
+                <Option key={option.value} value={option.value}>{option.label}</Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item label={t('customer.serviceFeeCountType')} name="serviceFeeCountType" rules={[{ required: true, message: t('customer.serviceFeeCountType') + t('common.required') }]}>
+          <Select placeholder={t('customer.serviceFeeCountType')}>
+            {serviceFeeCountTypeOptions.map(option => (
+              <Select.Option key={option.value} value={option.value}>{option.label}</Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item label={t('customer.serviceFeeRatio')} name="serviceFeeRatio" rules={[{ required: true, message: t('customer.serviceFeeRatio') + t('common.required') }]}>
+          <Input type="number" min={0} max={10} step={0.01} />
         </Form.Item>
         <Form.Item label={t('customer.enable')} name="enable" valuePropName="checked">
           <Checkbox>{t('customer.enable')}</Checkbox>

@@ -9,7 +9,7 @@ export function getCustomerList(params?: CustomerQuery) {
 
 // 获取客户详情
 export function getCustomerDetail(id: string) {
-  return http.get(`/v1/Customer/${id}`);
+  return http.get<Customer>(`/v1/Customer/${id}`);
 }
 
 // 新增客户
