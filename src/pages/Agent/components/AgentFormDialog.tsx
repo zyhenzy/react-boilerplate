@@ -65,34 +65,34 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
         <Form.Item label={t('agent.name')} name="name" rules={[{ required: true, message: t('agent.name') + t('common.required') }]}>
           <Input maxLength={50} autoFocus />
         </Form.Item>
-        <div>
-          <Form.Item label={t('agent.countryCode')} name="countryCode" style={{ flex: 1, marginBottom: 0 }} labelCol={{ flex: '100px' }} wrapperCol={{ flex: 1 }}>
-            <Select showSearch optionFilterProp="children" placeholder={t('agent.countryCode')}>
+        <Form.Item label={t('agent.countryCode')} name="countryCode">
+          <Input.Group compact>
+            <Select showSearch optionFilterProp="children" placeholder={t('agent.countryCode')} style={{ width: 160 }}>
               {countryOptions.map(option => (
                 <Option key={option.value} value={option.value}>{option.label}（{option.value}）</Option>
               ))}
             </Select>
-          </Form.Item>
-          <Form.Item label={t('agent.contact')} name="contact" rules={[{ required: true, message: t('agent.contact') + t('common.required') }]} style={{ flex: 2, marginBottom: 0 }} labelCol={{ flex: '100px' }} wrapperCol={{ flex: 1 }}>
-            <Input maxLength={50} />
-          </Form.Item>
-        </div>
-        <div>
-          <Form.Item label={t('common.country')} name="country" style={{ flex: 1, marginBottom: 0 }} labelCol={{ flex: '100px' }} wrapperCol={{ flex: 1 }}>
-            <Select showSearch optionFilterProp="children" placeholder={t('common.country')} onChange={handleCountryChange} value={form.country || undefined}>
+            <Form.Item name="contact" noStyle rules={[{ required: true, message: t('agent.contact') + t('common.required') }]}>
+              <Input maxLength={50} style={{ width: 'calc(100% - 160px)' }} placeholder={t('agent.contact') as string} />
+            </Form.Item>
+          </Input.Group>
+        </Form.Item>
+        <Form.Item label={t('common.country')} name="country">
+          <Input.Group compact>
+            <Select showSearch optionFilterProp="children" placeholder={t('common.country')} style={{ width: 160 }} onChange={handleCountryChange} value={form.country || undefined}>
               {countryCodeOptions.map(option => (
                 <Option key={option.value} value={option.value}>{option.label}</Option>
               ))}
             </Select>
-          </Form.Item>
-          <Form.Item label={t('common.city')} name="cityCode" style={{ flex: 2, marginBottom: 0 }} labelCol={{ flex: '100px' }} wrapperCol={{ flex: 1 }}>
-            <Select showSearch optionFilterProp="children" placeholder={t('common.city')} disabled={cityOptions.length === 0} value={form.cityCode || undefined}>
-              {cityOptions.map(option => (
-                <Option key={option.value} value={option.value}>{option.label}</Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </div>
+            <Form.Item name="cityCode" noStyle>
+              <Select showSearch optionFilterProp="children" placeholder={t('common.city')} disabled={cityOptions.length === 0} value={form.cityCode || undefined} style={{ width: 'calc(100% - 160px)' }}>
+                {cityOptions.map(option => (
+                  <Option key={option.value} value={option.value}>{option.label}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Input.Group>
+        </Form.Item>
         <Form.Item label={t('agent.currency')} name="currency">
           <Input maxLength={3} />
         </Form.Item>
