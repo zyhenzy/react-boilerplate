@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Modal, Form, Input, Select, Button, Checkbox, Upload, message } from 'antd';
-import { useTranslation } from 'react-i18next';
+import {Modal, Form, Input, Select, Button, Checkbox, Upload, message, Image, UploadFile, UploadProps} from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import type { Supplier } from '../../../api/supplier/types';
 import { getCityOptions, getImage, uploadImage } from '../../../api/basic';
 import { useSelector } from 'react-redux';
 import type { IOption } from '../../../api/basic/types';
+import {useTranslation} from "react-i18next";
 
 const { Option } = Select;
 
@@ -30,6 +31,14 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
   const [uploadError, setUploadError] = useState<string | null>(null);
   const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
   const [cityOptions, setCityOptions] = useState<any[]>([]);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [fileList, setFileList] = useState<UploadFile[]>(form.logoId ? [{
+    uid: '-1',
+    name: 'logo.png',
+    status: 'done',
+    url: getImage(form.logoId)
+  }] : []);
 
   React.useEffect(() => {
     setForm({
@@ -60,11 +69,33 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
     onSubmit(form as Supplier);
   };
 
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview && file.originFileObj) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file.originFileObj as File);
+      await new Promise(resolve => reader.onload = resolve);
+      file.preview = reader.result as string;
+    }
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+  };
+
+  const handleUploadChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+    if (newFileList.length && newFileList[0].status === 'done' && newFileList[0].response) {
+      setForm(f => ({ ...f, logoId: newFileList[0].response.imageId }));
+    }
+  };
+
   return (
     <Modal open={open} onCancel={onClose} footer={null} title={initialValues ? t('supplier.edit') : t('supplier.add')} destroyOnClose>
       <Form initialValues={form} onFinish={handleSubmit} layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
-        <Form.Item label={t('supplier.name')} name="name" rules={[{ required: true, message: t('supplier.name') + t('common.required') }]}> <Input value={form.name} onChange={e => handleChange('name', e.target.value)} maxLength={50} /> </Form.Item>
-        <Form.Item label={t('supplier.contact')} name="contact" rules={[{ required: true, message: t('supplier.contact') + t('common.required') }]}> <Input value={form.contact} onChange={e => handleChange('contact', e.target.value)} maxLength={50} /> </Form.Item>
+        <Form.Item label={t('supplier.name')} name="name" rules={[{ required: true, message: t('supplier.name') + t('common.required') }]}>
+          <Input value={form.name} maxLength={50} />
+        </Form.Item>
+        <Form.Item label={t('supplier.contact')} name="contact" rules={[{ required: true, message: t('supplier.contact') + t('common.required') }]}>
+          <Input value={form.contact} maxLength={50} />
+        </Form.Item>
         <Form.Item label={t('common.country')} required>
           <div style={{ display: 'flex', gap: 8 }}>
             <Form.Item name="countryCode" rules={[{ required: true, message: t('common.country') + t('common.required') }]} noStyle>
@@ -83,12 +114,15 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             </Form.Item>
           </div>
         </Form.Item>
-        <Form.Item label={t('supplier.currency')} name="currency"> <Input value={form.currency} onChange={e => handleChange('currency', e.target.value)} maxLength={10} /> </Form.Item>
+        <Form.Item label={t('supplier.currency')} name="currency">
+          <Input value={form.currency} maxLength={10} />
+        </Form.Item>
         <Form.Item label={t('supplier.logo')} name="logoId">
           <Upload
             name="file"
             listType="picture-card"
-            showUploadList={false}
+            fileList={fileList}
+            showUploadList={{ showPreviewIcon: true }}
             customRequest={async ({ file, onSuccess, onError }) => {
               try {
                 const formData = new FormData();
@@ -98,7 +132,8 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                 }
                 const imageId = await uploadImage(formData);
                 setForm(f => ({ ...f, logoId: imageId }));
-                onSuccess && onSuccess('ok');
+                setFileList([{ uid: '-1', name: 'logo.png', status: 'done', url: getImage(imageId) }]);
+                onSuccess && onSuccess({ imageId });
                 message.success(t('supplier.uploadSuccess'));
               } catch (err: any) {
                 setUploadError(err?.message || '上传失败');
@@ -107,17 +142,27 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
               }
             }}
             accept="image/*"
+            onPreview={handlePreview}
+            onChange={handleUploadChange}
             style={{ width: 180, height: 180 }}
           >
-            {form.logoId ? (
-              <img src={getImage(form.logoId)} alt="logo" style={{ width: 180, height: 180, objectFit: 'cover', borderRadius: 12, border: '1px solid #eee' }} />
-            ) : (
-              <div style={{ width: 180, height: 180, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #d9d9d9', borderRadius: 12, background: '#fafafa' }}>
-                <span style={{ color: '#bbb', fontSize: 16 }}>{t('supplier.upload')}</span>
-              </div>
+            {fileList.length >= 1 ? null : (
+              <button style={{ border: 0, background: 'none' }} type="button">
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>{t('supplier.upload')}</div>
+              </button>
             )}
           </Upload>
           {uploadError && <span style={{ color: 'red', fontSize: 13 }}>{uploadError}</span>}
+          <Image
+            wrapperStyle={{ display: 'none' }}
+            preview={{
+              visible: previewOpen,
+              onVisibleChange: (visible) => setPreviewOpen(visible),
+              afterOpenChange: (visible) => !visible && setPreviewImage(''),
+            }}
+            src={previewImage}
+          />
         </Form.Item>
         <Form.Item name="enable" valuePropName="checked">
           <Checkbox checked={!!form.enable} onChange={e => handleChange('enable', e.target.checked)}>{t('supplier.enable')}</Checkbox>

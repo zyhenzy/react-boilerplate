@@ -26,7 +26,8 @@
     "yes": "是",
     "no": "否",
     "country": "国家",
-    "city": "城市"
+    "city": "城市",
+    "required": "必填"
   },
   "user": {
     "title": "用户管理",
