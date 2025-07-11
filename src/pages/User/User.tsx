@@ -1,19 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Switch,
-  IconButton,
-  TablePagination
-} from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { Button, Table, Switch, Pagination, Modal, Typography } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 import UserFormDialog from './components/UserFormDialog';
 import { getUserList, addUser, updateUser, enableUser, getUserDetail } from '../../api/user';
 import { useTranslation } from 'react-i18next';
@@ -71,58 +58,77 @@ const UserPage: React.FC = () => {
     setData(prevData => prevData.map(item => item.id === user.id ? { ...item, enable: !item.enable } : item));
   };
 
+  const columns = [
+    {
+      title: t('user.userName'),
+      dataIndex: 'userName',
+      key: 'userName',
+    },
+    {
+      title: t('user.name'),
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: t('user.phoneNumber'),
+      dataIndex: 'phoneNumber',
+      key: 'phoneNumber',
+    },
+    {
+      title: t('user.countryNumber'),
+      dataIndex: 'countryNumber',
+      key: 'countryNumber',
+    },
+    {
+      title: t('user.enable'),
+      dataIndex: 'enable',
+      key: 'enable',
+      render: (enable: boolean, record: any) => (
+        <Switch checked={enable} onChange={() => handleEnable(record)} disabled={loading} />
+      ),
+    },
+    {
+      title: t('user.actions'),
+      key: 'actions',
+      render: (_: any, record: any) => (
+        <Button
+          icon={<EditOutlined />}
+          size="small"
+          onClick={() => handleEdit(record)}
+          disabled={loading}
+          type="link"
+        />
+      ),
+    },
+  ];
+
   return (
-    <Box p={2}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <h2>{t('user.title')}</h2>
-        <Button variant="contained" onClick={handleAdd}>{t('user.add')}</Button>
-      </Box>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>{t('user.userName')}</TableCell>
-              <TableCell>{t('user.name')}</TableCell>
-              <TableCell>{t('user.phoneNumber')}</TableCell>
-              <TableCell>{t('user.countryNumber')}</TableCell>
-              <TableCell>{t('user.enable')}</TableCell>
-              <TableCell>{t('user.actions')}</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {loading ? (
-              <TableRow><TableCell colSpan={7} align="center">{t('user.loading')}</TableCell></TableRow>
-            ) : data.length === 0 ? (
-              <TableRow><TableCell colSpan={7}>{t('user.noData')}</TableCell></TableRow>
-            ) : (
-              data.map(item => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.userName}</TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.phoneNumber}</TableCell>
-                  <TableCell>{item.countryNumber}</TableCell>
-                  <TableCell>
-                    <Switch checked={item.enable} onChange={() => handleEnable(item)} disabled={loading} />
-                  </TableCell>
-                  <TableCell>
-                    <IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        component="div"
-        count={total}
-        page={pageIndex}
-        onPageChange={(_, newPage) => setPageIndex(newPage)}
-        rowsPerPage={pageSize}
-        onRowsPerPageChange={e => { setPageSize(Number(e.target.value)); setPageIndex(0); }}
-        rowsPerPageOptions={[10, 20, 50]}
-        labelRowsPerPage={t('common.rowsPerPage')}
+    <div style={{ padding: 16 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <Typography.Title level={4} style={{ margin: 0 }}>{t('user.title')}</Typography.Title>
+        <Button type="primary" onClick={handleAdd}>{t('user.add')}</Button>
+      </div>
+      <Table
+        columns={columns}
+        dataSource={data}
+        rowKey="id"
+        loading={loading}
+        pagination={false}
+        locale={{
+          emptyText: loading ? t('user.loading') : t('user.noData'),
+        }}
       />
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
+        <Pagination
+          current={pageIndex + 1}
+          pageSize={pageSize}
+          total={total}
+          showSizeChanger
+          pageSizeOptions={[10, 20, 50]}
+          onChange={(page, size) => { setPageIndex(page - 1); setPageSize(size); }}
+          showTotal={total => `${t('common.rowsPerPage')}: ${total}`}
+        />
+      </div>
       <UserFormDialog
         open={dialogOpen}
         onClose={() => { setDialogOpen(false); setEditingUser(null); }}
@@ -135,7 +141,7 @@ const UserPage: React.FC = () => {
         setForm={f => setEditingUser(f as any)}
         editingId={editingUser?.id || null}
       />
-    </Box>
+    </div>
   );
 };
 
