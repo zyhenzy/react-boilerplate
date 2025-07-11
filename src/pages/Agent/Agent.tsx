@@ -118,7 +118,6 @@ const AgentPage: React.FC = () => {
         open={dialogOpen}
         onClose={() => { setDialogOpen(false); setEditingAgent(null); }}
         onSubmit={(e) => {
-          e.preventDefault();
           if (!editingAgent?.name || !editingAgent?.contact) return;
           handleSubmit(editingAgent as Partial<Agent>);
         }}
