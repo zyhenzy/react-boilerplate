@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { zhCN as pickersZhCN, enUS as pickersEnUS } from '@mui/x-date-pickers/locales';
+import { ConfigProvider } from 'antd';
 
 const theme = createTheme({
     palette: {
@@ -96,11 +97,20 @@ function RootApp() {
   };
   return (
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={i18n.language === 'zh' ? 'zh-cn' : 'en'} localeText={getLocaleText()}>
-          <App />
-        </LocalizationProvider>
-      </ThemeProvider>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: '#135BAC', // 可自定义主题色
+            // colorPrimary: '#06BA85', // 可自定义主题色
+          },
+        }}
+      >
+        <ThemeProvider theme={theme}>
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={i18n.language === 'zh' ? 'zh-cn' : 'en'} localeText={getLocaleText()}>
+            <App />
+          </LocalizationProvider>
+        </ThemeProvider>
+      </ConfigProvider>
     </Provider>
   );
 }
