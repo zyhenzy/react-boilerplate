@@ -1,20 +1,12 @@
 import React, { useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import { Modal, Form, Input, Select, Button, Checkbox } from 'antd';
 import { useTranslation } from 'react-i18next';
 import type { Supplier } from '../../../api/supplier/types';
-import {getCityOptions, getImage, uploadImage} from '../../../api/basic';
-import {Box, FormControl} from '@mui/material';
-import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import Autocomplete from "@mui/material/Autocomplete";
-import {useSelector} from "react-redux";
-import type {IOption} from "../../../api/basic/types";
+import { getCityOptions, getImage, uploadImage } from '../../../api/basic';
+import { useSelector } from 'react-redux';
+import type { IOption } from '../../../api/basic/types';
+
+const { Option } = Select;
 
 interface SupplierFormDialogProps {
   open: boolean;
@@ -32,12 +24,13 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
     currency: initialValues?.currency || '',
     enable: initialValues?.enable ?? true,
     logoId: initialValues?.logoId || '',
+    countryCode: initialValues?.countryCode || '',
+    cityCode: initialValues?.cityCode || '',
   });
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const [previewOpen, setPreviewOpen] = useState(false);
   const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
-  const [cityOptions,setCityOptions] = useState<any[]>([])
+  const [cityOptions, setCityOptions] = useState<any[]>([]);
 
   React.useEffect(() => {
     setForm({
@@ -47,6 +40,8 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
       currency: initialValues?.currency || '',
       enable: initialValues?.enable ?? true,
       logoId: initialValues?.logoId || '',
+      countryCode: initialValues?.countryCode || '',
+      cityCode: initialValues?.cityCode || '',
     });
   }, [initialValues, open]);
 
@@ -74,173 +69,61 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // 保证 id 字段传递
+  const handleCountryChange = (value: string) => {
+    setCityOptions([]);
+    setForm(f => ({ ...f, countryCode: value, cityCode: '' }));
+    if (value) {
+      getCityOptions(value).then(res => setCityOptions(res));
+    }
+  };
+
+  const handleSubmit = () => {
     onSubmit(form as Supplier);
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
-      <form onSubmit={handleSubmit}>
-        <DialogTitle>{initialValues ? t('supplier.edit') : t('supplier.add')}</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label={t('supplier.name')}
-            fullWidth
-            value={form.name}
-            onChange={e => handleChange('name', e.target.value)}
-            required
-            inputProps={{ maxLength: 50 }}
-          />
-          <TextField
-            margin="dense"
-            label={t('supplier.contact')}
-            fullWidth
-            value={form.contact}
-            onChange={e => handleChange('contact', e.target.value)}
-            required
-            inputProps={{ maxLength: 50 }}
-          />
-
-
+    <Modal open={open} onCancel={onClose} footer={null} title={initialValues ? t('supplier.edit') : t('supplier.add')} destroyOnClose>
+      <Form initialValues={form} onFinish={handleSubmit} layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
+        <Form.Item label={t('supplier.name')} name="name" rules={[{ required: true, message: t('supplier.name') + t('common.required') }]}> <Input value={form.name} onChange={e => handleChange('name', e.target.value)} maxLength={50} /> </Form.Item>
+        <Form.Item label={t('supplier.contact')} name="contact" rules={[{ required: true, message: t('supplier.contact') + t('common.required') }]}> <Input value={form.contact} onChange={e => handleChange('contact', e.target.value)} maxLength={50} /> </Form.Item>
+        <Form.Item label={t('common.country')} required>
           <div style={{ display: 'flex', gap: 8 }}>
-            <FormControl style={{ minWidth: 120 }} margin="dense">
-              <Autocomplete
-                  options={countryCodeOptions}
-                  getOptionLabel={opt => opt.label || ''}
-                  value={countryCodeOptions.find(opt => opt.value === form.countryCode) || null}
-                  onChange={(_, newValue) => {
-                    setCityOptions([]);
-                    setForm(f => ({ ...f, country: newValue ? newValue.value : '' }));
-                    if (newValue) {
-                      getCityOptions(newValue.value).then(res => setCityOptions(res));
-                    }
-                  }}
-                  renderInput={(params) => (
-                      <TextField {...params} label={t('common.country')} margin="dense" />
-                  )}
-                  isOptionEqualToValue={(option, value) => option.value === value.value}
-              />
-            </FormControl>
-            <FormControl style={{ flex: 1 }} margin="dense">
-              <Autocomplete
-                  options={cityOptions}
-                  getOptionLabel={opt => opt.label || ''}
-                  value={cityOptions.find(opt => opt.value === form.cityCode) || null}
-                  onChange={(_, newValue) => setForm(f => ({ ...f, cityCode: newValue ? newValue.value : '' }))}
-                  renderInput={(params) => (
-                      <TextField {...params} label={t('common.city')} margin="dense" />
-                  )}
-                  isOptionEqualToValue={(option, value) => option.value === value.value}
-                  disabled={cityOptions.length === 0}
-              />
-            </FormControl>
+            <Form.Item name="countryCode" rules={[{ required: true, message: t('common.country') + t('common.required') }]} noStyle>
+              <Select showSearch optionFilterProp="children" placeholder={t('common.country')} style={{ width: 160 }} value={form.countryCode} onChange={handleCountryChange}>
+                {countryCodeOptions.map(option => (
+                  <Option key={option.value} value={option.value}>{option.label}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name="cityCode" rules={[{ required: true, message: t('common.city') + t('common.required') }]} noStyle>
+              <Select showSearch optionFilterProp="children" placeholder={t('common.city')} disabled={cityOptions.length === 0} style={{ width: 'calc(100% - 168px)' }} value={form.cityCode} onChange={value => handleChange('cityCode', value)}>
+                {cityOptions.map(option => (
+                  <Option key={option.value} value={option.value}>{option.label}</Option>
+                ))}
+              </Select>
+            </Form.Item>
           </div>
-
-          <TextField
-            margin="dense"
-            label={t('supplier.currency')}
-            fullWidth
-            value={form.currency}
-            onChange={e => handleChange('currency', e.target.value)}
-            inputProps={{ maxLength: 10 }}
-          />
-          <Box mb={2} display="flex" alignItems="center" justifyContent="center">
+        </Form.Item>
+        <Form.Item label={t('supplier.currency')} name="currency"> <Input value={form.currency} onChange={e => handleChange('currency', e.target.value)} maxLength={10} /> </Form.Item>
+        <Form.Item label={t('supplier.logo')} name="logoId">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             {form.logoId ? (
-              <Box
-                sx={{
-                  width: 300,
-                  height: 300,
-                  borderRadius: 2,
-                  overflow: 'hidden',
-                  boxShadow: 1,
-                  border: '2px solid #e0e0e0',
-                  cursor: 'pointer',
-                  transition: 'box-shadow 0.2s',
-                  '&:hover': {
-                    boxShadow: 4,
-                    borderColor: '#1976d2',
-                  },
-                  m: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: '#fafafa',
-                  position: 'relative',
-                }}
-                onClick={() => {
-                  document.getElementById('logo-upload-input')?.click();
-                }}
-                title={t('supplier.changeAvatar')}
-              >
-                <img
-                  src={getImage(form.logoId)}
-                  alt="logo"
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
-                />
-                <Button
-                  size="small"
-                  sx={{ position: 'absolute', right: 8, bottom: 8, minWidth: 0, p: 0.5, bgcolor: 'rgba(0,0,0,0.5)', color: '#fff', borderRadius: '50%' }}
-                  onClick={e => { e.stopPropagation(); setPreviewOpen(true); }}
-                  title="放大预览"
-                >
-                  <ZoomInIcon fontSize="small" />
-                </Button>
-              </Box>
-            ) : (
-              <Button
-                variant="outlined"
-                component="label"
-                disabled={uploading}
-                size="large"
-                sx={{ height: 300, width: 300, borderRadius: 2, minWidth: 0, p: 0, ml: 0, m: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fafafa' }}
-              >
-                <span style={{ fontSize: 16, color: '#888', textAlign: 'center', width: '100%' }}>{uploading ? t('supplier.uploading') : t('supplier.upload')}</span>
-                <input
-                  id="logo-upload-input"
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={handleFileChange}
-                />
-              </Button>
-            )}
-            <input
-              id="logo-upload-input"
-              type="file"
-              accept="image/*"
-              hidden
-              style={{ display: 'none' }}
-              onChange={handleFileChange}
-            />
-            {uploadError && <span style={{ color: 'red', marginLeft: 16, fontSize: 13 }}>{uploadError}</span>}
-          </Box>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={!!form.enable}
-                onChange={e => handleChange('enable', e.target.checked)}
-                color="primary"
-              />
-            }
-            label={t('supplier.enable')}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose} color="secondary">{t('common.cancel')}</Button>
-          <Button type="submit" variant="contained" color="primary">{initialValues ? t('common.update') : t('common.confirm')}</Button>
-        </DialogActions>
-      </form>
-      <Dialog open={previewOpen} onClose={() => setPreviewOpen(false)} maxWidth="xl">
-        <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', bgcolor: '#222' }}>
-          <img src={getImage(form.logoId as string)} alt={t('supplier.upload') as string} style={{ width: '80vw', height: '80vh', background: '#fff', borderRadius: 8 }} />
-          <Button onClick={() => setPreviewOpen(false)} sx={{ mt: 2 }} variant="contained">{t('common.close')}</Button>
-        </Box>
-      </Dialog>
-    </Dialog>
+              <img src={getImage(form.logoId)} alt="logo" style={{ width: 80, height: 80, objectFit: 'contain', borderRadius: 8, border: '1px solid #eee' }} />
+            ) : null}
+            <Button type="primary" onClick={() => document.getElementById('logo-upload-input')?.click()} loading={uploading}>{t('supplier.upload')}</Button>
+            <input id="logo-upload-input" type="file" accept="image/*" hidden onChange={handleFileChange} />
+            {uploadError && <span style={{ color: 'red', fontSize: 13 }}>{uploadError}</span>}
+          </div>
+        </Form.Item>
+        <Form.Item name="enable" valuePropName="checked">
+          <Checkbox checked={!!form.enable} onChange={e => handleChange('enable', e.target.checked)}>{t('supplier.enable')}</Checkbox>
+        </Form.Item>
+        <Form.Item style={{ textAlign: 'right', marginBottom: 0 }}>
+          <Button onClick={onClose} style={{ marginRight: 8 }}>{t('common.cancel')}</Button>
+          <Button type="primary" htmlType="submit">{initialValues ? t('common.update') : t('common.confirm')}</Button>
+        </Form.Item>
+      </Form>
+    </Modal>
   );
 };
 

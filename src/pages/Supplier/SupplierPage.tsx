@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { getSupplierList, createSupplier, updateSupplier, enableSupplier } from '../../api/supplier';
 import type { Supplier } from '../../api/supplier/types';
 import SupplierFormDialog from './components/SupplierFormDialog';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TablePagination, Box } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import Switch from '@mui/material/Switch';
+import { Table, Button, Switch, Pagination, Typography } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 
 const SupplierPage: React.FC = () => {
@@ -33,13 +31,9 @@ const SupplierPage: React.FC = () => {
     fetchData();
   }, [pageIndex, pageSize]);
 
-  const handlePageChange = (_: unknown, newPage: number) => {
-    setPageIndex(newPage);
-  };
-
-  const handleRowsPerPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPageSize(Number(e.target.value));
-    setPageIndex(0);
+  const handlePageChange = (page: number, size?: number) => {
+    setPageIndex(page - 1);
+    if (size) setPageSize(size);
   };
 
   const handleAdd = async (values: Omit<Supplier, 'id'>) => {
@@ -65,66 +59,68 @@ const SupplierPage: React.FC = () => {
     setData(prevData => prevData.map(item => item.id === supplier.id ? { ...item, enable: !item.enable } : item));
   };
 
+  const columns = [
+    { title: t('supplier.name'), dataIndex: 'name', key: 'name' },
+    { title: t('supplier.contact'), dataIndex: 'contact', key: 'contact' },
+    { title: t('supplier.currency'), dataIndex: 'currency', key: 'currency' },
+    {
+      title: t('supplier.enable'),
+      dataIndex: 'enable',
+      key: 'enable',
+      render: (enable: boolean, record: Supplier) => (
+        <Switch checked={enable} onChange={() => handleEnable(record)} disabled={loading} />
+      ),
+    },
+    {
+      title: t('supplier.actions'),
+      key: 'actions',
+      render: (_: any, record: Supplier) => (
+        <Button
+          icon={<EditOutlined />}
+          size="small"
+          onClick={() => handleEdit(record)}
+          disabled={loading}
+          type="link"
+        />
+      ),
+    },
+  ];
+
   return (
-    <Box p={1}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-        <h2>{t('supplier.title')}</h2>
-        <Button variant="contained" onClick={() => { setEditingSupplier(null); setDialogOpen(true); }}>{t('supplier.add')}</Button>
-      </Box>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>{t('supplier.name')}</TableCell>
-              <TableCell>{t('supplier.contact')}</TableCell>
-              <TableCell>{t('supplier.currency')}</TableCell>
-              <TableCell>{t('supplier.enable')}</TableCell>
-              <TableCell>{t('supplier.actions')}</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {loading ? (
-              <TableRow><TableCell colSpan={5} align="center">{t('supplier.loading')}</TableCell></TableRow>
-            ) : data.length === 0 ? (
-              <TableRow><TableCell colSpan={5}>{t('supplier.noData')}</TableCell></TableRow>
-            ) : (
-              data.map(item => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.contact}</TableCell>
-                  <TableCell>{item.currency}</TableCell>
-                  <TableCell>
-                    <Switch checked={item.enable} onChange={() => handleEnable(item)} disabled={loading} />
-                  </TableCell>
-                  <TableCell>
-                    <IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        component="div"
-        count={total}
-        page={pageIndex}
-        onPageChange={handlePageChange}
-        rowsPerPage={pageSize}
-        onRowsPerPageChange={handleRowsPerPageChange}
-        rowsPerPageOptions={[10, 20, 50]}
-        labelRowsPerPage={t('common.rowsPerPage')}
+    <div style={{ padding: 8 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+        <Typography.Title level={4} style={{ margin: 0 }}>{t('supplier.title')}</Typography.Title>
+        <Button type="primary" onClick={() => { setEditingSupplier(null); setDialogOpen(true); }}>{t('supplier.add')}</Button>
+      </div>
+      <Table
+        columns={columns}
+        dataSource={data}
+        rowKey="id"
+        loading={loading}
+        pagination={false}
+        locale={{
+          emptyText: loading ? t('supplier.loading') : t('supplier.noData'),
+        }}
       />
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8 }}>
+        <Pagination
+          current={pageIndex + 1}
+          pageSize={pageSize}
+          total={total}
+          showSizeChanger
+          pageSizeOptions={[10, 20, 50]}
+          onChange={handlePageChange}
+          showTotal={total => `${t('common.rowsPerPage')}: ${total}`}
+        />
+      </div>
       <SupplierFormDialog
         open={dialogOpen}
         onClose={() => { setDialogOpen(false); setEditingSupplier(null); }}
         onSubmit={editingSupplier ? handleUpdate : handleAdd}
         initialValues={editingSupplier || undefined}
       />
-    </Box>
+    </div>
   );
 };
 
 export default SupplierPage;
-
-
