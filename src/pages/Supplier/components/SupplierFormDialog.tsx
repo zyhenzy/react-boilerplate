@@ -32,6 +32,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
   const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
   const productOptions = useSelector((state: any) => state.options.productOptions) || [];
   const [cityOptions, setCityOptions] = useState<any[]>([]);
+  const [formInstance] = Form.useForm();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>(form.logoId ? [{
@@ -66,10 +67,6 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
     }
   };
 
-  const handleSubmit = () => {
-    onSubmit(form as Supplier);
-  };
-
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview && file.originFileObj) {
       const reader = new FileReader();
@@ -89,31 +86,39 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
   };
 
   return (
-    <Modal open={open} onCancel={onClose} footer={null} title={initialValues ? t('supplier.edit') : t('supplier.add')} destroyOnClose>
-      <Form initialValues={form} onFinish={handleSubmit} layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
+    <Modal open={open} onCancel={onClose} footer={null} title={initialValues ? t('supplier.edit') : t('supplier.add')}>
+      <Form
+        form={formInstance}
+        initialValues={form}
+        onFinish={values => {
+          setForm((f: any) => ({ ...f, ...values }));
+          onSubmit({ ...form, ...values });
+        }}
+        layout="horizontal"
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 18 }}
+      >
         <Form.Item label={t('supplier.name')} name="name" rules={[{ required: true, message: t('supplier.name') + t('common.required') }]}>
           <Input value={form.name} maxLength={50} />
         </Form.Item>
         <Form.Item label={t('supplier.contact')} name="contact" rules={[{ required: true, message: t('supplier.contact') + t('common.required') }]}>
           <Input value={form.contact} maxLength={50} />
         </Form.Item>
-        <Form.Item label={t('common.country')} required>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <Form.Item name="countryCode" rules={[{ required: true, message: t('common.country') + t('common.required') }]} noStyle>
-              <Select showSearch optionFilterProp="children" placeholder={t('common.country')} style={{ width: 160 }} value={form.countryCode} onChange={handleCountryChange}>
-                {countryCodeOptions.map(option => (
-                  <Option key={option.value} value={option.value}>{option.label}</Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item name="cityCode" rules={[{ required: true, message: t('common.city') + t('common.required') }]} noStyle>
-              <Select showSearch optionFilterProp="children" placeholder={t('common.city')} disabled={cityOptions.length === 0} style={{ width: 'calc(100% - 168px)' }} value={form.cityCode} onChange={value => handleChange('cityCode', value)}>
-                {cityOptions.map(option => (
-                  <Option key={option.value} value={option.value}>{option.label}</Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </div>
+        {/* 国家 */}
+        <Form.Item label={t('common.country')} name="countryCode" rules={[{ required: true, message: t('common.country') + t('common.required') }]}>
+          <Select showSearch optionFilterProp="children" placeholder={t('common.country')} style={{ width: 160 }} onChange={handleCountryChange}>
+            {countryCodeOptions.map(option => (
+              <Option key={option.value} value={option.value}>{option.label}</Option>
+            ))}
+          </Select>
+        </Form.Item>
+        {/* 城市 */}
+        <Form.Item label={t('common.city')} name="cityCode" rules={[{ required: true, message: t('common.city') + t('common.required') }]}>
+          <Select showSearch optionFilterProp="children" placeholder={t('common.city')} disabled={cityOptions.length === 0}>
+            {cityOptions.map(option => (
+              <Option key={option.value} value={option.value}>{option.label}</Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item label={t('supplier.currency')} name="currency">
           <Input value={form.currency} maxLength={10} />
@@ -166,14 +171,15 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                   formData.append('id', String(form.id));
                 }
                 const imageId = await uploadImage(formData);
+                console.log(imageId)
                 setForm(f => ({ ...f, logoId: imageId }));
                 setFileList([{ uid: '-1', name: 'logo.png', status: 'done', url: getImage(imageId) }]);
                 onSuccess && onSuccess({ imageId });
-                message.success(t('supplier.uploadSuccess'));
+                message.success(t('common.uploadSuccess'));
               } catch (err: any) {
                 setUploadError(err?.message || '上传失败');
                 onError && onError(err);
-                message.error(t('supplier.uploadFail'));
+                message.error(t('common.uploadFail'));
               }
             }}
             accept="image/*"

@@ -28,7 +28,9 @@
     "country": "国家",
     "city": "城市",
     "required": "必填",
-    "remark": "备注"
+    "remark": "备注",
+    "uploadSuccess": "上传成功",
+    "uploadFail": "上传失败"
   },
   "user": {
     "title": "用户管理",
