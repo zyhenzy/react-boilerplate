@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dialog,
   DialogActions,
@@ -16,6 +16,9 @@ import type { Customer } from '../../../api/customer/types';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
+import Autocomplete from "@mui/material/Autocomplete";
+import {getCityOptions} from "../../../api/basic";
+import type {IOption} from "../../../api/basic/types";
 
 interface CustomerFormDialogProps {
   open: boolean;
@@ -35,7 +38,9 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
   editingId
 }) => {
   const { t } = useTranslation();
-  const countryOptions = useSelector((state: RootState) => state.options.countryOptions);
+  const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
+  const productsOptions = useSelector((state: any) => state.options.productOptions) as IOption[];
+  const [cityOptions,setCityOptions] = useState<any[]>([])
 
   useEffect(() => {
     if (form.enable === undefined) {
@@ -58,31 +63,48 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
             required
             inputProps={{ maxLength: 50 }}
           />
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 8 }}>
-            <FormControl style={{ minWidth: 120 }}>
-              <InputLabel id="countryCode-label">{t('customer.countryCode')}</InputLabel>
-              <Select
-                labelId="countryCode-label"
-                label={t('customer.countryCode')}
-                value={form.countryCode || ''}
-                onChange={e => setForm(f => ({ ...f, countryCode: e.target.value }))}
-                displayEmpty
-              >
-                {countryOptions.map(option => (
-                  <MenuItem key={option.value} value={option.value}>{option.label}（{option.value}）</MenuItem>
-                ))}
-              </Select>
+
+          <div style={{ display: 'flex', gap: 8 }}>
+            <FormControl style={{ minWidth: 150 }} margin="dense">
+              <Autocomplete
+                  options={countryCodeOptions}
+                  getOptionLabel={opt => opt.label || ''}
+                  value={countryCodeOptions.find(opt => opt.value === form.countryCode) || null}
+                  onChange={(_, newValue) => {
+                    setCityOptions([]);
+                    setForm(f => ({ ...f, countryCode: newValue ? newValue.value : '' }));
+                    if (newValue) {
+                      getCityOptions(newValue.value).then(res => setCityOptions(res));
+                    }
+                  }}
+                  renderInput={(params) => (
+                      <TextField {...params} label={t('common.country')} margin="dense" />
+                  )}
+                  isOptionEqualToValue={(option, value) => option.value === value.value}
+              />
             </FormControl>
-            <TextField
-              margin="dense"
-              label={t('customer.contact')}
-              value={form.contact || ''}
-              onChange={e => setForm(f => ({ ...f, contact: e.target.value }))}
-              required
-              inputProps={{ maxLength: 50 }}
-              style={{ flex: 1 }}
-            />
+            <FormControl style={{ flex: 1 }} margin="dense">
+              <Autocomplete
+                  options={cityOptions}
+                  getOptionLabel={opt => opt.label || ''}
+                  value={cityOptions.find(opt => opt.value === form.cityCode) || null}
+                  onChange={(_, newValue) => setForm(f => ({ ...f, cityCode: newValue ? newValue.value : '' }))}
+                  renderInput={(params) => (
+                      <TextField {...params} label={t('common.city')} margin="dense" />
+                  )}
+                  isOptionEqualToValue={(option, value) => option.value === value.value}
+                  disabled={cityOptions.length === 0}
+              />
+            </FormControl>
           </div>
+          <TextField
+            margin="dense"
+            label={t('customer.contact')}
+            fullWidth
+            value={form.contact || ''}
+            onChange={e => setForm(f => ({ ...f, contact: e.target.value }))}
+            required
+          />
           <TextField
             margin="dense"
             label={t('customer.currency')}
@@ -107,6 +129,40 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
             onChange={e => setForm(f => ({ ...f, invoiceTaxNumber: e.target.value }))}
             inputProps={{ maxLength: 50 }}
           />
+          <TextField
+              select
+              margin="dense"
+              label={t('customer.serviceFeeCountType')}
+              fullWidth
+              value={form.serviceFeeCountType}
+              onChange={e => setForm(f => ({ ...f, serviceFeeCountType: Number(e.target.value) }))}
+          >
+            <MenuItem value={0}>{t('customer.serviceFeeCountType_full')}</MenuItem>
+            <MenuItem value={1}>{t('customer.serviceFeeCountType_ticket')}</MenuItem>
+          </TextField>
+          <TextField
+              margin="dense"
+              label={t('customer.serviceFeeRatio')}
+              type="number"
+              fullWidth
+              value={form.serviceFeeRatio ?? ''}
+              onChange={e => setForm(f => ({ ...f, serviceFeeRatio: Number(e.target.value) }))}
+              inputProps={{ min: 0, step: 0.01 }}
+          />
+          <TextField
+              select
+              margin="dense"
+              label={t('customer.products')}
+              fullWidth
+              SelectProps={{ multiple: true }}
+              value={form.products || []}
+              onChange={e => setForm(f => ({ ...f, products: e.target.value as unknown as string[] }))}
+          >
+            {productsOptions.map(opt => (
+                <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+            ))}
+          </TextField>
+
           <div style={{marginTop: 8}}>
             <label style={{display: 'flex', alignItems: 'center'}}>
               <span style={{marginRight: 8}}>{t('customer.enable')}</span>

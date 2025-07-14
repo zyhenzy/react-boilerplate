@@ -75,7 +75,12 @@
     "add": "新增客户",
     "edit": "编辑客户",
     "noData": "暂无数据",
-    "loading": "加载中..."
+    "loading": "加载中...",
+    "serviceFeeCountType": "服务费计算方式",
+    "serviceFeeCountType_full": "全价",
+    "serviceFeeCountType_ticket": "仅票价",
+    "serviceFeeRatio": "服务费比例",
+    "products": "产品"
   },
   "supplier": {
     "title": "供应商管理",

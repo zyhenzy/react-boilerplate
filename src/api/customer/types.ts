@@ -4,10 +4,14 @@ export interface Customer {
   name: string; // 名称，必填，最大50
   contact: string; // 联系方式，必填，最大50
   countryCode?: string | null; // 国家代码，可空，最大2
+  cityCode?: string | null; // 城市代码
   currency?: string | null; // 币种，可空，最大3
   invoiceHeader?: string | null; // 发票抬头，可空，最大50
   invoiceTaxNumber?: string | null; // 发票税号，可空，最大50
   enable: boolean; // 启用
+  products: string[]; // 关联产品ID列表
+  serviceFeeCountType:number; // 服务费计算方式（全价/仅票价）0|1
+  serviceFeeRatio:number; // 服务费比例
 }
 
 // Customer列表查询参数，对应后端接口Query参数
