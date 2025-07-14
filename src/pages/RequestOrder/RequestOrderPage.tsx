@@ -109,7 +109,7 @@ const RequestOrderPage: React.FC = () => {
       pnr: values.pnr ?? undefined,
       bookerName: values.bookerName ?? undefined,
       bookerContact: values.bookerContact ?? undefined,
-      rateBooking: Number(values.rateBooking) ?? undefined,
+      adjustmentValue: Number(values.adjustmentValue) ?? undefined,
       changeRule: values.changeRule ?? undefined,
       refundRule: values.refundRule ?? undefined,
       originalTicketFee: Number(values.originalTicketFee) ?? undefined,

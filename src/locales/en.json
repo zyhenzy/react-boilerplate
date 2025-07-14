@@ -162,7 +162,7 @@
     "status_3": "Ticketed",
     "supplier": "Supplier",
     "currencyBooking": "Booking Currency",
-    "rateBooking": "Exchange Rate",
+    "adjustmentValue": "Exchange Rate",
     "changeRule": "Change Rule",
     "refundRule": "Refund Rule",
     "originalTicketFee": "Original Ticket Price",

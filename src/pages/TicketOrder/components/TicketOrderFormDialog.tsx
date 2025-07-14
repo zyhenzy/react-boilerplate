@@ -248,11 +248,11 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
             </FormControl>
             <TextField
                 margin="dense"
-                label={t('ticketOrder.rateBooking')}
+                label={t('ticketOrder.adjustmentValue')}
                 fullWidth
                 type="number"
-                value={form.rateBooking || ''}
-                onChange={e => setForm(f => ({ ...f, rateBooking: e.target.value }))}
+                value={form.adjustmentValue || ''}
+                onChange={e => setForm(f => ({ ...f, adjustmentValue: e.target.value }))}
             />
             <TextField
                 margin="dense"

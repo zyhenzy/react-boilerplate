@@ -40,6 +40,26 @@ export function getProductOptions(){
   return http.get<IOption[]>('/v1/Data/productOptions');
 }
 
+// 航司下拉
+export function getAirlineOptions(){
+  return http.get<IOption[]>('/v1/Data/airlineOptions');
+}
+
+// 机场下拉
+export function getAirportOptions(){
+  return http.get<IOption[]>('/v1/Data/airportOptions');
+}
+
+// 舱位等级
+export function getClassTypeOptions(){
+  return http.get<IOption[]>('/v1/Data/classTypeOptions');
+}
+
+// 餐食
+export function getMealsOptions(){
+  return http.get<IOption[]>('/v1/Data/mealsOptions');
+}
+
 // 上传图片接口，支持自定义 headers
 export function uploadImage(formData: FormData) {
   return http.post<string>('/v1/Image/upload', formData, {

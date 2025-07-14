@@ -5,7 +5,12 @@ import {
   getRoleOptions,
   getCertificateOptions,
   getAgentOptions,
-  getCustomerOptions, getProductOptions
+  getCustomerOptions,
+  getProductOptions,
+  getAirlineOptions,
+  getAirportOptions,
+  getClassTypeOptions,
+  getMealsOptions
 } from '../api/basic';
 import { IOption } from '../api/basic/types';
 
@@ -37,6 +42,23 @@ export const fetchProductOptions = createAsyncThunk('options/fetchProductOptions
   return await getProductOptions();
 });
 
+export const fetchAirlineOptions = createAsyncThunk('options/fetchAirlineOptions', async () => {
+  return await getAirlineOptions();
+});
+
+export const fetchAirportOptions = createAsyncThunk('options/fetchAirportOptions', async () => {
+  return await getAirportOptions();
+});
+
+export const fetchClassTypeOptions = createAsyncThunk('options/fetchClassTypeOptions', async () => {
+  return await getClassTypeOptions();
+});
+
+export const fetchMealsOptions = createAsyncThunk('options/fetchMealsOptions', async () => {
+  return await getMealsOptions();
+});
+
+
 interface OptionsState {
   countryOptions: IOption[];
   countryCodeOptions: IOption[];
@@ -45,6 +67,10 @@ interface OptionsState {
   agentOptions: IOption[];
   customerOptions: IOption[];
   productOptions: IOption[];
+  airlineOptions: IOption[];
+  airportOptions: IOption[];
+  classTypeOptions: IOption[];
+  mealsOptions: IOption[];
 }
 
 const initialState: OptionsState = {
@@ -55,6 +81,10 @@ const initialState: OptionsState = {
   agentOptions: [],
   customerOptions: [],
   productOptions: [],
+  airlineOptions: [],
+  airportOptions: [],
+  classTypeOptions: [],
+  mealsOptions: []
 };
 
 const optionsSlice = createSlice({
@@ -83,7 +113,19 @@ const optionsSlice = createSlice({
       })
       .addCase(fetchProductOptions.fulfilled, (state, action) => {
         state.productOptions = action.payload;
-      });
+      })
+      .addCase(fetchAirlineOptions.fulfilled, (state, action) => {
+        state.airlineOptions = action.payload;
+      })
+      .addCase(fetchAirportOptions.fulfilled, (state, action) => {
+        state.airportOptions = action.payload;
+      })
+      .addCase(fetchClassTypeOptions.fulfilled, (state, action) => {
+        state.classTypeOptions = action.payload;
+      })
+      .addCase(fetchMealsOptions.fulfilled, (state, action) => {
+        state.mealsOptions = action.payload;
+      })
   },
 });
 

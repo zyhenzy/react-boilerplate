@@ -4,6 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import dayjs from 'dayjs';
 import type { AddTicketOrderTripCommand } from '../../../api/ticket-order/types';
+import {userTypeOptions} from "../../../constants/userTypeOptions";
+import {useSelector} from "react-redux";
+import type {IOption} from "../../../api/basic/types";
+import Autocomplete from '@mui/material/Autocomplete';
 
 interface TripFormDialogProps {
   open: boolean;
@@ -15,6 +19,10 @@ interface TripFormDialogProps {
 const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSubmit, trip }) => {
   const { t, i18n } = useTranslation();
   const [form, setForm] = useState<AddTicketOrderTripCommand>({});
+  const airlineOptions = useSelector((state: any) => state.options.airlineOptions) as IOption[];
+  const airportOptions = useSelector((state: any) => state.options.airportOptions) as IOption[];
+  const classTypeOptions = useSelector((state: any) => state.options.classTypeOptions) as IOption[];
+  const mealsOptions = useSelector((state: any) => state.options.mealsOptions) as IOption[];
 
   useEffect(() => {
     setForm(trip || {});
@@ -25,13 +33,17 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
       <form onSubmit={e => { e.preventDefault(); onTripSubmit(form); }}>
         <DialogTitle>{trip ? t('ticketOrder.editTrip') : t('ticketOrder.addTrip')}</DialogTitle>
         <DialogContent>
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.airline')}
-            fullWidth
-            value={form.airline || ''}
-            onChange={e => setForm(f => ({ ...f, airline: e.target.value }))}
+          <Autocomplete
+            options={airlineOptions}
+            getOptionLabel={option => option.label || ''}
+            value={airlineOptions.find(opt => opt.value === form.airline) || null}
+            onChange={(_, newValue) => setForm(f => ({ ...f, airline: newValue ? newValue.value : '' }))}
+            renderInput={params => (
+              <TextField {...params} label={t('ticketOrder.airline')} margin="dense" fullWidth />
+            )}
+            isOptionEqualToValue={(option, value) => option.value === value.value}
           />
+
           <TextField
             margin="dense"
             label={t('ticketOrder.flight')}
@@ -94,12 +106,15 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               }}
             />
           </div>
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.depAirport')}
-            fullWidth
-            value={form.depAirport || ''}
-            onChange={e => setForm(f => ({ ...f, depAirport: e.target.value }))}
+          <Autocomplete
+              options={airportOptions}
+              getOptionLabel={option => option.label || ''}
+              value={airportOptions.find(opt => opt.value === form.depAirport) || null}
+              onChange={(_, newValue) => setForm(f => ({ ...f, depAirport: newValue ? newValue.value : '' }))}
+              renderInput={params => (
+                  <TextField {...params} label={t('ticketOrder.depAirport')} margin="dense" fullWidth />
+              )}
+              isOptionEqualToValue={(option, value) => option.value === value.value}
           />
           <TextField
               margin="dense"
@@ -108,12 +123,16 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               value={form.depTerminal || ''}
               onChange={e => setForm(f => ({ ...f, depTerminal: e.target.value }))}
           />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.arrAirport')}
-            fullWidth
-            value={form.arrAirport || ''}
-            onChange={e => setForm(f => ({ ...f, arrAirport: e.target.value }))}
+
+          <Autocomplete
+              options={airportOptions}
+              getOptionLabel={option => option.label || ''}
+              value={airportOptions.find(opt => opt.value === form.arrAirport) || null}
+              onChange={(_, newValue) => setForm(f => ({ ...f, arrAirport: newValue ? newValue.value : '' }))}
+              renderInput={params => (
+                  <TextField {...params} label={t('ticketOrder.arrAirport')} margin="dense" fullWidth />
+              )}
+              isOptionEqualToValue={(option, value) => option.value === value.value}
           />
           <TextField
               margin="dense"
@@ -123,12 +142,17 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               onChange={e => setForm(f => ({ ...f, arrTerminal: e.target.value }))}
           />
           <TextField
-            margin="dense"
-            label={t('ticketOrder.cabinLevel')}
-            fullWidth
-            value={form.cabinLevel || ''}
-            onChange={e => setForm(f => ({ ...f, cabinLevel: e.target.value }))}
-          />
+              margin="dense"
+              label={t('ticketOrder.cabinLevel')}
+              select
+              fullWidth
+              value={form.cabinLevel || ''}
+              onChange={e => setForm((f: any) => ({ ...f, cabinLevel: e.target.value }))}
+          >
+            {classTypeOptions.map(option => (
+                <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+            ))}
+          </TextField>
           <TextField
             margin="dense"
             label={t('ticketOrder.planCabinCode')}
@@ -161,12 +185,17 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             onChange={e => setForm(f => ({ ...f, aircraft: e.target.value }))}
           />
           <TextField
-            margin="dense"
-            label={t('ticketOrder.meals')}
-            fullWidth
-            value={form.meals || ''}
-            onChange={e => setForm(f => ({ ...f, meals: e.target.value }))}
-          />
+              margin="dense"
+              label={t('ticketOrder.meals')}
+              select
+              fullWidth
+              value={form.meals || ''}
+              onChange={e => setForm((f: any) => ({ ...f, meals: e.target.value }))}
+          >
+            {mealsOptions.map(option => (
+                <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+            ))}
+          </TextField>
           <TextField
             margin="dense"
             label={t('ticketOrder.luggageTransportationRule')}
@@ -181,6 +210,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             value={form.luggageHandRule || ''}
             onChange={e => setForm(f => ({ ...f, luggageHandRule: e.target.value }))}
           />
+
           <FormControl fullWidth margin="dense">
             <InputLabel shrink>{t('ticketOrder.stop')}</InputLabel>
             <Select
@@ -194,6 +224,25 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               <MenuItem value="false">{t('no')}</MenuItem>
             </Select>
           </FormControl>
+          {form.stop && <>
+            <Autocomplete
+              options={airportOptions}
+              getOptionLabel={option => option.label || ''}
+              value={airportOptions.find(opt => opt.value === form.stopAirport) || null}
+              onChange={(_, newValue) => setForm(f => ({ ...f, stopAirport: newValue ? newValue.value : '' }))}
+              renderInput={params => (
+                  <TextField {...params} label={t('ticketOrder.stopAirport')} margin="dense" fullWidth />
+              )}
+              isOptionEqualToValue={(option, value) => option.value === value.value}
+            />
+            <TimePicker
+                label={t('ticketOrder.stopTime')}
+                value={form.stopTime ? dayjs(form.stopTime, 'HH:mm') : null}
+                onChange={value => setForm(f => ({ ...f, stopTime: value ? value.format('HH:mm') : '' }))}
+                ampm={false}
+                slotProps={{ textField: { margin: 'dense', fullWidth: true } }}
+            />
+          </>}
           <TextField
             margin="dense"
             label={t('ticketOrder.remark')}
@@ -239,3 +288,5 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
 };
 
 export default TripFormDialog;
+
+

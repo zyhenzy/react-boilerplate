@@ -10,12 +10,10 @@ export enum TicketOrderStatus {
 
 // 机票订单实体
 export interface TicketOrder {
-  id?: string; // 订单ID
-  billNo?: string; // 订单号
-  bookerName?: string; // 预订人姓名
-  bookerContact?: string; // 预订人联系方式
-  rateBooking?: number|string; // 预定汇率
-  currencyBooking?:string; // 预定币种（只有在修改的时候有）
+  id?: string; // 订单ID fixme：确定下是否存在
+  billNo?: string; // 订单号，fixme：确定下是否存在
+  bookerName?: string; // 订票人
+  bookerContact?: string; // 订票人联系方式
   pnr?: string; // PNR
   changeRule?: string; // 改期规则
   refundRule?: string; // 退票规则
@@ -23,11 +21,16 @@ export interface TicketOrder {
   ticketFee?: number|string; // 票价
   taxFee?: number|string; // 税
   insuranceFee?: number|string; // 保险费
-  serviceFee?: number|string; // 服务费
   flightList?: AddTicketOrderTripCommand[]; // 航班集合
   passengerList?: AddTicketOrderPassengerCommand[]; // 乘客集合
   supplierId?: string; // 供应商ID
   customerId?: string; // 客户ID
+  adjustmentValue?: number|string; // 调整值
+  // 以下字段是修改用的
+  // payType?:string // 支付方式
+  issueTime?:string // 出票时间
+  currencyBooking?:string; // 预定币种（只有在修改的时候有）
+  serviceFee?: number|string; // 服务费
   status?: TicketOrderStatus; // 订单状态
   createdAt?: string; // 创建时间
   updatedAt?: string; // 更新时间
@@ -52,7 +55,7 @@ export interface TicketOrderQuery {
 export interface AddTicketOrderCommand {
   bookerName?: string;
   bookerContact?: string;
-  rateBooking?: number;
+  adjustmentValue?: number;
   pnr?: string;
   changeRule?: string;
   refundRule?: string;
@@ -76,7 +79,7 @@ export interface UpdateTicketOrderCommand {
   currency?: string;
   currencyBooking?: string; // 预定币种（只有在修改的时候有）
   currencyPay?: string;
-  rateBooking?: number;
+  adjustmentValue?: number;
   ratePay?: number;
   changeRule?: string;
   refundRule?: string;
@@ -139,6 +142,8 @@ export interface AddTicketOrderTripCommand {
   luggageTransportationRule?: string; // 行李托运规则
   luggageHandRule?: string; // 行李手提规则
   stop?: boolean; // 经停
+  stopAirport?: string; // 经停机场
+  stopTime?: string; // 经停时间
   remark?: string; // 备注
   // price?: number|string; // 价格
   // airportFee?: number|string; // 机建费
@@ -169,6 +174,8 @@ export interface UpdateTicketOrderTripCommand {
   luggageTransportationRule?: string;
   luggageHandRule?: string;
   stop?: boolean;
+  stopAirport?: string; // 经停机场
+  stopTime?: string; // 经停时间
   remark?: string;
   // price?: number;
   // airportFee?: number;
@@ -192,6 +199,8 @@ export interface AddTicketOrderPassengerCommand {
   countryNumber?: string; // 国家号码
   phoneNumber?: string; // 手机
   ticketNo?: string; // 票号
+  sex?:string // 性别
+  validity?:string // 证件有效期
 }
 
 // 修改乘客
@@ -206,6 +215,8 @@ export interface UpdateTicketOrderPassengerCommand {
   countryNumber?: string;
   phoneNumber?: string;
   ticketNo?: string;
+  sex?:string // 性别
+  validity?:string // 证件有效期
 }
 
 // 删除乘客

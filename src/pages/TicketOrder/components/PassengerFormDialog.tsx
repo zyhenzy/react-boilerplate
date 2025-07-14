@@ -62,6 +62,17 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
             value={form.certificateNo || ''}
             onChange={e => setForm(f => ({ ...f, certificateNo: e.target.value }))}
           />
+          <TextField
+            margin="dense"
+            label={t('ticketOrder.validity')}
+            type="date"
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            value={form.validity || ''}
+            onChange={e => setForm(f => ({ ...f, validity: e.target.value }))}
+          />
+
+
           <div style={{ display: 'flex', gap: 8 }}>
             <FormControl style={{ minWidth: 120 }} margin="dense">
               <InputLabel>{t('ticketOrder.countryNumber')}</InputLabel>
