@@ -125,6 +125,13 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
               <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
             ))}
           </TextField>
+          <TextField
+              margin="dense"
+              label={t('user.email')}
+              fullWidth
+              value={form.email || ''}
+              onChange={e => setForm((f: any) => ({ ...f, email: e.target.value }))}
+          />
           <FormControl fullWidth margin="dense">
             <InputLabel id="role-label">{t('user.role')}</InputLabel>
             <Select

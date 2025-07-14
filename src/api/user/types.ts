@@ -36,8 +36,8 @@ export interface IUser {
   createTime?: string;
   countryNumber: string;
   phoneNumber: string;
-  email:string;
   createUserName?: string;
+  email?:string;
   agentId?: string | null;
   role?: string[] | null;
   roles?: string[] | null; // fixme:查详情返回的是roles，新增的时候用的是role

@@ -38,6 +38,7 @@
     "agent": "代理",
     "customer": "客户",
     "sex": "性别",
+    "email": "邮箱",
     "role": "角色",
     "password": "密码",
     "enable": "启用",
