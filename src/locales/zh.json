@@ -90,7 +90,15 @@
     "loading": "加载中...",
     "upload": "营业执照",
     "uploading": "上传中...",
-    "changeAvatar": "点击更换图片"
+    "changeAvatar": "点击更换图片",
+    "bank": "银行",
+    "bankAddress": "银行地址",
+    "bankPostalCode": "银行邮政编码",
+    "bankSwiftCode": "银行SWIFT代码",
+    "bankAccount": "银行账号",
+    "bankAccountName": "银行账户名",
+    "remark": "备注",
+    "products": "产品"
   },
   "agentOrder": {
     "title": "代理人订单管理",

@@ -10,7 +10,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { useTranslation } from 'react-i18next';
 import type { Supplier } from '../../../api/supplier/types';
 import {getCityOptions, getImage, uploadImage} from '../../../api/basic';
-import {Box, FormControl} from '@mui/material';
+import {Box, FormControl, MenuItem} from '@mui/material';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import Autocomplete from "@mui/material/Autocomplete";
 import {useSelector} from "react-redux";
@@ -32,11 +32,22 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
     currency: initialValues?.currency || '',
     enable: initialValues?.enable ?? true,
     logoId: initialValues?.logoId || '',
+    countryCode: initialValues?.countryCode || '',
+    cityCode: initialValues?.cityCode || '',
+    bank: initialValues?.bank || '',
+    bankAddress: initialValues?.bankAddress || '',
+    bankPostalCode: initialValues?.bankPostalCode || '',
+    bankSwiftCode: initialValues?.bankSwiftCode || '',
+    bankAccount: initialValues?.bankAccount || '',
+    bankAccountName: initialValues?.bankAccountName || '',
+    remark: initialValues?.remark || '',
+    products: initialValues?.products || [],
   });
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
+  const productsOptions = useSelector((state: any) => state.options.productOptions) as IOption[];
   const [cityOptions,setCityOptions] = useState<any[]>([])
 
   React.useEffect(() => {
@@ -47,6 +58,16 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
       currency: initialValues?.currency || '',
       enable: initialValues?.enable ?? true,
       logoId: initialValues?.logoId || '',
+      countryCode: initialValues?.countryCode || '',
+      cityCode: initialValues?.cityCode || '',
+      bank: initialValues?.bank || '',
+      bankAddress: initialValues?.bankAddress || '',
+      bankPostalCode: initialValues?.bankPostalCode || '',
+      bankSwiftCode: initialValues?.bankSwiftCode || '',
+      bankAccount: initialValues?.bankAccount || '',
+      bankAccountName: initialValues?.bankAccountName || '',
+      remark: initialValues?.remark || '',
+      products: initialValues?.products || [],
     });
   }, [initialValues, open]);
 
@@ -104,8 +125,6 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             required
             inputProps={{ maxLength: 50 }}
           />
-
-
           <div style={{ display: 'flex', gap: 8 }}>
             <FormControl style={{ minWidth: 120 }} margin="dense">
               <Autocomplete
@@ -114,7 +133,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                   value={countryCodeOptions.find(opt => opt.value === form.countryCode) || null}
                   onChange={(_, newValue) => {
                     setCityOptions([]);
-                    setForm(f => ({ ...f, country: newValue ? newValue.value : '' }));
+                    setForm(f => ({ ...f, countryCode: newValue ? newValue.value : '' }));
                     if (newValue) {
                       getCityOptions(newValue.value).then(res => setCityOptions(res));
                     }
@@ -139,7 +158,6 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
               />
             </FormControl>
           </div>
-
           <TextField
             margin="dense"
             label={t('supplier.currency')}
@@ -148,86 +166,159 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             onChange={e => handleChange('currency', e.target.value)}
             inputProps={{ maxLength: 10 }}
           />
+          <TextField
+            margin="dense"
+            label={t('supplier.bank')}
+            fullWidth
+            value={form.bank}
+            onChange={e => handleChange('bank', e.target.value)}
+            inputProps={{ maxLength: 50 }}
+          />
+          <TextField
+            margin="dense"
+            label={t('supplier.bankAddress')}
+            fullWidth
+            value={form.bankAddress}
+            onChange={e => handleChange('bankAddress', e.target.value)}
+            inputProps={{ maxLength: 100 }}
+          />
+          <TextField
+            margin="dense"
+            label={t('supplier.bankPostalCode')}
+            fullWidth
+            value={form.bankPostalCode}
+            onChange={e => handleChange('bankPostalCode', e.target.value)}
+            inputProps={{ maxLength: 20 }}
+          />
+          <TextField
+            margin="dense"
+            label={t('supplier.bankSwiftCode')}
+            fullWidth
+            value={form.bankSwiftCode}
+            onChange={e => handleChange('bankSwiftCode', e.target.value)}
+            inputProps={{ maxLength: 20 }}
+          />
+          <TextField
+            margin="dense"
+            label={t('supplier.bankAccount')}
+            fullWidth
+            value={form.bankAccount}
+            onChange={e => handleChange('bankAccount', e.target.value)}
+            inputProps={{ maxLength: 30 }}
+          />
+          <TextField
+            margin="dense"
+            label={t('supplier.bankAccountName')}
+            fullWidth
+            value={form.bankAccountName}
+            onChange={e => handleChange('bankAccountName', e.target.value)}
+            inputProps={{ maxLength: 50 }}
+          />
+          <TextField
+            margin="dense"
+            label={t('supplier.remark')}
+            fullWidth
+            multiline
+            minRows={2}
+            value={form.remark}
+            onChange={e => handleChange('remark', e.target.value)}
+            inputProps={{ maxLength: 200 }}
+          />
+          <TextField
+            select
+            margin="dense"
+            label={t('supplier.products')}
+            fullWidth
+            SelectProps={{ multiple: true }}
+            value={form.products || []}
+            onChange={e => handleChange('products', e.target.value)}
+          >
+            {productsOptions.map(opt => (
+                <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+            ))}
+          </TextField>
+
           <Box mb={2} display="flex" alignItems="center" justifyContent="center">
             {form.logoId ? (
-              <Box
-                sx={{
-                  width: 300,
-                  height: 300,
-                  borderRadius: 2,
-                  overflow: 'hidden',
-                  boxShadow: 1,
-                  border: '2px solid #e0e0e0',
-                  cursor: 'pointer',
-                  transition: 'box-shadow 0.2s',
-                  '&:hover': {
-                    boxShadow: 4,
-                    borderColor: '#1976d2',
-                  },
-                  m: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: '#fafafa',
-                  position: 'relative',
-                }}
-                onClick={() => {
-                  document.getElementById('logo-upload-input')?.click();
-                }}
-                title={t('supplier.changeAvatar')}
-              >
-                <img
-                  src={getImage(form.logoId)}
-                  alt="logo"
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
-                />
-                <Button
-                  size="small"
-                  sx={{ position: 'absolute', right: 8, bottom: 8, minWidth: 0, p: 0.5, bgcolor: 'rgba(0,0,0,0.5)', color: '#fff', borderRadius: '50%' }}
-                  onClick={e => { e.stopPropagation(); setPreviewOpen(true); }}
-                  title="放大预览"
+                <Box
+                    sx={{
+                      width: 300,
+                      height: 300,
+                      borderRadius: 2,
+                      overflow: 'hidden',
+                      boxShadow: 1,
+                      border: '2px solid #e0e0e0',
+                      cursor: 'pointer',
+                      transition: 'box-shadow 0.2s',
+                      '&:hover': {
+                        boxShadow: 4,
+                        borderColor: '#1976d2',
+                      },
+                      m: 2,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: '#fafafa',
+                      position: 'relative',
+                    }}
+                    onClick={() => {
+                      document.getElementById('logo-upload-input')?.click();
+                    }}
+                    title={t('supplier.changeAvatar')}
                 >
-                  <ZoomInIcon fontSize="small" />
-                </Button>
-              </Box>
+                  <img
+                      src={getImage(form.logoId)}
+                      alt="logo"
+                      style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+                  />
+                  <Button
+                      size="small"
+                      sx={{ position: 'absolute', right: 8, bottom: 8, minWidth: 0, p: 0.5, bgcolor: 'rgba(0,0,0,0.5)', color: '#fff', borderRadius: '50%' }}
+                      onClick={e => { e.stopPropagation(); setPreviewOpen(true); }}
+                      title="放大预览"
+                  >
+                    <ZoomInIcon fontSize="small" />
+                  </Button>
+                </Box>
             ) : (
-              <Button
-                variant="outlined"
-                component="label"
-                disabled={uploading}
-                size="large"
-                sx={{ height: 300, width: 300, borderRadius: 2, minWidth: 0, p: 0, ml: 0, m: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fafafa' }}
-              >
-                <span style={{ fontSize: 16, color: '#888', textAlign: 'center', width: '100%' }}>{uploading ? t('supplier.uploading') : t('supplier.upload')}</span>
-                <input
-                  id="logo-upload-input"
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={handleFileChange}
-                />
-              </Button>
+                <Button
+                    variant="outlined"
+                    component="label"
+                    disabled={uploading}
+                    size="large"
+                    sx={{ height: 300, width: 300, borderRadius: 2, minWidth: 0, p: 0, ml: 0, m: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fafafa' }}
+                >
+                  <span style={{ fontSize: 16, color: '#888', textAlign: 'center', width: '100%' }}>{uploading ? t('supplier.uploading') : t('supplier.upload')}</span>
+                  <input
+                      id="logo-upload-input"
+                      type="file"
+                      accept="image/*"
+                      hidden
+                      onChange={handleFileChange}
+                  />
+                </Button>
             )}
             <input
-              id="logo-upload-input"
-              type="file"
-              accept="image/*"
-              hidden
-              style={{ display: 'none' }}
-              onChange={handleFileChange}
+                id="logo-upload-input"
+                type="file"
+                accept="image/*"
+                hidden
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
             />
             {uploadError && <span style={{ color: 'red', marginLeft: 16, fontSize: 13 }}>{uploadError}</span>}
           </Box>
           <FormControlLabel
-            control={
-              <Checkbox
-                checked={!!form.enable}
-                onChange={e => handleChange('enable', e.target.checked)}
-                color="primary"
-              />
-            }
-            label={t('supplier.enable')}
+              control={
+                <Checkbox
+                    checked={!!form.enable}
+                    onChange={e => handleChange('enable', e.target.checked)}
+                    color="primary"
+                />
+              }
+              label={t('supplier.enable')}
           />
+
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="secondary">{t('common.cancel')}</Button>

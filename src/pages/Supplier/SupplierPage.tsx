@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getSupplierList, createSupplier, updateSupplier, enableSupplier } from '../../api/supplier';
+import {getSupplierList, createSupplier, updateSupplier, enableSupplier, getSupplierDetail} from '../../api/supplier';
 import type { Supplier } from '../../api/supplier/types';
 import SupplierFormDialog from './components/SupplierFormDialog';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TablePagination, Box } from '@mui/material';
@@ -48,8 +48,9 @@ const SupplierPage: React.FC = () => {
     fetchData();
   };
 
-  const handleEdit = (supplier: Supplier) => {
-    setEditingSupplier(supplier);
+  const handleEdit = async (supplier: Supplier) => {
+    const res = await getSupplierDetail(supplier.id as string)
+    setEditingSupplier(res);
     setDialogOpen(true);
   };
 
