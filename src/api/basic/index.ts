@@ -1,6 +1,11 @@
 import http from '../../utils/http';
 import { IOption} from './types';
 
+// 性别下拉
+export function getSexOptions() {
+  return http.get<IOption[]>('/v1/Data/sexOptions');
+}
+
 // 国家手机编码下拉
 export function getCountryOptions() {
   return http.get<IOption[]>('/v1/Data/countryOptions');
@@ -11,6 +16,7 @@ export function getCountryCodeOptions() {
   return http.get<IOption[]>('/v1/Data/countryCodeOptions');
 }
 
+// 城市下拉
 export function getCityOptions(country:string){
   return http.get<IOption[]>('/v1/Data/cityOptions',{country});
 }

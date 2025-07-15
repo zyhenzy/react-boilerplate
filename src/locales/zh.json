@@ -26,7 +26,8 @@
     "yes": "是",
     "no": "否",
     "country": "国家",
-    "city": "城市"
+    "city": "城市",
+    "sex": "性别"
   },
   "user": {
     "title": "用户管理",
@@ -189,6 +190,7 @@
     "changeRule": "改签规则",
     "refundRule": "退票规则",
     "originalTicketFee": "原票面价",
+    "issuedSuccess": "出票成功",
     "ticketFee": "票面价",
     "taxFee": "税费",
     "insuranceFee": "保险费",

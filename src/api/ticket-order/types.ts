@@ -109,7 +109,7 @@ export interface PayedTicketOrderCommand {
 // 出票
 export interface IssuedTicketOrderCommand {
   id: string;
-  currency?: string;
+  passengerList: { id: string; ticketNo: string }[];
 }
 
 // 修改LOGO
@@ -189,6 +189,7 @@ export interface DeleteTicketOrderTripCommand {
 
 // 新增乘客
 export interface AddTicketOrderPassengerCommand {
+  id?:string // 乘客ID，新增时不需要传
   ticketOrderId?: string; // 机票订单ID
   name?: string; // 姓名
   englishName?: string; // 英文名

@@ -17,6 +17,7 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
   const certificateOptions = useSelector((state: any) => state.options.certificateOptions) as IOption[];
   const countryOptions = useSelector((state: any) => state.options.countryOptions) as IOption[];
   const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
+  const sexOptions = useSelector((state: any) => state.options.sexOptions) as IOption[];
   const [form, setForm] = useState<AddTicketOrderPassengerCommand>({});
 
   useEffect(() => {
@@ -111,6 +112,18 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
               onChange={e => setForm(f => ({ ...f, nationality: e.target.value }))}
             >
               {countryCodeOptions.map(opt => (
+                <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="dense">
+            <InputLabel>{t('common.sex')}</InputLabel>
+            <Select
+              label={t('common.sex')}
+              value={form.sex || ''}
+              onChange={e => setForm(f => ({ ...f, sex: e.target.value }))}
+            >
+              {sexOptions.map(opt => (
                 <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
               ))}
             </Select>

@@ -10,7 +10,7 @@ import {
   getAirlineOptions,
   getAirportOptions,
   getClassTypeOptions,
-  getMealsOptions
+  getMealsOptions, getSexOptions
 } from '../api/basic';
 import { IOption } from '../api/basic/types';
 
@@ -58,6 +58,9 @@ export const fetchMealsOptions = createAsyncThunk('options/fetchMealsOptions', a
   return await getMealsOptions();
 });
 
+export const fetchSexOptions = createAsyncThunk('options/fetchSexOptions', async () => {
+  return await getSexOptions();
+});
 
 interface OptionsState {
   countryOptions: IOption[]; // 电话区号
@@ -71,6 +74,7 @@ interface OptionsState {
   airportOptions: IOption[];
   classTypeOptions: IOption[];
   mealsOptions: IOption[];
+  sexOptions: IOption[];
 }
 
 const initialState: OptionsState = {
@@ -84,7 +88,8 @@ const initialState: OptionsState = {
   airlineOptions: [],
   airportOptions: [],
   classTypeOptions: [],
-  mealsOptions: []
+  mealsOptions: [],
+  sexOptions: []
 };
 
 const optionsSlice = createSlice({
@@ -125,6 +130,9 @@ const optionsSlice = createSlice({
       })
       .addCase(fetchMealsOptions.fulfilled, (state, action) => {
         state.mealsOptions = action.payload;
+      })
+      .addCase(fetchSexOptions.fulfilled, (state, action) => {
+        state.sexOptions = action.payload;
       })
   },
 });

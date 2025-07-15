@@ -31,7 +31,9 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
 import {
   addTicketOrderPassenger,
-  addTicketOrderTrip, deleteTicketOrderPassenger, deleteTicketOrderTrip,
+  addTicketOrderTrip,
+  deleteTicketOrderPassenger,
+  deleteTicketOrderTrip,
   updateTicketOrderPassenger,
   updateTicketOrderTrip
 } from "../../../api/ticket-order";
@@ -287,6 +289,9 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 type="number"
                 value={form.originalTicketFee || ''}
                 onChange={e => setForm(f => ({ ...f, originalTicketFee: e.target.value }))}
+                InputProps={{
+                  endAdornment: currentCurrency&&<span style={{ marginLeft: 4 }}>{currentCurrency}</span>
+                }}
             />
             <TextField
                 margin="dense"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import type { TicketOrder } from '../../api/ticket-order/types';
+import {IssuedTicketOrderCommand, TicketOrder} from '../../api/ticket-order/types';
 import { getTicketOrderList, addTicketOrder, updateTicketOrder, getTicketOrderDetail, cancelTicketOrder, payedTicketOrder, issuedTicketOrder, downloadTicketOrderWord } from '../../api/ticket-order';
 import { getSupplierList } from '../../api/supplier';
 import type { Supplier } from '../../api/supplier/types';
@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import TicketOrderFormDialog from './components/TicketOrderFormDialog';
 import PayDialog from './components/PayDialog';
-import IssuedDialog from './components/IssuedDialog';
+// import IssuedDialog from './components/IssuedDialog';
 import TicketOrderDetailDialog from './components/TicketOrderDetailDialog';
 import { useTranslation } from 'react-i18next';
 
@@ -35,9 +35,6 @@ const TicketOrderPage: React.FC = () => {
   const [payDialogOpen, setPayDialogOpen] = useState(false);
   const [payingOrder, setPayingOrder] = useState<TicketOrder | null>(null);
   const [payLoading, setPayLoading] = useState(false);
-  const [issuedDialogOpen, setIssuedDialogOpen] = useState(false);
-  const [issuingOrder, setIssuingOrder] = useState<TicketOrder | null>(null);
-  const [issuedLoading, setIssuedLoading] = useState(false);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [detailOrder, setDetailOrder] = useState<TicketOrder | null>(null);
   const [query, setQuery] = useState({
@@ -118,21 +115,23 @@ const TicketOrderPage: React.FC = () => {
     }
   };
 
-  const handleIssued = (order: TicketOrder) => {
-    setIssuingOrder(order);
-    setIssuedDialogOpen(true);
-  };
-
-  const handleIssuedSubmit = async (values: any) => {
-    setIssuedLoading(true);
-    try {
-      await issuedTicketOrder(values);
-      setIssuedDialogOpen(false);
-      setIssuingOrder(null);
-      fetchData();
-    } finally {
-      setIssuedLoading(false);
+  const handleIssued = async (order: TicketOrder) => {
+    const issuedParams:IssuedTicketOrderCommand = {
+      id: order.id as string,
+      passengerList: order.passengerList?.map(p => ({
+        id: p.id as string,
+        ticketNo: p.ticketNo as string
+      })) ?? []
     }
+    setLoading(true);
+    try {
+      await issuedTicketOrder(issuedParams)
+      // @ts-ignore
+      window?.showSnackbar(t('ticketOrder.issuedSuccess') as string,'success');
+    }finally {
+      setLoading(false);
+    }
+    await fetchData()
   };
 
   const handleShowDetail = async (order: TicketOrder) => {
@@ -269,7 +268,7 @@ const TicketOrderPage: React.FC = () => {
                   <TableCell>{t(`ticketOrder.status_${item.status}`)}</TableCell>
                   <TableCell>
                     {item.status!==0&&<Button size="small" onClick={() => handleShowDetail(item)}>{t('common.detail')}</Button>}
-                    {item.status===0&&<Button size="small" onClick={() => handleEdit(item)} disabled={loading}>{t('common.edit')}</Button>}
+                    <Button size="small" onClick={() => handleEdit(item)} disabled={loading}>{t('common.edit')}</Button>
                     {item.status===0&&<Button size="small" color="primary" onClick={() => handlePay(item)} disabled={loading}>{t('ticketOrder.pay')}</Button>}
                     {item.status===2&&<Button size="small" color="success" onClick={() => handleIssued(item)} disabled={loading}>{t('ticketOrder.issued')}</Button>}
                     {item.status===0&&<Button size="small" color="error" onClick={() => handleCancel(item)} disabled={loading}>{t('ticketOrder.cancel')}</Button>}
@@ -306,13 +305,6 @@ const TicketOrderPage: React.FC = () => {
         onSubmit={handlePaySubmit}
         loading={payLoading}
         orderId={payingOrder?.id}
-      />
-      <IssuedDialog
-        open={issuedDialogOpen}
-        onClose={() => setIssuedDialogOpen(false)}
-        onSubmit={handleIssuedSubmit}
-        loading={issuedLoading}
-        orderId={issuingOrder?.id}
       />
       <TicketOrderDetailDialog
         open={detailDialogOpen}

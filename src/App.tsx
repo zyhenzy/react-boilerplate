@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useMediaQuery, Theme } from '@mui/material';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
-import Dashboard from './pages/Dashboard';
 import User from './pages/User/User';
 import Settings from './pages/Settings';
 import {Box} from "@mui/material";
