@@ -50,7 +50,16 @@ const UserPage: React.FC = () => {
 
   const handleEdit = async (user: any) => {
     const res = await getUserDetail(user.id);
-    const _res = Object.assign(res,{role:res.roles}) // fixme：查详情返回的是roles，新增的时候用的是role
+    const _res = Object.assign(res,{
+      role:res.roles,
+    }) // fixme：查详情返回的是roles，新增的时候用的是role
+    if(_res.agentId){
+      _res.userType = '1';
+    }else if(_res.customerId){
+      _res.userType = '0';
+    }else{
+      _res.userType = '2';
+    }
     setEditingUser(_res);
     setDialogOpen(true);
   };

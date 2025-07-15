@@ -42,12 +42,10 @@ class HttpRequest {
                 if (data.code === 0) {
                     return data.result;
                 } else {
-                    if(data.code===-1){
-                        if (typeof window !== 'undefined' && typeof window.showSnackbar === 'function') {
-                            window.showSnackbar(data.message,'error');
-                        } else {
-                            alert(data.message);
-                        }
+                    if (typeof window !== 'undefined' && typeof window.showSnackbar === 'function') {
+                        window.showSnackbar(data.message,'error');
+                    } else {
+                        alert(data.message);
                     }
                     return Promise.reject(data.message || '请求失败');
                 }

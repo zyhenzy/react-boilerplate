@@ -29,6 +29,7 @@ export interface LoginParams {
  */
 export interface IUser {
   id: string;
+  userType: string; // 用户类型 0客户，1代理 2其他；仅前端用
   userName: string;
   name: string;
   sex?: 'M' | 'F' | 'O' | null;
@@ -39,6 +40,7 @@ export interface IUser {
   createUserName?: string;
   email?:string;
   agentId?: string | null;
+  customerId?: string | null; // 客户ID
   role?: string[] | null;
   roles?: string[] | null; // fixme:查详情返回的是roles，新增的时候用的是role
 }

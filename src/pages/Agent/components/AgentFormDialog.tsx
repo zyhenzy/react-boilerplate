@@ -6,9 +6,6 @@ import {
   DialogTitle,
   TextField,
   Button,
-  MenuItem,
-  Select,
-  InputLabel,
   FormControl,
   Checkbox
 } from '@mui/material';
@@ -17,7 +14,6 @@ import type { Agent } from '../../../api/agent/types';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
-import type {IOption} from "../../../api/basic/types";
 import {getCityOptions} from "../../../api/basic";
 
 interface AgentFormDialogProps {
@@ -38,8 +34,7 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
   editingId
 }) => {
   const { t } = useTranslation();
-  const countryOptions = useSelector((state: RootState) => state.options.countryOptions);
-  const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
+  const countryCodeOptions = useSelector((state: RootState) => state.options.countryCodeOptions);
   const [cityOptions,setCityOptions] = useState<any[]>([])
 
   useEffect(() => {
@@ -48,9 +43,23 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
     }
   }, [form.enable, setForm]);
 
+  useEffect(() => {
+    if (form.countryCode) {
+      fetchCityOptions(form.countryCode);
+    } else {
+      setCityOptions([]);
+    }
+  }, [form.countryCode]);
+
   const handleClose = () => {
     setCityOptions([])
     onClose()
+  }
+
+  const fetchCityOptions = async (countryCode: string) => {
+    setCityOptions([]);
+    const res = await getCityOptions(countryCode);
+    setCityOptions(res)
   }
 
   return (
@@ -68,44 +77,25 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
             required
             inputProps={{ maxLength: 50 }}
           />
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 8 }}>
-            <FormControl style={{ minWidth: 120 }}>
-              <InputLabel id="countryCode-label">{t('agent.countryCode')}</InputLabel>
-              <Select
-                labelId="countryCode-label"
-                label={t('agent.countryCode')}
-                value={form.countryCode || ''}
-                onChange={e => setForm(f => ({ ...f, countryCode: e.target.value }))}
-                displayEmpty
-              >
-                {countryOptions.map(option => (
-                  <MenuItem key={option.value} value={option.value}>{option.label}（{option.value}）</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <TextField
+          <TextField
               margin="dense"
               label={t('agent.contact')}
+              fullWidth
               value={form.contact || ''}
               onChange={e => setForm(f => ({ ...f, contact: e.target.value }))}
               required
-              inputProps={{ maxLength: 50 }}
-              style={{ flex: 1 }}
-            />
-          </div>
-
+              inputProps={{ maxLength: 100 }}
+          />
           <div style={{ display: 'flex', gap: 8 }}>
             <FormControl style={{ minWidth: 120 }} margin="dense">
               <Autocomplete
                 options={countryCodeOptions}
                 getOptionLabel={opt => opt.label || ''}
-                value={countryCodeOptions.find(opt => opt.value === form.country) || null}
+                value={countryCodeOptions.find(opt => opt.value === form.countryCode) || null}
                 onChange={(_, newValue) => {
-                  setCityOptions([]);
-                  setForm(f => ({ ...f, country: newValue ? newValue.value : '' }));
-                  if (newValue) {
-                    getCityOptions(newValue.value).then(res => setCityOptions(res));
-                  }
+
+                  setForm(f => ({ ...f, countryCode: newValue ? newValue.value : '' }));
+
                 }}
                 renderInput={(params) => (
                   <TextField {...params} label={t('common.country')} margin="dense" />

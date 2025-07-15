@@ -60,8 +60,8 @@ export const fetchMealsOptions = createAsyncThunk('options/fetchMealsOptions', a
 
 
 interface OptionsState {
-  countryOptions: IOption[];
-  countryCodeOptions: IOption[];
+  countryOptions: IOption[]; // 电话区号
+  countryCodeOptions: IOption[]; // 国家编码
   roleOptions: IOption[];
   certificateOptions: IOption[];
   agentOptions: IOption[];
