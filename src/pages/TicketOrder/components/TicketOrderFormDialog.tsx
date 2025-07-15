@@ -1,9 +1,8 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   TextField,
   Button,
   InputLabel,
@@ -54,7 +53,6 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
   onSubmit,
   form,
   setForm,
-  editingId,
   suppliers
 }) => {
   const { t } = useTranslation();
@@ -63,6 +61,20 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
   const [tripDialogOpen, setTripDialogOpen] = React.useState(false);
   const [editingTrip, setEditingTrip] = React.useState<AddTicketOrderTripCommand | undefined>(undefined);
   const customerOptions = useSelector((state: RootState) => state.options.customerOptions);
+  const [currentCurrency,setCurrentCurrency] = useState<string>() // 当前币种，来源于客户
+
+  useEffect(() => {
+    if(form.customerId){
+      getCurrencyByCustomerId(form.customerId);
+    }
+  }, [form.customerId]);
+
+  const getCurrencyByCustomerId = (customerId:string)=>{
+    const customer = customerOptions.find(c => c.value === customerId);
+    if(customer){
+      setCurrentCurrency(customer.currency);
+    }
+  }
 
   const handleAddPassenger = () => {
     setEditingPassenger(undefined);
@@ -283,6 +295,9 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 type="number"
                 value={form.ticketFee || ''}
                 onChange={e => setForm(f => ({ ...f, ticketFee: e.target.value }))}
+                InputProps={{
+                  endAdornment: currentCurrency&&<span style={{ marginLeft: 4 }}>{currentCurrency}</span>
+                }}
             />
             <TextField
                 margin="dense"
