@@ -70,25 +70,23 @@ const RequestOrderPage: React.FC = () => {
   }, [pageIndex, pageSize, query]);
 
   const handleViewDetail = async (order: RequestOrder) => {
-    setDetailDialogOpen(true);
     const res = await getRequestOrderDetail(order.id!);
     setDetailOrder(res || null);
+    setDetailDialogOpen(true);
   };
 
   const handleTrans = async (order: RequestOrder) => {
     const res: RequestOrder = await getRequestOrderDetail(order.id as string);
     // 字段映射，需根据实际字段调整
     const ticketOrder: TicketOrder = {
-      // bookerName:res.bookerName, // todo：订票人没有
       customerId:res.customerId,
+      bookerName:res.bookerName ?? undefined,
       bookerContact: res.phoneNumber ?? undefined,
       flightList: res.tripList?.map(item => ({
         depCity: item.dep,
         arrCity: item.arr,
-        depDate: item.startTime, // 取startTime的日期
-        arrDate: item.endTime, // 取endTime的日期
-        depTime: item.startTime, // 取startTime的时间
-        arrTime: item.endTime, // 取endTime的时间
+        // depTime: item.startTime,
+        // arrTime: item.endTime,
         flight: item.flightNo,
         // 其他 AddTicketOrderTripCommand 需要的字段可补充
       })),
@@ -106,6 +104,7 @@ const RequestOrderPage: React.FC = () => {
         }
       })
     };
+
     setEditingOrder(ticketOrder);
     setDialogOpen(true);
   };
@@ -235,4 +234,3 @@ const RequestOrderPage: React.FC = () => {
 };
 
 export default RequestOrderPage;
-

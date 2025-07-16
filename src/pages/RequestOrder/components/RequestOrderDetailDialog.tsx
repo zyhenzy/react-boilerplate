@@ -19,6 +19,9 @@ import {
 import type { RequestOrder } from '../../../api/request-order/types';
 import { useTranslation } from 'react-i18next';
 import { getImage } from '../../../api/basic';
+import {getLabelFromOption} from "../../../utils";
+import {useSelector} from "react-redux";
+import type {RootState} from "../../../store";
 
 interface RequestOrderDetailDialogProps {
   open: boolean;
@@ -37,6 +40,7 @@ const InfoRow: React.FC<{ label: string; value?: React.ReactNode }> = ({ label, 
 
 const RequestOrderDetailDialog: React.FC<RequestOrderDetailDialogProps> = ({ open, onClose, order }) => {
   const { t } = useTranslation();
+  const customerOptions = useSelector((state: RootState) => state.options.customerOptions);
 
   return (
       <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
@@ -49,7 +53,7 @@ const RequestOrderDetailDialog: React.FC<RequestOrderDetailDialogProps> = ({ ope
             <InfoRow label={t('requestOrder.phoneNumber')} value={order?.phoneNumber} />
             <InfoRow label={t('requestOrder.bookerName')} value={order?.bookerName} />
             <InfoRow label={t('requestOrder.remark')} value={order?.remark} />
-            <InfoRow label={t('requestOrder.customer')} value={order?.customerId} />
+            <InfoRow label={t('requestOrder.customer')} value={getLabelFromOption(order?.customerId,customerOptions)} />
             <InfoRow label={t('requestOrder.status')} value={typeof order?.status === 'number' ? t(`requestOrder.status_${order.status}`) : '-'} />
             <Divider sx={{ my: 1 }} />
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>{t('requestOrder.tripList')}</Typography>

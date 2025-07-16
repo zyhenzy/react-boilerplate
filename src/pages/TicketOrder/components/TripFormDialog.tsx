@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import dayjs from 'dayjs';
 import type { AddTicketOrderTripCommand } from '../../../api/ticket-order/types';
-import {userTypeOptions} from "../../../constants/userTypeOptions";
 import {useSelector} from "react-redux";
 import type {IOption} from "../../../api/basic/types";
 import Autocomplete from '@mui/material/Autocomplete';
