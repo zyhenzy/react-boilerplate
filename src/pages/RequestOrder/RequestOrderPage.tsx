@@ -173,6 +173,7 @@ const RequestOrderPage: React.FC = () => {
               <TableCell>{t('requestOrder.phoneNumber')}</TableCell>
               <TableCell>{t('requestOrder.customer')}</TableCell>
               <TableCell>{t('requestOrder.status')}</TableCell>
+              <TableCell>{t('requestOrder.trip')}</TableCell>
               <TableCell>{t('requestOrder.actions')}</TableCell>
             </TableRow>
           </TableHead>
@@ -189,8 +190,13 @@ const RequestOrderPage: React.FC = () => {
                   <TableCell>{item.customerId}</TableCell>
                   <TableCell>{t(`requestOrder.status_${item.status}`)}</TableCell>
                   <TableCell>
-                    {item.status===0&&<Button size="small" onClick={() => handleTrans(item)}>{t('requestOrder.trans')}</Button>}
-                    <IconButton size="small" onClick={() => handleViewDetail(item)} disabled={loading}><VisibilityIcon /></IconButton>
+                    {item.tripList?.map((trip, idx) => (
+                      <div key={idx}>{trip.dep} → {trip.arr}</div>
+                    ))}
+                  </TableCell>
+                  <TableCell>
+                    <IconButton size="small" onClick={() => handleViewDetail(item)}><VisibilityIcon /></IconButton>
+                    <Button size="small" onClick={() => handleTrans(item)}>{t('requestOrder.transToTicketOrder')}</Button>
                   </TableCell>
                 </TableRow>
               ))

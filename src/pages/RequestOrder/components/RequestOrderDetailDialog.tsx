@@ -41,63 +41,48 @@ const RequestOrderDetailDialog: React.FC<RequestOrderDetailDialogProps> = ({ ope
           <Box display="grid" gap={2}>
             <InfoRow label={t('requestOrder.countryNumber')} value={order?.countryNumber} />
             <InfoRow label={t('requestOrder.phoneNumber')} value={order?.phoneNumber} />
-            <InfoRow
-                label={t('requestOrder.status')}
-                value={typeof order?.status === 'number' ? t(`requestOrder.status_${order.status}`) : '-'}
-            />
+            <InfoRow label={t('requestOrder.bookerName')} value={order?.bookerName} />
             <InfoRow label={t('requestOrder.remark')} value={order?.remark} />
-            <InfoRow label={t('common.createdAt')} value={order?.createdAt} />
-            <InfoRow label={t('common.updatedAt')} value={order?.updatedAt} />
+            <InfoRow label={t('requestOrder.customer')} value={order?.customerId} />
+            <InfoRow label={t('requestOrder.status')} value={typeof order?.status === 'number' ? t(`requestOrder.status_${order.status}`) : '-'} />
+            <Divider sx={{ my: 2 }} />
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>{t('requestOrder.tripList')}</Typography>
+            {order?.tripList?.length ? (
+              order.tripList.map((trip, idx) => (
+                <Paper key={idx} variant="outlined" sx={{ p: 1, mb: 1 }}>
+                  <InfoRow label={t('requestOrder.dep')} value={trip.dep} />
+                  <InfoRow label={t('requestOrder.arr')} value={trip.arr} />
+                  <InfoRow label={t('requestOrder.startTime')} value={trip.startTime} />
+                  <InfoRow label={t('requestOrder.endTime')} value={trip.endTime} />
+                  <InfoRow label={t('requestOrder.flightNo')} value={trip.flightNo} />
+                </Paper>
+              ))
+            ) : <Typography color="text.secondary">{t('requestOrder.noTrip')}</Typography>}
+            <Divider sx={{ my: 2 }} />
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>{t('requestOrder.passengerList')}</Typography>
+            {order?.passengerList?.length ? (
+              order.passengerList.map((p, idx) => (
+                <Paper key={idx} variant="outlined" sx={{ p: 1, mb: 1 }}>
+                  <InfoRow label={t('requestOrder.passengerName')} value={p.name} />
+                  <InfoRow label={t('requestOrder.englishName')} value={p.englishName} />
+                  <InfoRow label={t('requestOrder.birthday')} value={p.birthday} />
+                  <InfoRow label={t('requestOrder.certificateType')} value={p.certificateType} />
+                  <InfoRow label={t('requestOrder.certificateNo')} value={p.certificateNo} />
+                  <InfoRow label={t('requestOrder.nationality')} value={p.nationality} />
+                  <InfoRow label={t('requestOrder.countryNumber')} value={p.countryNumber} />
+                  <InfoRow label={t('requestOrder.phoneNumber')} value={p.phoneNumber} />
+                  <InfoRow label={t('requestOrder.ticketNo')} value={p.ticketNo} />
+                </Paper>
+              ))
+            ) : <Typography color="text.secondary">{t('requestOrder.noPassenger')}</Typography>}
+            <Divider sx={{ my: 2 }} />
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>{t('requestOrder.imageList')}</Typography>
+            <Box display="flex" gap={2} flexWrap="wrap">
+              {order?.imageList?.length ? order.imageList.map((img, idx) => (
+                <img key={idx} src={getImage(img)} alt="order-img" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 4 }} />
+              )) : <Typography color="text.secondary">{t('requestOrder.noImage')}</Typography>}
+            </Box>
           </Box>
-
-          {order?.passengerList && order?.passengerList?.length > 0 && (
-              <Box mt={4}>
-                <Typography variant="h6" gutterBottom>
-                  {t('requestOrder.passengerList')}
-                </Typography>
-                <Divider sx={{ mb: 2 }} />
-                {order.passengerList.map((p, idx) => (
-                    <Paper key={idx} variant="outlined" sx={{ p: 2, mb: 2 }}>
-                      <Box display="grid" gap={1}>
-                        <InfoRow label={t('requestOrder.passengerName')} value={p.name} />
-                        <InfoRow label={t('requestOrder.englishName', '英文名')} value={p.englishName} />
-                        <InfoRow label={t('requestOrder.birthday', '出生日期')} value={p.birthday} />
-                        <InfoRow label={t('requestOrder.certificateType', '证件类型')} value={p.certificateType} />
-                        <InfoRow label={t('requestOrder.certificateNo', '证件号')} value={p.certificateNo} />
-                        <InfoRow label={t('requestOrder.nationality', '国籍')} value={p.nationality} />
-                        <InfoRow label={t('requestOrder.countryNumber', '国家区号')} value={p.countryNumber} />
-                        <InfoRow label={t('requestOrder.phoneNumber', '手机号')} value={p.phoneNumber} />
-                        <InfoRow label={t('requestOrder.ticketNo', '票号')} value={p.ticketNo} />
-                      </Box>
-                    </Paper>
-                ))}
-              </Box>
-          )}
-
-          {order?.imageList && order.imageList.length > 0 && (
-              <Box mt={4}>
-                <Typography variant="h6" gutterBottom>
-                  {t('requestOrder.imageList', '图片列表')}
-                </Typography>
-                <Divider sx={{ mb: 2 }} />
-                <Box display="flex" flexWrap="wrap" gap={2}>
-                  {order.imageList.map((imgId, idx) => (
-                      <img
-                          key={idx}
-                          src={getImage(imgId)}
-                          alt="order-img"
-                          style={{
-                            width: 100,
-                            height: 100,
-                            objectFit: 'cover',
-                            borderRadius: 8,
-                            border: '1px solid #ddd'
-                          }}
-                      />
-                  ))}
-                </Box>
-              </Box>
-          )}
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
           <Button onClick={onClose} variant="contained" color="primary">
