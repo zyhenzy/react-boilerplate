@@ -40,6 +40,7 @@ import {
 import {Passenger, PassengerQuery} from "../../../api/passenger/types";
 import {getPassengerListByCustomer} from "../../../api/passenger";
 // import CloseIcon from '@mui/icons-material/Close';
+import SelectPassengerDialog from './SelectPassengerDialog';
 
 interface TicketOrderFormDialogProps {
   open: boolean;
@@ -64,6 +65,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
   const [editingPassenger, setEditingPassenger] = React.useState<AddTicketOrderPassengerCommand | undefined>(undefined);
   const [tripDialogOpen, setTripDialogOpen] = React.useState(false);
   const [editingTrip, setEditingTrip] = React.useState<AddTicketOrderTripCommand | undefined>(undefined);
+  const [selectPassengerDialogOpen, setSelectPassengerDialogOpen] = useState(false);
   const customerOptions = useSelector((state: RootState) => state.options.customerOptions);
   const [currentCurrency,setCurrentCurrency] = useState<string>() // 当前币种，来源于客户
   const [passengerList,setPassengerList] = useState<Passenger[]>([]) // 客户历史乘客信息
@@ -201,236 +203,249 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
   };
 
   return (
-      <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-        <form onSubmit={e => { e.preventDefault(); onSubmit(form); }} style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
-          {/*<DialogTitle sx={{ m: 0, p: 2, position: 'relative' }}>*/}
-          {/*  {editingId ? t('ticketOrder.edit') : t('ticketOrder.add')}*/}
-          {/*  <Button*/}
-          {/*    aria-label="close"*/}
-          {/*    onClick={onClose}*/}
-          {/*    sx={{*/}
-          {/*      position: 'absolute',*/}
-          {/*      right: 8,*/}
-          {/*      top: 8,*/}
-          {/*      minWidth: 0,*/}
-          {/*      padding: 0,*/}
-          {/*      color: (theme) => theme.palette.grey[500],*/}
-          {/*    }}*/}
-          {/*  >*/}
-          {/*    <CloseIcon />*/}
-          {/*  </Button>*/}
-          {/*</DialogTitle>*/}
-          <DialogContent>
-            <TextField
-                autoFocus
-                margin="dense"
-                label={t('ticketOrder.bookerName')}
-                fullWidth
-                value={form.bookerName || ''}
-                onChange={e => setForm(f => ({ ...f, bookerName: e.target.value }))}
-                required
-            />
-            <TextField
-                margin="dense"
-                label={t('ticketOrder.bookerContact')}
-                fullWidth
-                value={form.bookerContact || ''}
-                onChange={e => setForm(f => ({ ...f, bookerContact: e.target.value }))}
-            />
-            <TextField
-                margin="dense"
-                label={t('ticketOrder.pnr')}
-                fullWidth
-                value={form.pnr || ''}
-                onChange={e => setForm(f => ({ ...f, pnr: e.target.value }))}
-            />
-            {/* 供应商下选择 */}
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+      <form onSubmit={e => { e.preventDefault(); onSubmit(form); }} style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
+        {/*<DialogTitle sx={{ m: 0, p: 2, position: 'relative' }}>*/}
+        {/*  {editingId ? t('ticketOrder.edit') : t('ticketOrder.add')}*/}
+        {/*  <Button*/}
+        {/*    aria-label="close"*/}
+        {/*    onClick={onClose}*/}
+        {/*    sx={{*/}
+        {/*      position: 'absolute',*/}
+        {/*      right: 8,*/}
+        {/*      top: 8,*/}
+        {/*      minWidth: 0,*/}
+        {/*      padding: 0,*/}
+        {/*      color: (theme) => theme.palette.grey[500],*/}
+        {/*    }}*/}
+        {/*  >*/}
+        {/*    <CloseIcon />*/}
+        {/*  </Button>*/}
+        {/*</DialogTitle>*/}
+        <DialogContent>
+          <TextField
+              autoFocus
+              margin="dense"
+              label={t('ticketOrder.bookerName')}
+              fullWidth
+              value={form.bookerName || ''}
+              onChange={e => setForm(f => ({ ...f, bookerName: e.target.value }))}
+              required
+          />
+          <TextField
+              margin="dense"
+              label={t('ticketOrder.bookerContact')}
+              fullWidth
+              value={form.bookerContact || ''}
+              onChange={e => setForm(f => ({ ...f, bookerContact: e.target.value }))}
+          />
+          <TextField
+              margin="dense"
+              label={t('ticketOrder.pnr')}
+              fullWidth
+              value={form.pnr || ''}
+              onChange={e => setForm(f => ({ ...f, pnr: e.target.value }))}
+          />
+          {/* 供应商下选择 */}
 
-            <FormControl fullWidth margin="dense" required>
-              <InputLabel>{t('ticketOrder.supplier')}</InputLabel>
-              <Select
-                  label={t('ticketOrder.supplier')}
-                  value={form.supplierId || ''}
-                  onChange={e => setForm(f => ({ ...f, supplierId: e.target.value }))}
-              >
-                {suppliers.map(s => (
-                    <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            {form.id&&<TextField
-                margin="dense"
-                label={t('ticketOrder.currencyBooking')}
-                fullWidth
-                value={form.currencyBooking || ''}
-                onChange={e => setForm(f => ({ ...f, currencyBooking: e.target.value }))}
-            />}
-            {/* 客户下拉选择 */}
-            <FormControl fullWidth margin="dense">
-              <InputLabel>{t('ticketOrder.customerId', '客户')}</InputLabel>
-              <Select
-                label={t('ticketOrder.customerId', '客户')}
-                value={form.customerId || ''}
-                onChange={e => setForm(f => ({ ...f, customerId: e.target.value }))}
-              >
-                {customerOptions.map((c: any) => (
-                  <MenuItem key={c.value} value={c.value}>{c.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <TextField
-                margin="dense"
-                label={t('ticketOrder.adjustmentValue')}
-                fullWidth
-                type="number"
-                value={form.adjustmentValue || ''}
-                onChange={e => setForm(f => ({ ...f, adjustmentValue: e.target.value }))}
-            />
-            <TextField
-                margin="dense"
-                label={t('ticketOrder.changeRule')}
-                fullWidth
-                value={form.changeRule || ''}
-                onChange={e => setForm(f => ({ ...f, changeRule: e.target.value }))}
-            />
-            <TextField
-                margin="dense"
-                label={t('ticketOrder.refundRule')}
-                fullWidth
-                value={form.refundRule || ''}
-                onChange={e => setForm(f => ({ ...f, refundRule: e.target.value }))}
-            />
-            <TextField
-                margin="dense"
-                label={t('ticketOrder.originalTicketFee')}
-                fullWidth
-                type="number"
-                value={form.originalTicketFee || ''}
-                onChange={e => setForm(f => ({ ...f, originalTicketFee: e.target.value }))}
-                InputProps={{
-                  endAdornment: currentCurrency&&<span style={{ marginLeft: 4 }}>{currentCurrency}</span>
-                }}
-            />
-            <TextField
-                margin="dense"
-                label={t('ticketOrder.ticketFee')}
-                fullWidth
-                type="number"
-                value={form.ticketFee || ''}
-                onChange={e => setForm(f => ({ ...f, ticketFee: e.target.value }))}
-                InputProps={{
-                  endAdornment: currentCurrency&&<span style={{ marginLeft: 4 }}>{currentCurrency}</span>
-                }}
-            />
-            <TextField
-                margin="dense"
-                label={t('ticketOrder.taxFee')}
-                fullWidth
-                type="number"
-                value={form.taxFee || ''}
-                onChange={e => setForm(f => ({ ...f, taxFee: e.target.value }))}
-            />
-            <TextField
-                margin="dense"
-                label={t('ticketOrder.insuranceFee')}
-                fullWidth
-                type="number"
-                value={form.insuranceFee || ''}
-                onChange={e => setForm(f => ({ ...f, insuranceFee: e.target.value }))}
-            />
-            <TextField
-                margin="dense"
-                label={t('ticketOrder.serviceFee')}
-                fullWidth
-                type="number"
-                value={form.serviceFee || ''}
-                onChange={e => setForm(f => ({ ...f, serviceFee: e.target.value }))}
-            />
-            {/* 行程列表弹窗编辑版 */}
-            <div style={{ margin: '16px 0' }}>
-              <InputLabel>{t('ticketOrder.tripList') || t('ticketOrder.flightList')}</InputLabel>
-              <TableContainer component={Paper} style={{ marginTop: 8, marginBottom: 8 }}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>{t('ticketOrder.flight')}</TableCell>
-                      <TableCell>{t('ticketOrder.airline')}</TableCell>
-                      <TableCell>{t('ticketOrder.depCity')}</TableCell>
-                      <TableCell>{t('ticketOrder.arrCity')}</TableCell>
-                      <TableCell>{t('common.action')}</TableCell>
+          <FormControl fullWidth margin="dense" required>
+            <InputLabel>{t('ticketOrder.supplier')}</InputLabel>
+            <Select
+                label={t('ticketOrder.supplier')}
+                value={form.supplierId || ''}
+                onChange={e => setForm(f => ({ ...f, supplierId: e.target.value }))}
+            >
+              {suppliers.map(s => (
+                  <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          {form.id&&<TextField
+              margin="dense"
+              label={t('ticketOrder.currencyBooking')}
+              fullWidth
+              value={form.currencyBooking || ''}
+              onChange={e => setForm(f => ({ ...f, currencyBooking: e.target.value }))}
+          />}
+          {/* 客户下拉选择 */}
+          <FormControl fullWidth margin="dense">
+            <InputLabel>{t('ticketOrder.customerId', '客户')}</InputLabel>
+            <Select
+              label={t('ticketOrder.customerId', '客户')}
+              value={form.customerId || ''}
+              onChange={e => setForm(f => ({ ...f, customerId: e.target.value }))}
+            >
+              {customerOptions.map((c: any) => (
+                <MenuItem key={c.value} value={c.value}>{c.label}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+              margin="dense"
+              label={t('ticketOrder.adjustmentValue')}
+              fullWidth
+              type="number"
+              value={form.adjustmentValue || ''}
+              onChange={e => setForm(f => ({ ...f, adjustmentValue: e.target.value }))}
+          />
+          <TextField
+              margin="dense"
+              label={t('ticketOrder.changeRule')}
+              fullWidth
+              value={form.changeRule || ''}
+              onChange={e => setForm(f => ({ ...f, changeRule: e.target.value }))}
+          />
+          <TextField
+              margin="dense"
+              label={t('ticketOrder.refundRule')}
+              fullWidth
+              value={form.refundRule || ''}
+              onChange={e => setForm(f => ({ ...f, refundRule: e.target.value }))}
+          />
+          <TextField
+              margin="dense"
+              label={t('ticketOrder.originalTicketFee')}
+              fullWidth
+              type="number"
+              value={form.originalTicketFee || ''}
+              onChange={e => setForm(f => ({ ...f, originalTicketFee: e.target.value }))}
+              InputProps={{
+                endAdornment: currentCurrency&&<span style={{ marginLeft: 4 }}>{currentCurrency}</span>
+              }}
+          />
+          <TextField
+              margin="dense"
+              label={t('ticketOrder.ticketFee')}
+              fullWidth
+              type="number"
+              value={form.ticketFee || ''}
+              onChange={e => setForm(f => ({ ...f, ticketFee: e.target.value }))}
+              InputProps={{
+                endAdornment: currentCurrency&&<span style={{ marginLeft: 4 }}>{currentCurrency}</span>
+              }}
+          />
+          <TextField
+              margin="dense"
+              label={t('ticketOrder.taxFee')}
+              fullWidth
+              type="number"
+              value={form.taxFee || ''}
+              onChange={e => setForm(f => ({ ...f, taxFee: e.target.value }))}
+          />
+          <TextField
+              margin="dense"
+              label={t('ticketOrder.insuranceFee')}
+              fullWidth
+              type="number"
+              value={form.insuranceFee || ''}
+              onChange={e => setForm(f => ({ ...f, insuranceFee: e.target.value }))}
+          />
+          <TextField
+              margin="dense"
+              label={t('ticketOrder.serviceFee')}
+              fullWidth
+              type="number"
+              value={form.serviceFee || ''}
+              onChange={e => setForm(f => ({ ...f, serviceFee: e.target.value }))}
+          />
+          {/* 行程列表弹窗编辑版 */}
+          <div style={{ margin: '16px 0' }}>
+            <InputLabel>{t('ticketOrder.tripList') || t('ticketOrder.flightList')}</InputLabel>
+            <TableContainer component={Paper} style={{ marginTop: 8, marginBottom: 8 }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>{t('ticketOrder.flight')}</TableCell>
+                    <TableCell>{t('ticketOrder.airline')}</TableCell>
+                    <TableCell>{t('ticketOrder.depCity')}</TableCell>
+                    <TableCell>{t('ticketOrder.arrCity')}</TableCell>
+                    <TableCell>{t('common.action')}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {(form.flightList || []).map((trip, idx) => (
+                    <TableRow key={idx}>
+                      <TableCell>{trip.flight}</TableCell>
+                      <TableCell>{trip.airline || ''}</TableCell>
+                      <TableCell>{trip.depCity || ''}</TableCell>
+                      <TableCell>{trip.arrCity || ''}</TableCell>
+                      <TableCell>
+                        <Button size="small" onClick={() => handleEditTrip(trip, idx)}>{t('common.edit')}</Button>
+                        <Button size="small" onClick={() => handleDeleteTrip(trip, idx)}>{t('common.delete')}</Button>
+                      </TableCell>
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {(form.flightList || []).map((trip, idx) => (
-                      <TableRow key={idx}>
-                        <TableCell>{trip.flight}</TableCell>
-                        <TableCell>{trip.airline || ''}</TableCell>
-                        <TableCell>{trip.depCity || ''}</TableCell>
-                        <TableCell>{trip.arrCity || ''}</TableCell>
-                        <TableCell>
-                          <Button size="small" onClick={() => handleEditTrip(trip, idx)}>{t('common.edit')}</Button>
-                          <Button size="small" onClick={() => handleDeleteTrip(trip, idx)}>{t('common.delete')}</Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <Button onClick={handleAddTrip} size="small">{t('ticketOrder.addFlight')}</Button>
-            </div>
-            {/* 乘客列表弹窗编辑版 */}
-            <div style={{ margin: '16px 0' }}>
-              <InputLabel>{t('ticketOrder.passengerList')}</InputLabel>
-              <TableContainer component={Paper} style={{ marginTop: 8, marginBottom: 8 }}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>{t('ticketOrder.passengerName')}</TableCell>
-                      <TableCell>{t('ticketOrder.englishName')}</TableCell>
-                      <TableCell>{t('ticketOrder.certificateType')}</TableCell>
-                      <TableCell>{t('ticketOrder.certificateNo')}</TableCell>
-                      <TableCell>{t('ticketOrder.phoneNumber')}</TableCell>
-                      <TableCell>{t('common.action')}</TableCell>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Button onClick={handleAddTrip} size="small">{t('ticketOrder.addFlight')}</Button>
+          </div>
+          {/* 乘客列表弹窗编辑版 */}
+          <div style={{ margin: '16px 0' }}>
+            <InputLabel>{t('ticketOrder.passengerList')}</InputLabel>
+            <TableContainer component={Paper} style={{ marginTop: 8, marginBottom: 8 }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>{t('ticketOrder.passengerName')}</TableCell>
+                    <TableCell>{t('ticketOrder.englishName')}</TableCell>
+                    <TableCell>{t('ticketOrder.certificateType')}</TableCell>
+                    <TableCell>{t('ticketOrder.certificateNo')}</TableCell>
+                    <TableCell>{t('ticketOrder.phoneNumber')}</TableCell>
+                    <TableCell>{t('common.action')}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {(form.passengerList || []).map((p, idx) => (
+                    <TableRow key={idx}>
+                      <TableCell>{p.name}</TableCell>
+                      <TableCell>{p.englishName}</TableCell>
+                      <TableCell>{p.certificateType || ''}</TableCell>
+                      <TableCell>{p.certificateNo || ''}</TableCell>
+                      <TableCell>{p.phoneNumber || ''}</TableCell>
+                      <TableCell>
+                        <Button size="small" onClick={() => handleEditPassenger(p, idx)}>{t('common.edit')}</Button>
+                        <Button size="small" onClick={() => handleDeletePassenger(p, idx)}>{t('common.delete')}</Button>
+                      </TableCell>
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {(form.passengerList || []).map((p, idx) => (
-                      <TableRow key={idx}>
-                        <TableCell>{p.name}</TableCell>
-                        <TableCell>{p.englishName}</TableCell>
-                        <TableCell>{p.certificateType || ''}</TableCell>
-                        <TableCell>{p.certificateNo || ''}</TableCell>
-                        <TableCell>{p.phoneNumber || ''}</TableCell>
-                        <TableCell>
-                          <Button size="small" onClick={() => handleEditPassenger(p, idx)}>{t('common.edit')}</Button>
-                          <Button size="small" onClick={() => handleDeletePassenger(p, idx)}>{t('common.delete')}</Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <Button onClick={handleAddPassenger} size="small">{t('ticketOrder.addPassenger')}</Button>
-            </div>
-          </DialogContent>
-          <DialogActions style={{ position: 'sticky', bottom: 0, background: '#fff', zIndex: 1 }}>
-            <Button onClick={onClose}>{t('common.cancel')}</Button>
-            <Button type="submit" variant="contained" color="primary">{t('common.confirm')}</Button>
-          </DialogActions>
-        </form>
-        <PassengerFormDialog
-            open={passengerDialogOpen}
-            onClose={() => setPassengerDialogOpen(false)}
-            onPassengerSubmit={handlePassengerSubmit}
-            passenger={editingPassenger}
-        />
-        <TripFormDialog
-            open={tripDialogOpen}
-            onClose={() => setTripDialogOpen(false)}
-            onTripSubmit={handleTripSubmit}
-            trip={editingTrip}
-        />
-      </Dialog>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Button onClick={handleAddPassenger} size="small">{t('ticketOrder.addPassenger')}</Button>
+            <Button onClick={() => setSelectPassengerDialogOpen(true)} size="small" style={{ marginLeft: 8 }}>{t('ticketOrder.selectPassenger')}</Button>
+          </div>
+        </DialogContent>
+        <DialogActions style={{ position: 'sticky', bottom: 0, background: '#fff', zIndex: 1 }}>
+          <Button onClick={onClose}>{t('common.cancel')}</Button>
+          <Button type="submit" variant="contained" color="primary">{t('common.confirm')}</Button>
+        </DialogActions>
+      </form>
+      <PassengerFormDialog
+          open={passengerDialogOpen}
+          onClose={() => setPassengerDialogOpen(false)}
+          onPassengerSubmit={handlePassengerSubmit}
+          passenger={editingPassenger}
+      />
+      <TripFormDialog
+          open={tripDialogOpen}
+          onClose={() => setTripDialogOpen(false)}
+          onTripSubmit={handleTripSubmit}
+          trip={editingTrip}
+      />
+      <SelectPassengerDialog
+        open={selectPassengerDialogOpen}
+        onClose={() => setSelectPassengerDialogOpen(false)}
+        passengerList={passengerList}
+        onConfirm={selected => {
+          setForm(f => ({
+            ...f,
+            passengerList: [...(f.passengerList || []), ...selected]
+          }));
+          setSelectPassengerDialogOpen(false);
+        }}
+      />
+    </Dialog>
   );
 };
 
