@@ -39,8 +39,6 @@ const RequestOrderDetailDialog: React.FC<RequestOrderDetailDialogProps> = ({ ope
         </DialogTitle>
         <DialogContent dividers sx={{ p: 3 }}>
           <Box display="grid" gap={2}>
-            <InfoRow label={t('requestOrder.dep')} value={order?.dep} />
-            <InfoRow label={t('requestOrder.arr')} value={order?.arr} />
             <InfoRow label={t('requestOrder.countryNumber')} value={order?.countryNumber} />
             <InfoRow label={t('requestOrder.phoneNumber')} value={order?.phoneNumber} />
             <InfoRow

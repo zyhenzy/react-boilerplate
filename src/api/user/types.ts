@@ -24,6 +24,11 @@ export interface LoginParams {
   isAdmin?: boolean; // 是否是后台管理系统
 }
 
+export interface UpdatePassword {
+  id: string,
+  password: string
+}
+
 /**
  * 用户信息接口
  */

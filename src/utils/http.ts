@@ -25,7 +25,7 @@ class HttpRequest {
                 }
                 // 添加国际化语言
                 if (i18n && i18n.language) {
-                    const langValue = i18n.language === 'zh' ? 'zh-CN' : i18n.language;
+                    const langValue = i18n.language === 'zh' ? 'zh_CN' : i18n.language;
                     config.headers = config.headers || {};
                     config.headers['Lang'] = langValue;
                 }

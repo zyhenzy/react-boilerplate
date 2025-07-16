@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { Customer } from "../../api/customer/types";
-import { createCustomer, enableCustomer, getCustomerList, updateCustomer } from "../../api/customer";
+import {createCustomer, enableCustomer, getCustomerDetail, getCustomerList, updateCustomer} from "../../api/customer";
 import {
   Box,
   Button,
@@ -49,8 +49,9 @@ const CustomerPage: React.FC = () => {
     setDialogOpen(true);
   };
 
-  const handleEdit = (customer: Customer) => {
-    setEditingCustomer(customer);
+  const handleEdit = async (customer: Customer) => {
+    const res = await getCustomerDetail(customer.id as string)
+    setEditingCustomer(res);
     setDialogOpen(true);
   };
 

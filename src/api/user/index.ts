@@ -1,5 +1,5 @@
 import http from '../../utils/http';
-import {RegisterParams, LoginParams, IUser} from "./types";
+import {RegisterParams, LoginParams, IUser, UpdatePassword} from "./types";
 import { setUserInfo, clearUserInfo } from '../../store/userSlice';
 import { AppDispatch } from '../../store';
 import type {ListResponse} from "../types";
@@ -29,6 +29,14 @@ export function loginUser(params: LoginParams) {
  */
 export function infoUser() {
   return http.get<IUser>('/v1/User/info');
+}
+
+/**
+ * 更新用户密码
+ * @param params
+ */
+export function updatePassword(params:UpdatePassword){
+  return http.post('/v1/User/password', params);
 }
 
 /**

@@ -81,11 +81,15 @@ const RequestOrderPage: React.FC = () => {
     const ticketOrder: TicketOrder = {
       // bookerName:res.bookerName, // todo：订票人没有
       customerId:res.customerId,
-      bookerContact:res.phoneNumber,
-      flightList:[{
-        depCity:res.dep,
-        arrCity:res.arr,
-      }],
+      bookerContact: res.phoneNumber ?? undefined,
+      flightList: res.tripList?.map(item => ({
+        depCity: item.dep,
+        arrCity: item.arr,
+        depDate: item.startTime,
+        arrDate: item.endTime,
+        flight: item.flightNo,
+        // 其他 AddTicketOrderTripCommand 需要的字段可补充
+      })),
       passengerList:res.passengerList?.map(p=>{
         return {
           name:p.name,
@@ -165,8 +169,7 @@ const RequestOrderPage: React.FC = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>{t('requestOrder.dep')}</TableCell>
-              <TableCell>{t('requestOrder.arr')}</TableCell>
+              <TableCell>{t('requestOrder.bookerName')}</TableCell>
               <TableCell>{t('requestOrder.phoneNumber')}</TableCell>
               <TableCell>{t('requestOrder.customer')}</TableCell>
               <TableCell>{t('requestOrder.status')}</TableCell>
@@ -181,8 +184,7 @@ const RequestOrderPage: React.FC = () => {
             ) : (
               data.map(item => (
                 <TableRow key={item.id}>
-                  <TableCell>{item.dep}</TableCell>
-                  <TableCell>{item.arr}</TableCell>
+                  <TableCell>{item.bookerName}</TableCell>
                   <TableCell>{item.phoneNumber}</TableCell>
                   <TableCell>{item.customerId}</TableCell>
                   <TableCell>{t(`requestOrder.status_${item.status}`)}</TableCell>

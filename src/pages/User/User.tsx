@@ -15,7 +15,8 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import UserFormDialog from './components/UserFormDialog';
-import { getUserList, addUser, updateUser, enableUser, getUserDetail } from '../../api/user';
+import PasswordDialog from './components/PasswordDialog';
+import { getUserList, addUser, updateUser, enableUser, getUserDetail, updatePassword } from '../../api/user';
 import { useTranslation } from 'react-i18next';
 
 const UserPage: React.FC = () => {
@@ -27,6 +28,8 @@ const UserPage: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<any | null>(null);
+  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -80,6 +83,18 @@ const UserPage: React.FC = () => {
     setData(prevData => prevData.map(item => item.id === user.id ? { ...item, enable: !item.enable } : item));
   };
 
+  const handleOpenPasswordDialog = (userId: string) => {
+    setSelectedUserId(userId);
+    setPasswordDialogOpen(true);
+  };
+
+  const handlePasswordSubmit = async (newPassword: string) => {
+    if (!selectedUserId) return;
+    await updatePassword({ id: selectedUserId, password: newPassword });
+    setPasswordDialogOpen(false);
+    setSelectedUserId(null);
+  };
+
   return (
     <Box p={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -115,6 +130,7 @@ const UserPage: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <IconButton size="small" onClick={() => handleEdit(item)} disabled={loading}><EditIcon /></IconButton>
+                    <Button size="small" onClick={() => handleOpenPasswordDialog(item.id)} disabled={loading}>{t('user.changePassword')}</Button>
                   </TableCell>
                 </TableRow>
               ))
@@ -143,6 +159,11 @@ const UserPage: React.FC = () => {
         form={editingUser || { userName: '', name: '', enable: true }}
         setForm={f => setEditingUser(f as any)}
         editingId={editingUser?.id || null}
+      />
+      <PasswordDialog
+        open={passwordDialogOpen}
+        onClose={() => { setPasswordDialogOpen(false); setSelectedUserId(null); }}
+        onSubmit={handlePasswordSubmit}
       />
     </Box>
   );
