@@ -37,6 +37,8 @@ import {
   updateTicketOrderPassenger,
   updateTicketOrderTrip
 } from "../../../api/ticket-order";
+import {Passenger, PassengerQuery} from "../../../api/passenger/types";
+import {getPassengerListByCustomer} from "../../../api/passenger";
 // import CloseIcon from '@mui/icons-material/Close';
 
 interface TicketOrderFormDialogProps {
@@ -64,18 +66,34 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
   const [editingTrip, setEditingTrip] = React.useState<AddTicketOrderTripCommand | undefined>(undefined);
   const customerOptions = useSelector((state: RootState) => state.options.customerOptions);
   const [currentCurrency,setCurrentCurrency] = useState<string>() // 当前币种，来源于客户
+  const [passengerList,setPassengerList] = useState<Passenger[]>([]) // 客户历史乘客信息
 
   useEffect(() => {
     if(form.customerId){
       getCurrencyByCustomerId(form.customerId);
+      getPassengerByCustomerId(form.customerId);
     }
   }, [form.customerId]);
 
+  // 获取当前币种
   const getCurrencyByCustomerId = (customerId:string)=>{
     const customer = customerOptions.find(c => c.value === customerId);
     if(customer){
       setCurrentCurrency(customer.currency);
     }
+  }
+
+  // 获取历史乘客信息
+  const getPassengerByCustomerId = async (customerId:string)=>{
+    const params:PassengerQuery = {
+      Id:customerId,
+      PageIndex: 1,
+      PageSize: 10000
+    }
+    const passengerList = await getPassengerListByCustomer(params)
+    console.log(passengerList)
+    debugger
+    setPassengerList(passengerList.data || []);
   }
 
   const handleAddPassenger = () => {
