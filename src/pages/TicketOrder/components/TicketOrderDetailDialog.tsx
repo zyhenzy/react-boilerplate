@@ -11,28 +11,28 @@ interface TicketOrderDetailDialogProps {
 }
 
 const TicketOrderDetailDialog: React.FC<TicketOrderDetailDialogProps> = ({ open, onClose, order }) => {
-  const { t } = useTranslation();
-  if (!order) return null;
+  const { t,i18n } = useTranslation();
+
   return (
       <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
         <DialogTitle>{t('common.detail')}</DialogTitle>
         <DialogContent dividers>
-          <Typography variant="subtitle1">{t('ticketOrder.billNo')}: {order.billNo}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.bookerName')}: {order.bookerName}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.bookerContact')}: {order.bookerContact}</Typography>
-          <Typography variant="subtitle1">PNR: {order.pnr}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.status')}: {t(`ticketOrder.status_${order.status}`)}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.supplier')}: {order.supplierId}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.customer')}: {order.customerId}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.adjustmentValue')}: {order.adjustmentValue}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.currencyBooking')}: {order.currencyBooking}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.changeRule')}: {order.changeRule}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.refundRule')}: {order.refundRule}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.originalTicketFee')}: {order.originalTicketFee}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.ticketFee')}: {order.ticketFee}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.taxFee')}: {order.taxFee}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.insuranceFee')}: {order.insuranceFee}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.serviceFee')}: {order.serviceFee}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.billNo')}: {order?.billNo}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.bookerName')}: {order?.bookerName}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.bookerContact')}: {order?.bookerContact}</Typography>
+          <Typography variant="subtitle1">PNR: {order?.pnr}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.status')}: {t(`ticketOrder.status_${order?.status}`)}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.supplier')}: {order?.supplierId}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.customer')}: {order?.customerId}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.adjustmentValue')}: {order?.adjustmentValue}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.currencyBooking')}: {order?.currencyBooking}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.changeRule')}: {order?.changeRule}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.refundRule')}: {order?.refundRule}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.originalTicketFee')}: {order?.originalTicketFee}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.ticketFee')}: {order?.ticketFee}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.taxFee')}: {order?.taxFee}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.insuranceFee')}: {order?.insuranceFee}</Typography>
+          <Typography variant="subtitle1">{t('ticketOrder.serviceFee')}: {order?.serviceFee}</Typography>
           <Divider sx={{ my: 2 }} />
           <Typography variant="subtitle2">{t('ticketOrder.passengerList')}:</Typography>
           <TableContainer component={Paper} sx={{ mb: 2 }}>
@@ -51,12 +51,16 @@ const TicketOrderDetailDialog: React.FC<TicketOrderDetailDialogProps> = ({ open,
                 </TableRow>
               </TableHead>
               <TableBody>
-                {(order.passengerList || []).map((p, idx) => (
-                  <TableRow key={idx}>
+                {(order?.passengerList || []).map((p) => (
+                  <TableRow key={p.name}>
                     <TableCell>{p.name}</TableCell>
                     <TableCell>{p.englishName}</TableCell>
                     <TableCell>{p.birthday}</TableCell>
-                    <TableCell>{p.certificateType}</TableCell>
+                    <TableCell>
+                      {/* todo:certificateType根据国际化显示，琦哥直接返type码即可 */}
+                      {/*@ts-ignore*/}
+                      {i18n.language === 'zh'?p.certificateType.name:p.certificateType.nameEn}
+                    </TableCell>
                     <TableCell>{p.certificateNo}</TableCell>
                     <TableCell>{p.nationality}</TableCell>
                     <TableCell>{p.countryNumber}</TableCell>
@@ -101,7 +105,7 @@ const TicketOrderDetailDialog: React.FC<TicketOrderDetailDialogProps> = ({ open,
                 </TableRow>
               </TableHead>
               <TableBody>
-                {(order.flightList || []).map((f, idx) => (
+                {(order?.flightList || []).map((f, idx) => (
                   <TableRow key={idx}>
                     <TableCell>{f.airline}</TableCell>
                     <TableCell>{f.flight}</TableCell>
