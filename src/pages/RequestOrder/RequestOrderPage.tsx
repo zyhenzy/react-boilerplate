@@ -85,8 +85,10 @@ const RequestOrderPage: React.FC = () => {
       flightList: res.tripList?.map(item => ({
         depCity: item.dep,
         arrCity: item.arr,
-        depDate: item.startTime,
-        arrDate: item.endTime,
+        depDate: item.startTime, // 取startTime的日期
+        arrDate: item.endTime, // 取endTime的日期
+        depTime: item.startTime, // 取startTime的时间
+        arrTime: item.endTime, // 取endTime的时间
         flight: item.flightNo,
         // 其他 AddTicketOrderTripCommand 需要的字段可补充
       })),
@@ -233,3 +235,4 @@ const RequestOrderPage: React.FC = () => {
 };
 
 export default RequestOrderPage;
+
