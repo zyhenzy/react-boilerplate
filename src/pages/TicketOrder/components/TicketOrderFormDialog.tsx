@@ -26,7 +26,6 @@ import { useTranslation } from 'react-i18next';
 import PassengerFormDialog from './PassengerFormDialog';
 import TripFormDialog from './TripFormDialog';
 import type { AddTicketOrderPassengerCommand, AddTicketOrderTripCommand } from '../../../api/ticket-order/types';
-import type { Supplier } from '../../../api/supplier/types';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
 import {
@@ -39,8 +38,9 @@ import {
 } from "../../../api/ticket-order";
 import {Passenger, PassengerQuery} from "../../../api/passenger/types";
 import {getPassengerListByCustomer} from "../../../api/passenger";
-// import CloseIcon from '@mui/icons-material/Close';
 import SelectPassengerDialog from './SelectPassengerDialog';
+import {getLabelFromOption} from "../../../utils";
+import type {IOption} from "../../../api/basic/types";
 
 interface TicketOrderFormDialogProps {
   open: boolean;
@@ -49,7 +49,6 @@ interface TicketOrderFormDialogProps {
   form: Partial<TicketOrder>;
   setForm: React.Dispatch<React.SetStateAction<Partial<TicketOrder>>>;
   editingId: string | null;
-  suppliers: Supplier[];
 }
 
 const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
@@ -58,7 +57,6 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
   onSubmit,
   form,
   setForm,
-  suppliers
 }) => {
   const { t } = useTranslation();
   const [passengerDialogOpen, setPassengerDialogOpen] = React.useState(false);
@@ -69,6 +67,9 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
   const customerOptions = useSelector((state: RootState) => state.options.customerOptions);
   const [currentCurrency,setCurrentCurrency] = useState<string>() // 当前币种，来源于客户
   const [passengerList,setPassengerList] = useState<Passenger[]>([]) // 客户历史乘客信息
+  const certificateOptions = useSelector((state: any) => state.options.certificateOptions) as IOption[];
+  const supplierOptions = useSelector((state: any) => state.options.supplierOptions) as IOption[];
+
 
   useEffect(() => {
     if(form.customerId){
@@ -93,8 +94,6 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
       PageSize: 10000
     }
     const passengerList = await getPassengerListByCustomer(params)
-    console.log(passengerList)
-    debugger
     setPassengerList(passengerList.data || []);
   }
 
@@ -247,7 +246,6 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
               onChange={e => setForm(f => ({ ...f, pnr: e.target.value }))}
           />
           {/* 供应商下选择 */}
-
           <FormControl fullWidth margin="dense" required>
             <InputLabel>{t('ticketOrder.supplier')}</InputLabel>
             <Select
@@ -255,8 +253,8 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                 value={form.supplierId || ''}
                 onChange={e => setForm(f => ({ ...f, supplierId: e.target.value }))}
             >
-              {suppliers.map(s => (
-                  <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
+              {supplierOptions.map(s => (
+                  <MenuItem key={s.value} value={s.value}>{s.label}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -400,7 +398,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
                     <TableRow key={idx}>
                       <TableCell>{p.name}</TableCell>
                       <TableCell>{p.englishName}</TableCell>
-                      <TableCell>{p.certificateType || ''}</TableCell>
+                      <TableCell>{getLabelFromOption(p.certificateType,certificateOptions)}</TableCell>
                       <TableCell>{p.certificateNo || ''}</TableCell>
                       <TableCell>{p.phoneNumber || ''}</TableCell>
                       <TableCell>

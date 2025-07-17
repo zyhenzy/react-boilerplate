@@ -11,7 +11,9 @@ import {
   TableRow,
   Paper,
   IconButton,
-  TablePagination, Button, TextField
+  TablePagination,
+  Button,
+  TextField
 } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import RequestOrderDetailDialog from './components/RequestOrderDetailDialog';
@@ -227,7 +229,6 @@ const RequestOrderPage: React.FC = () => {
           form={editingOrder || {}}
           setForm={setEditingOrder as any}
           editingId={null}
-          suppliers={suppliers}
       />
     </Box>
   );

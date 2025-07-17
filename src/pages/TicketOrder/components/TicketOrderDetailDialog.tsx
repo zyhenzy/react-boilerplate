@@ -3,6 +3,9 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, 
 import { useTranslation } from 'react-i18next';
 import type { TicketOrder } from '../../../api/ticket-order/types';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import {getLabelFromOption} from "../../../utils";
+import {useSelector} from "react-redux";
+import type {IOption} from "../../../api/basic/types";
 
 interface TicketOrderDetailDialogProps {
   open: boolean;
@@ -12,6 +15,9 @@ interface TicketOrderDetailDialogProps {
 
 const TicketOrderDetailDialog: React.FC<TicketOrderDetailDialogProps> = ({ open, onClose, order }) => {
   const { t,i18n } = useTranslation();
+  const certificateOptions = useSelector((state: any) => state.options.certificateOptions) as IOption[];
+  const supplierOptions = useSelector((state: any) => state.options.supplierOptions) as IOption[];
+  const customerOptions = useSelector((state: any) => state.options.customerOptions) as IOption[];
 
   return (
       <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
@@ -22,8 +28,12 @@ const TicketOrderDetailDialog: React.FC<TicketOrderDetailDialogProps> = ({ open,
           <Typography variant="subtitle1">{t('ticketOrder.bookerContact')}: {order?.bookerContact}</Typography>
           <Typography variant="subtitle1">PNR: {order?.pnr}</Typography>
           <Typography variant="subtitle1">{t('ticketOrder.status')}: {t(`ticketOrder.status_${order?.status}`)}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.supplier')}: {order?.supplierId}</Typography>
-          <Typography variant="subtitle1">{t('ticketOrder.customer')}: {order?.customerId}</Typography>
+          <Typography variant="subtitle1">
+            {t('ticketOrder.supplier')}:{getLabelFromOption(order?.supplierId,supplierOptions)}
+          </Typography>
+          <Typography variant="subtitle1">
+            {t('ticketOrder.customer')}: {getLabelFromOption(order?.customerId,customerOptions)}
+          </Typography>
           <Typography variant="subtitle1">{t('ticketOrder.adjustmentValue')}: {order?.adjustmentValue}</Typography>
           <Typography variant="subtitle1">{t('ticketOrder.currencyBooking')}: {order?.currencyBooking}</Typography>
           <Typography variant="subtitle1">{t('ticketOrder.changeRule')}: {order?.changeRule}</Typography>
@@ -57,9 +67,7 @@ const TicketOrderDetailDialog: React.FC<TicketOrderDetailDialogProps> = ({ open,
                     <TableCell>{p.englishName}</TableCell>
                     <TableCell>{p.birthday}</TableCell>
                     <TableCell>
-                      {/* todo:certificateType根据国际化显示，琦哥直接返type码即可 */}
-                      {/*@ts-ignore*/}
-                      {i18n.language === 'zh'?p.certificateType.name:p.certificateType.nameEn}
+                      {getLabelFromOption(p.certificateType,certificateOptions)}
                     </TableCell>
                     <TableCell>{p.certificateNo}</TableCell>
                     <TableCell>{p.nationality}</TableCell>

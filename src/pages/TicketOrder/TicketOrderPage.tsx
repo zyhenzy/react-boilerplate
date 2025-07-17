@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {IssuedTicketOrderCommand, TicketOrder} from '../../api/ticket-order/types';
 import { getTicketOrderList, addTicketOrder, updateTicketOrder, getTicketOrderDetail, cancelTicketOrder, payedTicketOrder, issuedTicketOrder, downloadTicketOrderWord } from '../../api/ticket-order';
-import { getSupplierList } from '../../api/supplier';
-import type { Supplier } from '../../api/supplier/types';
 import {
   Box,
   Button,
@@ -18,14 +16,12 @@ import {
 } from '@mui/material';
 import TicketOrderFormDialog from './components/TicketOrderFormDialog';
 import PayDialog from './components/PayDialog';
-// import IssuedDialog from './components/IssuedDialog';
 import TicketOrderDetailDialog from './components/TicketOrderDetailDialog';
 import { useTranslation } from 'react-i18next';
 
 const TicketOrderPage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [data, setData] = useState<TicketOrder[]>([]);
-  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
@@ -62,16 +58,6 @@ const TicketOrderPage: React.FC = () => {
       setLoading(false);
     }
   };
-
-  // 获取供应商列表
-  const fetchSuppliers = async () => {
-    const res = await getSupplierList({ PageIndex: 1, PageSize: 1000 });
-    setSuppliers(res.data || []);
-  };
-
-  useEffect(() => {
-    fetchSuppliers();
-  }, []);
 
   useEffect(() => {
     fetchData();
@@ -297,7 +283,6 @@ const TicketOrderPage: React.FC = () => {
         form={editingOrder || {}}
         setForm={setEditingOrder as any}
         editingId={editingOrder?.id || null}
-        suppliers={suppliers}
       />
       <PayDialog
         open={payDialogOpen}

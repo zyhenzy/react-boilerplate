@@ -66,6 +66,11 @@ export function getMealsOptions(){
   return http.get<IOption[]>('/v1/Data/mealsOptions');
 }
 
+// 根据产品查供应商options
+export function getSupplierOptions(Type:string='') {
+  return http.get<IOption[]>('/v1/Data/supplierOptions',{Type});
+}
+
 // 上传图片接口，支持自定义 headers
 export function uploadImage(formData: FormData) {
   return http.post<string>('/v1/Image/upload', formData, {
