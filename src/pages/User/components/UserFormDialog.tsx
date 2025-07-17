@@ -16,7 +16,6 @@ import Select from '@mui/material/Select';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
-import { sexOptions } from '../../../constants/sexOptions';
 import {userTypeOptions} from "../../../constants/userTypeOptions";
 
 interface UserFormDialogProps {
@@ -41,7 +40,7 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
   const roleOptions = useSelector((state: RootState) => state.options.roleOptions);
   const agentOptions = useSelector((state: RootState) => state.options.agentOptions);
   const customerOptions = useSelector((state: RootState) => state.options.customerOptions);
-  const sexOpts = sexOptions.map(opt => ({ ...opt, label: t(`user.sex_${opt.value.toLowerCase()}`, opt.label) }));
+  const sexOptions = useSelector((state: RootState) => state.options.sexOptions);
 
   const handleUserTypeChange = (e:any)=>{
     setForm((f: any) => ({
@@ -121,7 +120,7 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
             value={form.sex || ''}
             onChange={e => setForm((f: any) => ({ ...f, sex: e.target.value }))}
           >
-            {sexOpts.map(option => (
+            {sexOptions.map(option => (
               <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
             ))}
           </TextField>
