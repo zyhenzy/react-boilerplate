@@ -9,7 +9,7 @@ export function getAgentList(params?: AgentQuery) {
 
 // 获取代理详情
 export function getAgentDetail(id: string) {
-  return http.get(`/v1/Agent/${id}`);
+  return http.get<Agent>(`/v1/Agent/${id}`);
 }
 
 // 新增代理

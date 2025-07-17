@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { Agent } from "../../api/agent/types";
-import { createAgent, enableAgent, getAgentList, updateAgent } from "../../api/agent";
+import {createAgent, enableAgent, getAgentDetail, getAgentList, updateAgent} from "../../api/agent";
 import {
   Box,
   Button,
@@ -49,8 +49,11 @@ const AgentPage: React.FC = () => {
     setDialogOpen(true);
   };
 
-  const handleEdit = (agent: Agent) => {
-    setEditingAgent(agent);
+  const handleEdit = async (agent: Agent) => {
+    const res = await getAgentDetail(agent.id as string)
+    /*@ts-ignore*/
+    res.cityCode = res?.city?.code
+    setEditingAgent(res);
     setDialogOpen(true);
   };
 
@@ -101,7 +104,8 @@ const AgentPage: React.FC = () => {
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.contact}</TableCell>
                   <TableCell>{item.countryCode}</TableCell>
-                  <TableCell>{item.cityCode}</TableCell>
+                  {/*@ts-ignore*/}
+                  <TableCell>{item?.city?.name}</TableCell>
                   <TableCell>{item.currency}</TableCell>
                   <TableCell>
                     <Switch checked={item.enable} onChange={() => handleEnable(item)} disabled={loading} />
