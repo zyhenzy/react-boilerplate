@@ -10,7 +10,7 @@ import {
   getAirlineOptions,
   getAirportOptions,
   getClassTypeOptions,
-  getMealsOptions, getSexOptions, getSupplierOptions
+  getMealsOptions, getSexOptions, getSupplierOptions, getCityOptions
 } from '../api/basic';
 import { IOption } from '../api/basic/types';
 
@@ -66,6 +66,10 @@ export const fetchSupplierOptions = createAsyncThunk('options/fetchSupplierOptio
   return await getSupplierOptions();
 });
 
+export const fetchCityOptions = createAsyncThunk('options/fetchCityOptions', async () => {
+  return await getCityOptions();
+});
+
 interface OptionsState {
   countryOptions: IOption[]; // 电话区号
   countryCodeOptions: IOption[]; // 国家编码
@@ -80,6 +84,7 @@ interface OptionsState {
   mealsOptions: IOption[];
   sexOptions: IOption[];
   supplierOptions: IOption[];
+  cityOptions: IOption[];
 }
 
 const initialState: OptionsState = {
@@ -95,7 +100,8 @@ const initialState: OptionsState = {
   classTypeOptions: [],
   mealsOptions: [],
   sexOptions: [],
-  supplierOptions: []
+  supplierOptions: [],
+  cityOptions: []
 };
 
 const optionsSlice = createSlice({
@@ -142,6 +148,9 @@ const optionsSlice = createSlice({
       })
       .addCase(fetchSupplierOptions.fulfilled, (state, action) => {
         state.supplierOptions = action.payload;
+      })
+      .addCase(fetchCityOptions.fulfilled, (state, action) => {
+        state.cityOptions = action.payload;
       })
   },
 });

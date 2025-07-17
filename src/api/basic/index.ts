@@ -17,8 +17,9 @@ export function getCountryCodeOptions() {
 }
 
 // 城市下拉
-export function getCityOptions(country:string){
-  return http.get<IOption[]>('/v1/Data/cityOptions',{country});
+export function getCityOptions(country?: string) {
+  return http.get<IOption[]>('/v1/Data/cityOptions', { country })
+      .then(res => res.filter(item => item.label && item.value));
 }
 
 // 角色下拉

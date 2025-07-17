@@ -26,7 +26,7 @@ import {
     fetchAirportOptions,
     fetchClassTypeOptions,
     fetchMealsOptions,
-    fetchSexOptions, fetchSupplierOptions
+    fetchSexOptions, fetchSupplierOptions, fetchCityOptions
 } from "../store/optionsSlice";
 import {AppDispatch} from "../store";
 
@@ -56,6 +56,7 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
             dispatch(fetchMealsOptions());
             dispatch(fetchSexOptions());
             dispatch(fetchSupplierOptions());
+            dispatch(fetchCityOptions());
         })();
     }, []);
 

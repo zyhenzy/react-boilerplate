@@ -20,6 +20,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
   const [form, setForm] = useState<AddTicketOrderTripCommand>({});
   const airlineOptions = useSelector((state: any) => state.options.airlineOptions) as IOption[];
   const airportOptions = useSelector((state: any) => state.options.airportOptions) as IOption[];
+  const cityOptions = useSelector((state: any) => state.options.cityOptions) as IOption[];
   const classTypeOptions = useSelector((state: any) => state.options.classTypeOptions) as IOption[];
   const mealsOptions = useSelector((state: any) => state.options.mealsOptions) as IOption[];
 
@@ -42,7 +43,6 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             )}
             isOptionEqualToValue={(option, value) => option.value === value.value}
           />
-
           <TextField
             margin="dense"
             label={t('ticketOrder.flight')}
@@ -51,20 +51,44 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             onChange={e => setForm(f => ({ ...f, flight: e.target.value }))}
             required
           />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.depCity')}
-            fullWidth
-            value={form.depCity || ''}
-            onChange={e => setForm(f => ({ ...f, depCity: e.target.value }))}
+
+
+          <Autocomplete
+              options={cityOptions}
+              getOptionLabel={option => option.label || ''}
+              value={cityOptions.find(opt => opt.value === form.depCity) || null}
+              onChange={(_, newValue) => setForm(f => ({ ...f, depCity: newValue ? newValue.value : '' }))}
+              renderInput={params => (
+                  <TextField {...params} label={t('ticketOrder.depCity')} margin="dense" fullWidth />
+              )}
+              isOptionEqualToValue={(option, value) => option.value === value.value}
           />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.arrCity')}
-            fullWidth
-            value={form.arrCity || ''}
-            onChange={e => setForm(f => ({ ...f, arrCity: e.target.value }))}
+
+          <Autocomplete
+              options={cityOptions}
+              getOptionLabel={option => option.label || ''}
+              value={cityOptions.find(opt => opt.value === form.arrCity) || null}
+              onChange={(_, newValue) => setForm(f => ({ ...f, arrCity: newValue ? newValue.value : '' }))}
+              renderInput={params => (
+                  <TextField {...params} label={t('ticketOrder.arrCity')} margin="dense" fullWidth />
+              )}
+              isOptionEqualToValue={(option, value) => option.value === value.value}
           />
+
+          {/*<TextField*/}
+          {/*  margin="dense"*/}
+          {/*  label={t('ticketOrder.depCity')}*/}
+          {/*  fullWidth*/}
+          {/*  value={form.depCity || ''}*/}
+          {/*  onChange={e => setForm(f => ({ ...f, depCity: e.target.value }))}*/}
+          {/*/>*/}
+          {/*<TextField*/}
+          {/*  margin="dense"*/}
+          {/*  label={t('ticketOrder.arrCity')}*/}
+          {/*  fullWidth*/}
+          {/*  value={form.arrCity || ''}*/}
+          {/*  onChange={e => setForm(f => ({ ...f, arrCity: e.target.value }))}*/}
+          {/*/>*/}
           <div style={{ display: 'flex', gap: 8 }}>
             <TextField
               margin="dense"
@@ -122,7 +146,6 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               value={form.depTerminal || ''}
               onChange={e => setForm(f => ({ ...f, depTerminal: e.target.value }))}
           />
-
           <Autocomplete
               options={airportOptions}
               getOptionLabel={option => option.label || ''}
@@ -166,8 +189,6 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             value={form.cabinCode || ''}
             onChange={e => setForm(f => ({ ...f, cabinCode: e.target.value }))}
           />
-
-
           <TextField
             margin="dense"
             label={t('ticketOrder.flyingTime')}
