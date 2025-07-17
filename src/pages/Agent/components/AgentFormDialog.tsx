@@ -93,9 +93,7 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
                 getOptionLabel={opt => opt.label || ''}
                 value={countryCodeOptions.find(opt => opt.value === form.countryCode) || null}
                 onChange={(_, newValue) => {
-
                   setForm(f => ({ ...f, countryCode: newValue ? newValue.value : '' }));
-
                 }}
                 renderInput={(params) => (
                   <TextField {...params} label={t('common.country')} margin="dense" />

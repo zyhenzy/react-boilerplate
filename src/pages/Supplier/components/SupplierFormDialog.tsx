@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -50,6 +50,15 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
   const productsOptions = useSelector((state: any) => state.options.productOptions) as IOption[];
   const [cityOptions,setCityOptions] = useState<any[]>([])
 
+  useEffect(() => {
+    if (form.countryCode) {
+      fetchCityOptions(form.countryCode);
+    } else {
+      setCityOptions([]);
+    }
+  }, [form.countryCode]);
+
+
   React.useEffect(() => {
     setForm({
       id: initialValues?.id,
@@ -70,6 +79,12 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
       products: initialValues?.products || [],
     });
   }, [initialValues, open]);
+
+  const fetchCityOptions = async (countryCode: string) => {
+    setCityOptions([]);
+    const res = await getCityOptions(countryCode);
+    setCityOptions(res)
+  }
 
   const handleChange = (key: keyof Supplier, value: any) => {
     setForm(f => ({ ...f, [key]: value }));
@@ -132,11 +147,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                   getOptionLabel={opt => opt.label || ''}
                   value={countryCodeOptions.find(opt => opt.value === form.countryCode) || null}
                   onChange={(_, newValue) => {
-                    setCityOptions([]);
                     setForm(f => ({ ...f, countryCode: newValue ? newValue.value : '' }));
-                    if (newValue) {
-                      getCityOptions(newValue.value).then(res => setCityOptions(res));
-                    }
                   }}
                   renderInput={(params) => (
                       <TextField {...params} label={t('common.country')} margin="dense" />
