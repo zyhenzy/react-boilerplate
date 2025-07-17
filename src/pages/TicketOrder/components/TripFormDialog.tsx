@@ -51,8 +51,6 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             onChange={e => setForm(f => ({ ...f, flight: e.target.value }))}
             required
           />
-
-
           <Autocomplete
               options={cityOptions}
               getOptionLabel={option => option.label || ''}
@@ -63,7 +61,6 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               )}
               isOptionEqualToValue={(option, value) => option.value === value.value}
           />
-
           <Autocomplete
               options={cityOptions}
               getOptionLabel={option => option.label || ''}
@@ -74,7 +71,6 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               )}
               isOptionEqualToValue={(option, value) => option.value === value.value}
           />
-
           {/*<TextField*/}
           {/*  margin="dense"*/}
           {/*  label={t('ticketOrder.depCity')}*/}
