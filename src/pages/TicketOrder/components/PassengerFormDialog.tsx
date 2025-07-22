@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import type { AddTicketOrderPassengerCommand } from '../../../api/ticket-order/types';
 import type { IOption } from '../../../api/basic/types';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 interface PassengerFormDialogProps {
   open: boolean;
@@ -63,14 +65,14 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
             value={form.certificateNo || ''}
             onChange={e => setForm(f => ({ ...f, certificateNo: e.target.value }))}
           />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.validity')}
-            type="date"
-            fullWidth
-            InputLabelProps={{ shrink: true }}
-            value={form.validity || ''}
-            onChange={e => setForm(f => ({ ...f, validity: e.target.value }))}
+
+          <DatePicker
+              label={t('ticketOrder.validity')}
+              value={form.validity ? dayjs(form.validity) : null}
+              onChange={value => setForm(f => ({ ...f, validity: value ? dayjs(value).format('YYYY-MM-DD') : '' }))}
+              openTo="year"
+              views={['year', 'month', 'day']}
+              slotProps={{ textField: { fullWidth: true, margin: 'dense',size:'small' } }}
           />
 
 
@@ -95,14 +97,13 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
               onChange={e => setForm(f => ({ ...f, phoneNumber: e.target.value }))}
             />
           </div>
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.birthday')}
-            fullWidth
-            type="date"
-            InputLabelProps={{ shrink: true }}
-            value={form.birthday || ''}
-            onChange={e => setForm(f => ({ ...f, birthday: e.target.value }))}
+          <DatePicker
+              label={t('ticketOrder.birthday')}
+              value={form.birthday ? dayjs(form.birthday) : null}
+              onChange={value => setForm(f => ({ ...f, birthday: value ? dayjs(value).format('YYYY-MM-DD') : '' }))}
+              openTo="year"
+              views={['year', 'month', 'day']}
+              slotProps={{ textField: { fullWidth: true, margin: 'dense',size:'small' } }}
           />
           <FormControl fullWidth margin="dense">
             <InputLabel>{t('ticketOrder.nationality')}</InputLabel>

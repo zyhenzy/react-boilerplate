@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { ConvertedAgentOrderCommand } from '../../api/agent-order/types';
-
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 interface ConvertedDialogProps {
   open: boolean;
@@ -75,14 +76,13 @@ const ConvertedDialog: React.FC<ConvertedDialogProps> = ({ open, onClose, onSubm
         <TextField margin="dense" label={t('agentOrder.price')} type="number" fullWidth value={form.price} onChange={e => handleChange('price', Number(e.target.value))} />
         <TextField margin="dense" label={t('agentOrder.tax')} type="number" fullWidth value={form.tax} onChange={e => handleChange('tax', Number(e.target.value))} />
         <TextField margin="dense" label={t('agentOrder.serviceCharge')} type="number" fullWidth value={form.serviceCharge} onChange={e => handleChange('serviceCharge', Number(e.target.value))} />
-        <TextField
-          margin="dense"
-          label={t('agentOrder.issuanceTimeLimit')}
-          fullWidth
-          type="date"
-          InputLabelProps={{ shrink: true }}
-          value={form.issuanceTimeLimit || ''}
-          onChange={e => handleChange('issuanceTimeLimit', e.target.value)}
+        <DatePicker
+            label={t('agentOrder.issuanceTimeLimit')}
+            value={form.issuanceTimeLimit ? dayjs(form.issuanceTimeLimit) : null}
+            onChange={value => handleChange('issuanceTimeLimit', value ? dayjs(value).format('YYYY-MM-DD') : '')}
+            openTo="year"
+            views={['year', 'month', 'day']}
+            slotProps={{ textField: { fullWidth: true, margin: 'dense',size:'small' } }}
         />
         <TextField margin="dense" label={t('agentOrder.tcRemark')} fullWidth value={form.tcRemark} onChange={e => handleChange('tcRemark', e.target.value)} />
       </DialogContent>

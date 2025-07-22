@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import dayjs from 'dayjs';
 import type { AddTicketOrderTripCommand } from '../../../api/ticket-order/types';
 import {useSelector} from "react-redux";
 import type {IOption} from "../../../api/basic/types";
 import Autocomplete from '@mui/material/Autocomplete';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 interface TripFormDialogProps {
   open: boolean;
@@ -86,14 +87,13 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
           {/*  onChange={e => setForm(f => ({ ...f, arrCity: e.target.value }))}*/}
           {/*/>*/}
           <div style={{ display: 'flex', gap: 8 }}>
-            <TextField
-              margin="dense"
+            <DatePicker
               label={t('ticketOrder.depDate')}
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              value={form.depDate || ''}
-              onChange={e => setForm(f => ({ ...f, depDate: e.target.value }))}
-              style={{ flex: 1 }}
+              value={form.depDate ? dayjs(form.depDate) : null}
+              onChange={value => setForm(q => ({ ...q, depDate: value ? dayjs(value).format('YYYY-MM-DD') : '' }))}
+              openTo="year"
+              views={['year', 'month', 'day']}
+              slotProps={{ textField: { margin: 'dense',size:'small',style:{ flex: 1 } } }}
             />
             <TimePicker
               label={t('ticketOrder.depTime')}
@@ -106,14 +106,13 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             />
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
-            <TextField
-              margin="dense"
+            <DatePicker
               label={t('ticketOrder.arrDate')}
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              value={form.arrDate || ''}
-              onChange={e => setForm(f => ({ ...f, arrDate: e.target.value }))}
-              style={{ flex: 1 }}
+              value={form.arrDate ? dayjs(form.arrDate) : null}
+              onChange={value => setForm(q => ({ ...q, arrDate: value ? dayjs(value).format('YYYY-MM-DD') : '' }))}
+              openTo="year"
+              views={['year', 'month', 'day']}
+              slotProps={{ textField: { margin: 'dense',size:'small',style:{ flex: 1 } } }}
             />
             <TimePicker
               label={t('ticketOrder.arrTime')}

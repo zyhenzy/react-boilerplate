@@ -28,6 +28,8 @@ import ReviewFailedDialog from './ReviewFailedDialog';
 import ConvertedDialog from './ConvertedDialog';
 import IssuedDialog from './IssuedDialog';
 import { useTranslation } from 'react-i18next';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 const AgentOrderPage: React.FC = () => {
   const { t } = useTranslation();
@@ -121,23 +123,21 @@ const AgentOrderPage: React.FC = () => {
             onChange={e => setQuery(q => ({ ...q, OrderNo: e.target.value }))}
             style={{ width: 160 }}
           />
-          <TextField
-            label={t('common.startDate')}
-            type="date"
-            size="small"
-            InputLabelProps={{ shrink: true }}
-            value={query.StartDate || ''}
-            onChange={e => setQuery(q => ({ ...q, StartDate: e.target.value }))}
-            style={{ width: 160 }}
+          <DatePicker
+              label={t('common.startDate')}
+              value={query.StartDate ? dayjs(query.StartDate) : null}
+              onChange={value => setQuery(q => ({ ...q, StartDate: dayjs(value).format('YYYY-MM-DD') }))}
+              openTo="year"
+              views={['year', 'month', 'day']}
+              slotProps={{ textField: { fullWidth: true, margin: 'dense',size:'small',style:{width:160}}}}
           />
-          <TextField
-            label={t('common.endDate')}
-            type="date"
-            size="small"
-            InputLabelProps={{ shrink: true }}
-            value={query.EndDate || ''}
-            onChange={e => setQuery(q => ({ ...q, EndDate: e.target.value }))}
-            style={{ width: 160 }}
+          <DatePicker
+              label={t('common.endDate')}
+              value={query.EndDate ? dayjs(query.EndDate) : null}
+              onChange={value => setQuery(q => ({ ...q, EndDate: dayjs(value).format('YYYY-MM-DD') }))}
+              openTo="year"
+              views={['year', 'month', 'day']}
+              slotProps={{ textField: { fullWidth: true, margin: 'dense',size:'small',style:{width:160}}}}
           />
           <FormControl size="small" style={{ width: 140 }}>
             <InputLabel>{t('agentOrder.type')}</InputLabel>

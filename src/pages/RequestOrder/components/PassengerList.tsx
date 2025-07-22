@@ -5,6 +5,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import type { AddRequestOrderPassengerCommand } from '../../../api/request-order/types';
 import { useTranslation } from 'react-i18next';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 interface PassengerListProps {
   passengerList: AddRequestOrderPassengerCommand[];
@@ -132,14 +134,13 @@ const PassengerList: React.FC<PassengerListProps> = ({ passengerList, onChange, 
             value={form.certificateNo || ''}
             onChange={e => setForm(f => ({ ...f, certificateNo: e.target.value }))}
           />
-          <TextField
-            margin="dense"
-            label={t('requestOrder.passengerBirthday')}
-            fullWidth
-            type="date"
-            InputLabelProps={{ shrink: true }}
-            value={form.birthday || ''}
-            onChange={e => setForm(f => ({ ...f, birthday: e.target.value }))}
+          <DatePicker
+              label={t('requestOrder.passengerBirthday')}
+              value={form.birthday ? dayjs(form.birthday) : null}
+              onChange={value => setForm(f => ({ ...f, birthday: value ? dayjs(value).format('YYYY-MM-DD') : '' }))}
+              openTo="year"
+              views={['year', 'month', 'day']}
+              slotProps={{ textField: { fullWidth: true, margin: 'dense',size:'small' } }}
           />
           <TextField
             margin="dense"
