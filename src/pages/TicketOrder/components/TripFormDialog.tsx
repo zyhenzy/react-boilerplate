@@ -184,13 +184,22 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             value={form.cabinCode || ''}
             onChange={e => setForm(f => ({ ...f, cabinCode: e.target.value }))}
           />
-          <TextField
-            margin="dense"
-            label={t('ticketOrder.flyingTime')}
-            fullWidth
-            type="number"
-            value={form.flyingTime || ''}
-            onChange={e => setForm(f => ({ ...f, flyingTime: e.target.value }))}
+          {/*<TextField*/}
+          {/*  margin="dense"*/}
+          {/*  label={t('ticketOrder.flyingTime')}*/}
+          {/*  fullWidth*/}
+          {/*  type="number"*/}
+          {/*  value={form.flyingTime || ''}*/}
+          {/*  onChange={e => setForm(f => ({ ...f, flyingTime: e.target.value }))}*/}
+          {/*/>*/}
+          <TimePicker
+              label={t('ticketOrder.flyingTime')}
+              value={form.flyingTime ? dayjs(form.flyingTime, 'HH:mm') : null}
+              onChange={value => setForm(f => ({ ...f, flyingTime: value ? value.format('HH:mm') : '' }))}
+              ampm={false}
+              slotProps={{
+                textField: { margin: 'dense', fullWidth: true,size:'small' }
+              }}
           />
           <TextField
             margin="dense"
