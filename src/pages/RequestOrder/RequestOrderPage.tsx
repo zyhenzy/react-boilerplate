@@ -81,6 +81,7 @@ const RequestOrderPage: React.FC = () => {
     const res: RequestOrder = await getRequestOrderDetail(order.id as string);
     // 字段映射，需根据实际字段调整
     const ticketOrder: TicketOrder = {
+      isRequest:true,
       customerId:res.customerId,
       bookerName:res.bookerName ?? undefined,
       bookerContact: res.phoneNumber ?? undefined,

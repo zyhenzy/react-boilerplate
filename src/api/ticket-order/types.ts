@@ -12,6 +12,7 @@ export enum TicketOrderStatus {
 export interface TicketOrder {
   id?: string; // 订单ID fixme：确定下是否存在
   billNo?: string; // 订单号，fixme：确定下是否存在
+  isRequest?:boolean // 是否是航班需求订单转换的（仅前端使用）
   bookerName?: string; // 订票人
   bookerContact?: string; // 订票人联系方式
   pnr?: string; // PNR

@@ -272,6 +272,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
               label={t('ticketOrder.customerId', '客户')}
               value={form.customerId || ''}
               onChange={e => setForm(f => ({ ...f, customerId: e.target.value }))}
+              disabled={form.isRequest}
             >
               {customerOptions.map((c: any) => (
                 <MenuItem key={c.value} value={c.value}>{c.label}</MenuItem>
