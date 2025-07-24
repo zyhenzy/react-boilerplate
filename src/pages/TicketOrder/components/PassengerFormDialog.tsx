@@ -6,6 +6,7 @@ import type { AddTicketOrderPassengerCommand } from '../../../api/ticket-order/t
 import type { IOption } from '../../../api/basic/types';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import Autocomplete from '@mui/material/Autocomplete';
 
 interface PassengerFormDialogProps {
   open: boolean;
@@ -106,16 +107,23 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
               slotProps={{ textField: { fullWidth: true, margin: 'dense',size:'small' } }}
           />
           <FormControl fullWidth margin="dense">
-            <InputLabel>{t('ticketOrder.nationality')}</InputLabel>
-            <Select
-              label={t('ticketOrder.nationality')}
-              value={form.nationality || ''}
-              onChange={e => setForm(f => ({ ...f, nationality: e.target.value }))}
-            >
-              {countryCodeOptions.map(opt => (
-                <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
-              ))}
-            </Select>
+            <Autocomplete
+              options={countryCodeOptions}
+              getOptionLabel={opt => `${opt.label || ''}${opt.labelEn ? ' / ' + opt.labelEn : ''}${opt.value ? ' / ' + opt.value : ''}`}
+              filterOptions={(options, { inputValue }) =>
+                options.filter(opt =>
+                  (opt.label && opt.label.includes(inputValue)) ||
+                  (opt.labelEn && opt.labelEn.toLowerCase().includes(inputValue.toLowerCase())) ||
+                  (opt.value && opt.value.includes(inputValue))
+                )
+              }
+              value={countryCodeOptions.find(opt => opt.value === form.nationality) || null}
+              onChange={(_, newValue) => setForm(f => ({ ...f, nationality: newValue ? newValue.value : '' }))}
+              renderInput={params => (
+                <TextField {...params} label={t('ticketOrder.nationality')} margin="dense" fullWidth />
+              )}
+              isOptionEqualToValue={(option, value) => option.value === value.value}
+            />
           </FormControl>
           <FormControl fullWidth margin="dense">
             <InputLabel>{t('common.sex')}</InputLabel>

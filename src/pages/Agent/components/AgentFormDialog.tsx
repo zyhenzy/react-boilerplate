@@ -87,18 +87,35 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
               inputProps={{ maxLength: 100 }}
           />
           <div style={{ display: 'flex', gap: 8 }}>
-            <FormControl style={{ minWidth: 120 }} margin="dense">
+            <FormControl style={{ minWidth: 180 }} margin="dense">
+              {/*<Autocomplete*/}
+              {/*  options={countryCodeOptions}*/}
+              {/*  getOptionLabel={opt => opt.label || ''}*/}
+              {/*  value={countryCodeOptions.find(opt => opt.value === form.countryCode) || null}*/}
+              {/*  onChange={(_, newValue) => {*/}
+              {/*    setForm(f => ({ ...f, countryCode: newValue ? newValue.value : '' }));*/}
+              {/*  }}*/}
+              {/*  renderInput={(params) => (*/}
+              {/*    <TextField {...params} label={t('common.country')} margin="dense" />*/}
+              {/*  )}*/}
+              {/*  isOptionEqualToValue={(option, value) => option.value === value.value}*/}
+              {/*/>*/}
               <Autocomplete
-                options={countryCodeOptions}
-                getOptionLabel={opt => opt.label || ''}
-                value={countryCodeOptions.find(opt => opt.value === form.countryCode) || null}
-                onChange={(_, newValue) => {
-                  setForm(f => ({ ...f, countryCode: newValue ? newValue.value : '' }));
-                }}
-                renderInput={(params) => (
-                  <TextField {...params} label={t('common.country')} margin="dense" />
-                )}
-                isOptionEqualToValue={(option, value) => option.value === value.value}
+                  options={countryCodeOptions}
+                  getOptionLabel={opt => `${opt.label || ''}`}
+                  filterOptions={(options, { inputValue }) =>
+                      options.filter(opt =>
+                          (opt.label && opt.label.includes(inputValue)) ||
+                          (opt.labelEn && opt.labelEn.toLowerCase().includes(inputValue.toLowerCase())) ||
+                          (opt.value && opt.value.includes(inputValue))
+                      )
+                  }
+                  value={countryCodeOptions.find(opt => opt.value === form.countryCode) || null}
+                  onChange={(_, newValue) => setForm(f => ({ ...f, countryCode: newValue ? newValue.value : '' }))}
+                  renderInput={params => (
+                      <TextField {...params} label={t('common.country')} margin="dense" fullWidth />
+                  )}
+                  isOptionEqualToValue={(option, value) => option.value === value.value}
               />
             </FormControl>
             <FormControl style={{ flex: 1 }} margin="dense">

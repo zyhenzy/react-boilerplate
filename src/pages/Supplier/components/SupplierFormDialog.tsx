@@ -117,7 +117,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <form onSubmit={handleSubmit}>
         <DialogTitle>{initialValues ? t('supplier.edit') : t('supplier.add')}</DialogTitle>
         <DialogContent>
@@ -141,16 +141,21 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             inputProps={{ maxLength: 50 }}
           />
           <div style={{ display: 'flex', gap: 8 }}>
-            <FormControl style={{ minWidth: 120 }} margin="dense">
+            <FormControl style={{ minWidth: 180 }} margin="dense">
               <Autocomplete
                   options={countryCodeOptions}
-                  getOptionLabel={opt => opt.label || ''}
+                  getOptionLabel={opt => `${opt.label || ''}`}
+                  filterOptions={(options, { inputValue }) =>
+                      options.filter(opt =>
+                          (opt.label && opt.label.includes(inputValue)) ||
+                          (opt.labelEn && opt.labelEn.toLowerCase().includes(inputValue.toLowerCase())) ||
+                          (opt.value && opt.value.includes(inputValue))
+                      )
+                  }
                   value={countryCodeOptions.find(opt => opt.value === form.countryCode) || null}
-                  onChange={(_, newValue) => {
-                    setForm(f => ({ ...f, countryCode: newValue ? newValue.value : '' }));
-                  }}
-                  renderInput={(params) => (
-                      <TextField {...params} label={t('common.country')} margin="dense" />
+                  onChange={(_, newValue) => setForm(f => ({ ...f, countryCode: newValue ? newValue.value : '' }))}
+                  renderInput={params => (
+                      <TextField {...params} label={t('common.country')} margin="dense" fullWidth />
                   )}
                   isOptionEqualToValue={(option, value) => option.value === value.value}
               />

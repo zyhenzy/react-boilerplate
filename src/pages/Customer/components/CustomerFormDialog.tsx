@@ -65,20 +65,21 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
           />
 
           <div style={{ display: 'flex', gap: 8 }}>
-            <FormControl style={{ minWidth: 150 }} margin="dense">
+            <FormControl style={{ minWidth: 180 }} margin="dense">
               <Autocomplete
                   options={countryCodeOptions}
-                  getOptionLabel={opt => opt.label || ''}
+                  getOptionLabel={opt => `${opt.label || ''}`}
+                  filterOptions={(options, { inputValue }) =>
+                      options.filter(opt =>
+                          (opt.label && opt.label.includes(inputValue)) ||
+                          (opt.labelEn && opt.labelEn.toLowerCase().includes(inputValue.toLowerCase())) ||
+                          (opt.value && opt.value.includes(inputValue))
+                      )
+                  }
                   value={countryCodeOptions.find(opt => opt.value === form.countryCode) || null}
-                  onChange={(_, newValue) => {
-                    setCityOptions([]);
-                    setForm(f => ({ ...f, countryCode: newValue ? newValue.value : '' }));
-                    if (newValue) {
-                      getCityOptions(newValue.value).then(res => setCityOptions(res));
-                    }
-                  }}
-                  renderInput={(params) => (
-                      <TextField {...params} label={t('common.country')} margin="dense" />
+                  onChange={(_, newValue) => setForm(f => ({ ...f, countryCode: newValue ? newValue.value : '' }))}
+                  renderInput={params => (
+                      <TextField {...params} label={t('common.country')} margin="dense" fullWidth />
                   )}
                   isOptionEqualToValue={(option, value) => option.value === value.value}
               />
