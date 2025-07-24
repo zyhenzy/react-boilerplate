@@ -113,7 +113,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
       taxFee: Number(form.taxFee)
     });
     if (response||response===0) {
-      setForm(f => ({ ...f, serviceFee: response }));
+      setForm(f => ({ ...f, serviceFee: Number(response) }));
     }
   }
 
@@ -363,8 +363,9 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
               margin="dense"
               label={t('ticketOrder.serviceFee')}
               fullWidth
+              disabled={true}
               type="number"
-              value={form.serviceFee}
+              value={form.serviceFee ?? ''}
               onChange={e => setForm(f => ({ ...f, serviceFee: e.target.value }))}
           />
           {/* 行程列表弹窗编辑版 */}
