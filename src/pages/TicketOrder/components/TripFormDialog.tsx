@@ -8,6 +8,7 @@ import type {IOption} from "../../../api/basic/types";
 import Autocomplete from '@mui/material/Autocomplete';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import { getCityOptions } from '../../../api/basic';
 
 interface TripFormDialogProps {
   open: boolean;
@@ -19,9 +20,10 @@ interface TripFormDialogProps {
 const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSubmit, trip }) => {
   const { t, i18n } = useTranslation();
   const [form, setForm] = useState<AddTicketOrderTripCommand>({});
+  const [depCityOptions, setDepCityOptions] = useState<IOption[]>([]);
+  const [arrCityOptions, setArrCityOptions] = useState<IOption[]>([]);
   const airlineOptions = useSelector((state: any) => state.options.airlineOptions) as IOption[];
   const airportOptions = useSelector((state: any) => state.options.airportOptions) as IOption[];
-  const cityOptions = useSelector((state: any) => state.options.cityOptions) as IOption[];
   const classTypeOptions = useSelector((state: any) => state.options.classTypeOptions) as IOption[];
   const mealsOptions = useSelector((state: any) => state.options.mealsOptions) as IOption[];
 
@@ -53,24 +55,40 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             required
           />
           <Autocomplete
-              options={cityOptions}
-              getOptionLabel={option => option.label || ''}
-              value={cityOptions.find(opt => opt.value === form.depCity) || null}
-              onChange={(_, newValue) => setForm(f => ({ ...f, depCity: newValue ? newValue.value : '' }))}
-              renderInput={params => (
-                  <TextField {...params} label={t('ticketOrder.depCity')} margin="dense" fullWidth />
-              )}
-              isOptionEqualToValue={(option, value) => option.value === value.value}
+            options={depCityOptions}
+            getOptionLabel={option => option.label || ''}
+            value={depCityOptions.find(opt => opt.value === form.depCity) || null}
+            onInputChange={async (_, value) => {
+              if (value) {
+                const opts = await getCityOptions({ keyword: value });
+                setDepCityOptions(opts);
+              } else {
+                setDepCityOptions([]);
+              }
+            }}
+            onChange={(_, newValue) => setForm(f => ({ ...f, depCity: newValue ? newValue.value : '' }))}
+            renderInput={params => (
+              <TextField {...params} label={t('ticketOrder.depCity')} margin="dense" fullWidth />
+            )}
+            isOptionEqualToValue={(option, value) => option.value === value.value}
           />
           <Autocomplete
-              options={cityOptions}
-              getOptionLabel={option => option.label || ''}
-              value={cityOptions.find(opt => opt.value === form.arrCity) || null}
-              onChange={(_, newValue) => setForm(f => ({ ...f, arrCity: newValue ? newValue.value : '' }))}
-              renderInput={params => (
-                  <TextField {...params} label={t('ticketOrder.arrCity')} margin="dense" fullWidth />
-              )}
-              isOptionEqualToValue={(option, value) => option.value === value.value}
+            options={arrCityOptions}
+            getOptionLabel={option => option.label || ''}
+            value={arrCityOptions.find(opt => opt.value === form.arrCity) || null}
+            onInputChange={async (_, value) => {
+              if (value) {
+                const opts = await getCityOptions({ keyword: value });
+                setArrCityOptions(opts);
+              } else {
+                setArrCityOptions([]);
+              }
+            }}
+            onChange={(_, newValue) => setForm(f => ({ ...f, arrCity: newValue ? newValue.value : '' }))}
+            renderInput={params => (
+              <TextField {...params} label={t('ticketOrder.arrCity')} margin="dense" fullWidth />
+            )}
+            isOptionEqualToValue={(option, value) => option.value === value.value}
           />
           {/*<TextField*/}
           {/*  margin="dense"*/}
@@ -312,5 +330,4 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
 };
 
 export default TripFormDialog;
-
 

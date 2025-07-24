@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
 import {userTypeOptions} from "../../../constants/userTypeOptions";
+import Autocomplete from "@mui/material/Autocomplete";
 
 interface UserFormDialogProps {
   open: boolean;
@@ -88,20 +89,23 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
             inputProps={{ maxLength: 25 }}
           />
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 8 }}>
-            <TextField
-              margin="dense"
-              label={t('user.countryNumber')}
-              select
-              value={form.countryNumber || ''}
-              onChange={e => setForm((f: any) => ({ ...f, countryNumber: e.target.value }))}
-              required
-              inputProps={{ maxLength: 5 }}
-              style={{ minWidth: 120 }}
-            >
-              {countryOptions.map(option => (
-                <MenuItem key={option.value} value={option.value}>{option.label}（{option.value}）</MenuItem>
-              ))}
-            </TextField>
+            <Autocomplete
+                options={countryOptions}
+                getOptionLabel={opt => `${opt.label || ''}(${opt.value})`}
+                filterOptions={(options, { inputValue }) =>
+                    options.filter(opt =>
+                        (opt.label && opt.label.includes(inputValue)) ||
+                        (opt.labelEn && opt.labelEn.toLowerCase().includes(inputValue.toLowerCase())) ||
+                        (opt.value && opt.value.includes(inputValue))
+                    )
+                }
+                value={countryOptions.find(opt => opt.value === form.countryNumber) || null}
+                onChange={(_, newValue) => setForm((f:any) => ({ ...f, countryNumber: newValue ? newValue.value : '' }))}
+                renderInput={params => (
+                    <TextField {...params} label={t('user.countryNumber')} margin="dense" fullWidth style={{ minWidth: 180 }} />
+                )}
+                isOptionEqualToValue={(option, value) => option.value === value.value}
+            />
             <TextField
               margin="dense"
               label={t('user.phoneNumber')}

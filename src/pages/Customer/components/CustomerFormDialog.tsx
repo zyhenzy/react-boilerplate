@@ -7,18 +7,15 @@ import {
   TextField,
   Button,
   MenuItem,
-  Select,
-  InputLabel,
   FormControl,
   Checkbox
 } from '@mui/material';
 import type { Customer } from '../../../api/customer/types';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import type { RootState } from '../../../store';
 import Autocomplete from "@mui/material/Autocomplete";
-import {getCityOptions} from "../../../api/basic";
 import type {IOption} from "../../../api/basic/types";
+import {getCityOptions} from "../../../api/basic";
 
 interface CustomerFormDialogProps {
   open: boolean;
@@ -47,6 +44,20 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
       setForm(f => ({ ...f, enable: true }));
     }
   }, [form.enable, setForm]);
+
+  useEffect(() => {
+    if (form.countryCode) {
+      fetchCityOptions(form.countryCode);
+    } else {
+      setCityOptions([]);
+    }
+  }, [form.countryCode]);
+
+  const fetchCityOptions = async (countryCode: string) => {
+    setCityOptions([]);
+    const res = await getCityOptions({country:countryCode});
+    setCityOptions(res)
+  }
 
   return (
     <Dialog open={open} onClose={onClose}>

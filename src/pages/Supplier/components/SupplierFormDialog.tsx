@@ -82,7 +82,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
 
   const fetchCityOptions = async (countryCode: string) => {
     setCityOptions([]);
-    const res = await getCityOptions(countryCode);
+    const res = await getCityOptions({country:countryCode});
     setCityOptions(res)
   }
 

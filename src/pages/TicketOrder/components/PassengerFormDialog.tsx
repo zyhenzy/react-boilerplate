@@ -75,21 +75,24 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
               views={['year', 'month', 'day']}
               slotProps={{ textField: { fullWidth: true, margin: 'dense',size:'small' } }}
           />
-
-
           <div style={{ display: 'flex', gap: 8 }}>
-            <FormControl style={{ minWidth: 120 }} margin="dense">
-              <InputLabel>{t('ticketOrder.countryNumber')}</InputLabel>
-              <Select
-                label={t('ticketOrder.countryNumber')}
-                value={form.countryNumber || ''}
-                onChange={e => setForm(f => ({ ...f, countryNumber: e.target.value }))}
-              >
-                {countryOptions.map(opt => (
-                  <MenuItem key={opt.value} value={opt.value}>({opt.value}){opt.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Autocomplete
+                options={countryOptions}
+                getOptionLabel={opt => `${opt.label || ''}(${opt.value})`}
+                filterOptions={(options, { inputValue }) =>
+                    options.filter(opt =>
+                        (opt.label && opt.label.includes(inputValue)) ||
+                        (opt.labelEn && opt.labelEn.toLowerCase().includes(inputValue.toLowerCase())) ||
+                        (opt.value && opt.value.includes(inputValue))
+                    )
+                }
+                value={countryOptions.find(opt => opt.value === form.countryNumber) || null}
+                onChange={(_, newValue) => setForm(f => ({ ...f, countryNumber: newValue ? newValue.value : '' }))}
+                renderInput={params => (
+                    <TextField {...params} label={t('ticketOrder.countryNumber')} margin="dense" fullWidth style={{ minWidth: 180 }} />
+                )}
+                isOptionEqualToValue={(option, value) => option.value === value.value}
+            />
             <TextField
               margin="dense"
               label={t('ticketOrder.phoneNumber')}

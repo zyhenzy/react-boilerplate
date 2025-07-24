@@ -58,7 +58,7 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
 
   const fetchCityOptions = async (countryCode: string) => {
     setCityOptions([]);
-    const res = await getCityOptions(countryCode);
+    const res = await getCityOptions({country:countryCode});
     setCityOptions(res)
   }
 
@@ -88,18 +88,6 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
           />
           <div style={{ display: 'flex', gap: 8 }}>
             <FormControl style={{ minWidth: 180 }} margin="dense">
-              {/*<Autocomplete*/}
-              {/*  options={countryCodeOptions}*/}
-              {/*  getOptionLabel={opt => opt.label || ''}*/}
-              {/*  value={countryCodeOptions.find(opt => opt.value === form.countryCode) || null}*/}
-              {/*  onChange={(_, newValue) => {*/}
-              {/*    setForm(f => ({ ...f, countryCode: newValue ? newValue.value : '' }));*/}
-              {/*  }}*/}
-              {/*  renderInput={(params) => (*/}
-              {/*    <TextField {...params} label={t('common.country')} margin="dense" />*/}
-              {/*  )}*/}
-              {/*  isOptionEqualToValue={(option, value) => option.value === value.value}*/}
-              {/*/>*/}
               <Autocomplete
                   options={countryCodeOptions}
                   getOptionLabel={opt => `${opt.label || ''}`}
