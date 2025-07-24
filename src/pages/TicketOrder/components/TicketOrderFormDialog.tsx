@@ -32,7 +32,7 @@ import {
   addTicketOrderPassenger,
   addTicketOrderTrip,
   deleteTicketOrderPassenger,
-  deleteTicketOrderTrip,
+  deleteTicketOrderTrip, postComputeServiceFee,
   updateTicketOrderPassenger,
   updateTicketOrderTrip
 } from "../../../api/ticket-order";
@@ -78,6 +78,10 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
     }
   }, [form.customerId]);
 
+  useEffect(() => {
+    computeServiceFee()
+  }, [form.customerId, form.ticketFee, form.taxFee]);
+
   // 获取当前币种
   const getCurrencyByCustomerId = (customerId:string)=>{
     const customer = customerOptions.find(c => c.value === customerId);
@@ -95,6 +99,22 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
     }
     const passengerList = await getPassengerListByCustomer(params)
     setPassengerList(passengerList.data || []);
+  }
+
+  // 计算服务费
+  const computeServiceFee = async () => {
+    if (!form.customerId || !form.ticketFee || !form.taxFee) {
+      return;
+    }
+    // 调用计算服务费的接口
+    const response = await postComputeServiceFee({
+      customerId: form.customerId,
+      ticketFee: Number(form.ticketFee),
+      taxFee: Number(form.taxFee)
+    });
+    if (response||response===0) {
+      setForm(f => ({ ...f, serviceFee: response }));
+    }
   }
 
   const handleAddPassenger = () => {
@@ -344,7 +364,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
               label={t('ticketOrder.serviceFee')}
               fullWidth
               type="number"
-              value={form.serviceFee || ''}
+              value={form.serviceFee}
               onChange={e => setForm(f => ({ ...f, serviceFee: e.target.value }))}
           />
           {/* 行程列表弹窗编辑版 */}

@@ -102,6 +102,15 @@ export function deleteTicketOrderPassenger(data: DeleteTicketOrderPassengerComma
   return http.post('/v1/TicketOrder/deletePassenger', data);
 }
 
+// 计算服务费
+export function postComputeServiceFee(data: {
+  customerId: string,
+  ticketFee: number,
+  taxFee: number
+}) {
+  return http.post<number>('/v1/TicketOrder/serviceFee', data);
+}
+
 // 下载机票订单Word
 export function downloadTicketOrderWord(lang: string, id: string, price?: boolean) {
   // 构建下载链接
