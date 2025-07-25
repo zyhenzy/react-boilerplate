@@ -25,14 +25,19 @@
   },
   "user": {
     "title": "User Management",
+    "userType": "User Type",
     "userName": "Username",
     "name": "Name",
     "phoneNumber": "Phone Number",
     "countryNumber": "Country Code",
+    "agent": "Agent",
     "customer": "Customer",
     "sex": "Gender",
+    "email": "Email",
     "role": "Role",
     "password": "Password",
+    "changePassword": "Change Password",
+    "newPassword": "New Password",
     "enable": "Enable",
     "actions": "Actions",
     "add": "Add User",
@@ -41,11 +46,10 @@
     "loading": "Loading..."
   },
   "agent": {
-    "title": "Agent",
+    "title": "Agent Management",
     "name": "Name",
     "contact": "Contact Info",
     "countryCode": "Country Code",
-    "cityCode": "City Code",
     "currency": "Currency",
     "enable": "Enable",
     "actions": "Actions",
@@ -69,7 +73,12 @@
     "add": "Add Customer",
     "edit": "Edit Customer",
     "noData": "No data",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "serviceFeeCountType": "Service Fee Calculation Type",
+    "serviceFeeCountType_full": "Full Price",
+    "serviceFeeCountType_ticket": "Ticket Only",
+    "serviceFeeRatio": "Service Fee Ratio",
+    "products": "Products"
   },
   "supplier": {
     "title": "Supplier Management",
@@ -82,9 +91,17 @@
     "edit": "Edit Supplier",
     "noData": "No data",
     "loading": "Loading...",
-    "upload": "Avatar",
+    "upload": "Business License",
     "uploading": "Uploading...",
-    "changeAvatar": "Click to change avatar"
+    "changeAvatar": "Click to change image",
+    "bank": "Bank",
+    "bankAddress": "Bank Address",
+    "bankPostalCode": "Bank Postal Code",
+    "bankSwiftCode": "Bank SWIFT Code",
+    "bankAccount": "Bank Account",
+    "bankAccountName": "Bank Account Name",
+    "remark": "Remark",
+    "products": "Products"
   },
   "agentOrder": {
     "title": "Agent Order Management",
