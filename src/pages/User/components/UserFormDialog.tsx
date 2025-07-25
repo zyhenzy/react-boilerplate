@@ -64,6 +64,7 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
               fullWidth
               value={form.userType || ''}
               onChange={handleUserTypeChange}
+              required
           >
             {userTypeOptions.map(option => (
                 <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
@@ -102,7 +103,7 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
                 value={countryOptions.find(opt => opt.value === form.countryNumber) || null}
                 onChange={(_, newValue) => setForm((f:any) => ({ ...f, countryNumber: newValue ? newValue.value : '' }))}
                 renderInput={params => (
-                    <TextField {...params} label={t('user.countryNumber')} margin="dense" fullWidth style={{ minWidth: 180 }} />
+                    <TextField {...params} label={t('user.countryNumber')} margin="dense" fullWidth style={{ minWidth: 180 }} required />
                 )}
                 isOptionEqualToValue={(option, value) => option.value === value.value}
             />
@@ -134,6 +135,7 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
               fullWidth
               value={form.email || ''}
               onChange={e => setForm((f: any) => ({ ...f, email: e.target.value }))}
+              required
           />
           <FormControl fullWidth margin="dense">
             <InputLabel id="role-label">{t('user.role')}</InputLabel>
@@ -147,6 +149,7 @@ const UserFormDialog: React.FC<UserFormDialogProps> = ({
                 return opt ? opt.label : val;
               }).join(', ')}
               fullWidth
+              required
             >
               {roleOptions.map(option => (
                 <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>

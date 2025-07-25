@@ -90,7 +90,7 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
                   value={countryCodeOptions.find(opt => opt.value === form.countryCode) || null}
                   onChange={(_, newValue) => setForm(f => ({ ...f, countryCode: newValue ? newValue.value : '' }))}
                   renderInput={params => (
-                      <TextField {...params} label={t('common.country')} margin="dense" fullWidth />
+                      <TextField {...params} label={t('common.country')} margin="dense" fullWidth required />
                   )}
                   isOptionEqualToValue={(option, value) => option.value === value.value}
               />
@@ -102,7 +102,7 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
                   value={cityOptions.find(opt => opt.value === form.cityCode) || null}
                   onChange={(_, newValue) => setForm(f => ({ ...f, cityCode: newValue ? newValue.value : '' }))}
                   renderInput={(params) => (
-                      <TextField {...params} label={t('common.city')} margin="dense" />
+                      <TextField {...params} label={t('common.city')} margin="dense" required />
                   )}
                   isOptionEqualToValue={(option, value) => option.value === value.value}
                   disabled={cityOptions.length === 0}
@@ -123,6 +123,7 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
             fullWidth
             value={form.currency || ''}
             onChange={e => setForm(f => ({ ...f, currency: e.target.value }))}
+            required
             inputProps={{ maxLength: 3 }}
           />
           <TextField
@@ -131,6 +132,7 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
             fullWidth
             value={form.invoiceHeader || ''}
             onChange={e => setForm(f => ({ ...f, invoiceHeader: e.target.value }))}
+            required
             inputProps={{ maxLength: 50 }}
           />
           <TextField
@@ -139,6 +141,7 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
             fullWidth
             value={form.invoiceTaxNumber || ''}
             onChange={e => setForm(f => ({ ...f, invoiceTaxNumber: e.target.value }))}
+            required
             inputProps={{ maxLength: 50 }}
           />
           <TextField
@@ -148,6 +151,7 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
               fullWidth
               value={form.serviceFeeCountType}
               onChange={e => setForm(f => ({ ...f, serviceFeeCountType: Number(e.target.value) }))}
+              required
           >
             <MenuItem value={0}>{t('customer.serviceFeeCountType_full')}</MenuItem>
             <MenuItem value={1}>{t('customer.serviceFeeCountType_ticket')}</MenuItem>
@@ -159,6 +163,7 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
               fullWidth
               value={form.serviceFeeRatio ?? ''}
               onChange={e => setForm(f => ({ ...f, serviceFeeRatio: Number(e.target.value) }))}
+              required
               inputProps={{ min: 0, step: 0.01 }}
           />
           <TextField
@@ -169,6 +174,7 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
               SelectProps={{ multiple: true }}
               value={form.products || []}
               onChange={e => setForm(f => ({ ...f, products: e.target.value as unknown as string[] }))}
+              required
           >
             {productsOptions.map(opt => (
                 <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
@@ -183,6 +189,7 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
                 onChange={e => setForm(f => ({ ...f, enable: e.target.checked }))}
                 color="primary"
                 size="small"
+                required
               />
             </label>
           </div>

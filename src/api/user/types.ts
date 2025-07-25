@@ -37,15 +37,15 @@ export interface IUser {
   userType: string; // 用户类型 0客户，1代理 2其他；仅前端用
   userName: string;
   name: string;
-  sex?: 'M' | 'F' | 'O' | null;
+  sex?: string;
   enable: boolean;
-  createTime?: string;
   countryNumber: string;
   phoneNumber: string;
-  createUserName?: string;
-  email?:string;
+  email:string;
   agentId?: string | null;
   customerId?: string | null; // 客户ID
-  role?: string[] | null;
-  roles?: string[] | null; // fixme:查详情返回的是roles，新增的时候用的是role
+  role: string[] | null;
+  roles: string[] | null; // fixme:查详情返回的是roles，新增的时候用的是role
+  createTime?: string;
+  createUserName?: string;
 }

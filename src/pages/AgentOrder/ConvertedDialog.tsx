@@ -73,16 +73,16 @@ const ConvertedDialog: React.FC<ConvertedDialogProps> = ({ open, onClose, onSubm
           <div><b>{t('agentOrder.tcRemark')}：</b>{order?.agentRemark || '-'}</div>
         </div>
         {/* 转换表单部分 */}
-        <TextField margin="dense" label={t('agentOrder.price')} type="number" fullWidth value={form.price} onChange={e => handleChange('price', Number(e.target.value))} />
-        <TextField margin="dense" label={t('agentOrder.tax')} type="number" fullWidth value={form.tax} onChange={e => handleChange('tax', Number(e.target.value))} />
-        <TextField margin="dense" label={t('agentOrder.serviceCharge')} type="number" fullWidth value={form.serviceCharge} onChange={e => handleChange('serviceCharge', Number(e.target.value))} />
+        <TextField margin="dense" label={t('agentOrder.price')} type="number" fullWidth value={form.price} onChange={e => handleChange('price', Number(e.target.value))} required />
+        <TextField margin="dense" label={t('agentOrder.tax')} type="number" fullWidth value={form.tax} onChange={e => handleChange('tax', Number(e.target.value))} required />
+        <TextField margin="dense" label={t('agentOrder.serviceCharge')} type="number" fullWidth value={form.serviceCharge} onChange={e => handleChange('serviceCharge', Number(e.target.value))} required />
         <DatePicker
             label={t('agentOrder.issuanceTimeLimit')}
             value={form.issuanceTimeLimit ? dayjs(form.issuanceTimeLimit) : null}
             onChange={value => handleChange('issuanceTimeLimit', value ? dayjs(value).format('YYYY-MM-DD') : '')}
             openTo="year"
             views={['year', 'month', 'day']}
-            slotProps={{ textField: { fullWidth: true, margin: 'dense',size:'small' } }}
+            slotProps={{ textField: { fullWidth: true, margin: 'dense',size:'small',required:true } }}
         />
         <TextField margin="dense" label={t('agentOrder.tcRemark')} fullWidth value={form.tcRemark} onChange={e => handleChange('tcRemark', e.target.value)} />
       </DialogContent>

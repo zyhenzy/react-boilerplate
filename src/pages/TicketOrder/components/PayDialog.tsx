@@ -40,6 +40,7 @@ const PayDialog: React.FC<PayDialogProps> = ({ open, onClose, onSubmit, loading,
             fullWidth
             value={form.currencyPay || ''}
             onChange={e => handleChange('currencyPay', e.target.value)}
+            required
           />
           <TextField
             margin="dense"
@@ -48,6 +49,7 @@ const PayDialog: React.FC<PayDialogProps> = ({ open, onClose, onSubmit, loading,
             type="number"
             value={form.ratePay || ''}
             onChange={e => handleChange('ratePay', e.target.value )}
+            required
           />
           <TextField
             margin="dense"
@@ -55,6 +57,7 @@ const PayDialog: React.FC<PayDialogProps> = ({ open, onClose, onSubmit, loading,
             fullWidth
             value={form.payType || ''}
             onChange={e => handleChange('payType', e.target.value)}
+            required
           />
         </DialogContent>
         <DialogActions>

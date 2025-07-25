@@ -42,7 +42,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             value={airlineOptions.find(opt => opt.value === form.airline) || null}
             onChange={(_, newValue) => setForm(f => ({ ...f, airline: newValue ? newValue.value : '' }))}
             renderInput={params => (
-              <TextField {...params} label={t('ticketOrder.airline')} margin="dense" fullWidth />
+              <TextField {...params} label={t('ticketOrder.airline')} margin="dense" fullWidth required />
             )}
             isOptionEqualToValue={(option, value) => option.value === value.value}
           />
@@ -68,7 +68,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             }}
             onChange={(_, newValue) => setForm(f => ({ ...f, depCity: newValue ? newValue.value : '' }))}
             renderInput={params => (
-              <TextField {...params} label={t('ticketOrder.depCity')} margin="dense" fullWidth />
+              <TextField {...params} label={t('ticketOrder.depCity')} margin="dense" fullWidth required />
             )}
             isOptionEqualToValue={(option, value) => option.value === value.value}
           />
@@ -86,7 +86,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             }}
             onChange={(_, newValue) => setForm(f => ({ ...f, arrCity: newValue ? newValue.value : '' }))}
             renderInput={params => (
-              <TextField {...params} label={t('ticketOrder.arrCity')} margin="dense" fullWidth />
+              <TextField {...params} label={t('ticketOrder.arrCity')} margin="dense" fullWidth required />
             )}
             isOptionEqualToValue={(option, value) => option.value === value.value}
           />
@@ -111,7 +111,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               onChange={value => setForm(q => ({ ...q, depDate: value ? dayjs(value).format('YYYY-MM-DD') : '' }))}
               openTo="year"
               views={['year', 'month', 'day']}
-              slotProps={{ textField: { margin: 'dense',size:'small',style:{ flex: 1 } } }}
+              slotProps={{ textField: { margin: 'dense', size: 'small', style: { flex: 1 }, required: true } }}
             />
             <TimePicker
               label={t('ticketOrder.depTime')}
@@ -119,7 +119,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               onChange={value => setForm(f => ({ ...f, depTime: value ? value.format('HH:mm') : '' }))}
               ampm={false}
               slotProps={{
-                textField: { margin: 'dense', style: { flex: 1 }, size: 'small' }
+                textField: { margin: 'dense', style: { flex: 1 }, size: 'small',required: true }
               }}
             />
           </div>
@@ -130,7 +130,9 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               onChange={value => setForm(q => ({ ...q, arrDate: value ? dayjs(value).format('YYYY-MM-DD') : '' }))}
               openTo="year"
               views={['year', 'month', 'day']}
-              slotProps={{ textField: { margin: 'dense',size:'small',style:{ flex: 1 } } }}
+              slotProps={
+                { textField: { margin: 'dense',size:'small',style:{ flex: 1 },required: true }}
+              }
             />
             <TimePicker
               label={t('ticketOrder.arrTime')}
@@ -138,7 +140,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               onChange={value => setForm(f => ({ ...f, arrTime: value ? value.format('HH:mm') : '' }))}
               ampm={false}
               slotProps={{
-                textField: { margin: 'dense', style: { flex: 1 }, size: 'small' }
+                textField: { margin: 'dense', style: { flex: 1 }, size: 'small',required: true }
               }}
             />
           </div>
@@ -148,7 +150,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               value={airportOptions.find(opt => opt.value === form.depAirport) || null}
               onChange={(_, newValue) => setForm(f => ({ ...f, depAirport: newValue ? newValue.value : '' }))}
               renderInput={params => (
-                  <TextField {...params} label={t('ticketOrder.depAirport')} margin="dense" fullWidth />
+                  <TextField {...params} label={t('ticketOrder.depAirport')} margin="dense" fullWidth required />
               )}
               isOptionEqualToValue={(option, value) => option.value === value.value}
           />
@@ -158,6 +160,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               fullWidth
               value={form.depTerminal || ''}
               onChange={e => setForm(f => ({ ...f, depTerminal: e.target.value }))}
+              required
           />
           <Autocomplete
               options={airportOptions}
@@ -165,7 +168,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               value={airportOptions.find(opt => opt.value === form.arrAirport) || null}
               onChange={(_, newValue) => setForm(f => ({ ...f, arrAirport: newValue ? newValue.value : '' }))}
               renderInput={params => (
-                  <TextField {...params} label={t('ticketOrder.arrAirport')} margin="dense" fullWidth />
+                  <TextField {...params} label={t('ticketOrder.arrAirport')} margin="dense" fullWidth required />
               )}
               isOptionEqualToValue={(option, value) => option.value === value.value}
           />
@@ -175,6 +178,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               fullWidth
               value={form.arrTerminal || ''}
               onChange={e => setForm(f => ({ ...f, arrTerminal: e.target.value }))}
+              required
           />
           <TextField
               margin="dense"
@@ -183,6 +187,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               fullWidth
               value={form.cabinLevel || ''}
               onChange={e => setForm((f: any) => ({ ...f, cabinLevel: e.target.value }))}
+              required
           >
             {classTypeOptions.map(option => (
                 <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
@@ -194,6 +199,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             fullWidth
             value={form.planCabinCode || ''}
             onChange={e => setForm(f => ({ ...f, planCabinCode: e.target.value }))}
+            required
           />
           <TextField
             margin="dense"
@@ -216,7 +222,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               onChange={value => setForm(f => ({ ...f, flyingTime: value ? value.format('HH:mm') : '' }))}
               ampm={false}
               slotProps={{
-                textField: { margin: 'dense', fullWidth: true,size:'small' }
+                textField: { margin: 'dense', fullWidth: true,size:'small',required: true }
               }}
           />
           <TextField
@@ -225,6 +231,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             fullWidth
             value={form.aircraft || ''}
             onChange={e => setForm(f => ({ ...f, aircraft: e.target.value }))}
+            required
           />
           <TextField
               margin="dense"
@@ -233,6 +240,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               fullWidth
               value={form.meals || ''}
               onChange={e => setForm((f: any) => ({ ...f, meals: e.target.value }))}
+              required
           >
             {mealsOptions.map(option => (
                 <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
@@ -244,6 +252,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             fullWidth
             value={form.luggageTransportationRule || ''}
             onChange={e => setForm(f => ({ ...f, luggageTransportationRule: e.target.value }))}
+            required
           />
           <TextField
             margin="dense"
@@ -251,6 +260,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             fullWidth
             value={form.luggageHandRule || ''}
             onChange={e => setForm(f => ({ ...f, luggageHandRule: e.target.value }))}
+            required
           />
 
           <FormControl fullWidth margin="dense">
@@ -260,6 +270,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
               label={t('ticketOrder.stop')}
               onChange={e => setForm(f => ({ ...f, stop: e.target.value === 'true' }))}
               displayEmpty
+              required
             >
               <MenuItem value="">{t('ticketOrder.pleaseSelect')}</MenuItem>
               <MenuItem value="true">{t('yes')}</MenuItem>

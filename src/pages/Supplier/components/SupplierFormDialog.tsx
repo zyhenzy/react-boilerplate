@@ -155,7 +155,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                   value={countryCodeOptions.find(opt => opt.value === form.countryCode) || null}
                   onChange={(_, newValue) => setForm(f => ({ ...f, countryCode: newValue ? newValue.value : '' }))}
                   renderInput={params => (
-                      <TextField {...params} label={t('common.country')} margin="dense" fullWidth />
+                      <TextField {...params} label={t('common.country')} margin="dense" fullWidth required />
                   )}
                   isOptionEqualToValue={(option, value) => option.value === value.value}
               />
@@ -167,7 +167,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
                   value={cityOptions.find(opt => opt.value === form.cityCode) || null}
                   onChange={(_, newValue) => setForm(f => ({ ...f, cityCode: newValue ? newValue.value : '' }))}
                   renderInput={(params) => (
-                      <TextField {...params} label={t('common.city')} margin="dense" />
+                      <TextField {...params} label={t('common.city')} margin="dense" required />
                   )}
                   isOptionEqualToValue={(option, value) => option.value === value.value}
                   disabled={cityOptions.length === 0}
@@ -180,6 +180,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             fullWidth
             value={form.currency}
             onChange={e => handleChange('currency', e.target.value)}
+            required
             inputProps={{ maxLength: 10 }}
           />
           <TextField
@@ -188,6 +189,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             fullWidth
             value={form.bank}
             onChange={e => handleChange('bank', e.target.value)}
+            required
             inputProps={{ maxLength: 50 }}
           />
           <TextField
@@ -196,6 +198,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             fullWidth
             value={form.bankAddress}
             onChange={e => handleChange('bankAddress', e.target.value)}
+            required
             inputProps={{ maxLength: 100 }}
           />
           <TextField
@@ -204,6 +207,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             fullWidth
             value={form.bankPostalCode}
             onChange={e => handleChange('bankPostalCode', e.target.value)}
+            required
             inputProps={{ maxLength: 20 }}
           />
           <TextField
@@ -212,6 +216,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             fullWidth
             value={form.bankSwiftCode}
             onChange={e => handleChange('bankSwiftCode', e.target.value)}
+            required
             inputProps={{ maxLength: 20 }}
           />
           <TextField
@@ -220,6 +225,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             fullWidth
             value={form.bankAccount}
             onChange={e => handleChange('bankAccount', e.target.value)}
+            required
             inputProps={{ maxLength: 30 }}
           />
           <TextField
@@ -228,6 +234,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             fullWidth
             value={form.bankAccountName}
             onChange={e => handleChange('bankAccountName', e.target.value)}
+            required
             inputProps={{ maxLength: 50 }}
           />
           <TextField
@@ -248,6 +255,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             SelectProps={{ multiple: true }}
             value={form.products || []}
             onChange={e => handleChange('products', e.target.value)}
+            required
           >
             {productsOptions.map(opt => (
                 <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>

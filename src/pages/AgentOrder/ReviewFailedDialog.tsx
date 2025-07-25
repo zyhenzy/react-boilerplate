@@ -40,6 +40,7 @@ const ReviewFailedDialog: React.FC<ReviewFailedDialogProps> = ({ open, onClose, 
           onChange={e => setReason(e.target.value)}
           multiline
           rows={3}
+          required
         />
         <TextField
           margin="dense"

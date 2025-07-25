@@ -13,7 +13,7 @@ export function getCountryOptions() {
 
 // 国家编码下拉
 export function getCountryCodeOptions() {
-  return http.get<IOption[]>('/v1/Data/countryCodeOptions');
+  return http.get<IOption[]>('/v1/Data/countryCodeOptions').then(res => res.filter(item => item.label && item.value));
 }
 
 // 城市下拉
@@ -49,12 +49,12 @@ export function getProductOptions(){
 
 // 航司下拉
 export function getAirlineOptions(){
-  return http.get<IOption[]>('/v1/Data/airlineOptions');
+  return http.get<IOption[]>('/v1/Data/airlineOptions').then(res => res.filter(item => item.label && item.value));
 }
 
 // 机场下拉
 export function getAirportOptions(){
-  return http.get<IOption[]>('/v1/Data/airportOptions');
+  return http.get<IOption[]>('/v1/Data/airportOptions').then(res => res.filter(item => item.label && item.value));
 }
 
 // 舱位等级

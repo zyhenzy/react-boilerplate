@@ -46,6 +46,7 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
             fullWidth
             value={form.englishName || ''}
             onChange={e => setForm(f => ({ ...f, englishName: e.target.value }))}
+            required
           />
           <FormControl fullWidth margin="dense">
             <InputLabel>{t('ticketOrder.certificateType')}</InputLabel>
@@ -53,6 +54,7 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
               label={t('ticketOrder.certificateType')}
               value={form.certificateType || ''}
               onChange={e => setForm(f => ({ ...f, certificateType: e.target.value }))}
+              required
             >
               {certificateOptions.map(opt => (
                 <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
@@ -65,6 +67,7 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
             fullWidth
             value={form.certificateNo || ''}
             onChange={e => setForm(f => ({ ...f, certificateNo: e.target.value }))}
+            required
           />
 
           <DatePicker
@@ -73,7 +76,7 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
               onChange={value => setForm(f => ({ ...f, validity: value ? dayjs(value).format('YYYY-MM-DD') : '' }))}
               openTo="year"
               views={['year', 'month', 'day']}
-              slotProps={{ textField: { fullWidth: true, margin: 'dense',size:'small' } }}
+              slotProps={{ textField: { fullWidth: true, margin: 'dense',size:'small',required:true } }}
           />
           <div style={{ display: 'flex', gap: 8 }}>
             <Autocomplete
@@ -89,7 +92,7 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
                 value={countryOptions.find(opt => opt.value === form.countryNumber) || null}
                 onChange={(_, newValue) => setForm(f => ({ ...f, countryNumber: newValue ? newValue.value : '' }))}
                 renderInput={params => (
-                    <TextField {...params} label={t('ticketOrder.countryNumber')} margin="dense" fullWidth style={{ minWidth: 180 }} />
+                    <TextField {...params} label={t('ticketOrder.countryNumber')} margin="dense" fullWidth style={{ minWidth: 180 }} required />
                 )}
                 isOptionEqualToValue={(option, value) => option.value === value.value}
             />
@@ -99,6 +102,7 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
               style={{ flex: 1 }}
               value={form.phoneNumber || ''}
               onChange={e => setForm(f => ({ ...f, phoneNumber: e.target.value }))}
+              required
             />
           </div>
           <DatePicker
@@ -107,7 +111,7 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
               onChange={value => setForm(f => ({ ...f, birthday: value ? dayjs(value).format('YYYY-MM-DD') : '' }))}
               openTo="year"
               views={['year', 'month', 'day']}
-              slotProps={{ textField: { fullWidth: true, margin: 'dense',size:'small' } }}
+              slotProps={{ textField: { fullWidth: true, margin: 'dense',size:'small',required:true } }}
           />
           <FormControl fullWidth margin="dense">
             <Autocomplete
@@ -123,12 +127,12 @@ const PassengerFormDialog: React.FC<PassengerFormDialogProps> = ({ open, onClose
               value={countryCodeOptions.find(opt => opt.value === form.nationality) || null}
               onChange={(_, newValue) => setForm(f => ({ ...f, nationality: newValue ? newValue.value : '' }))}
               renderInput={params => (
-                <TextField {...params} label={t('ticketOrder.nationality')} margin="dense" fullWidth />
+                <TextField {...params} label={t('ticketOrder.nationality')} margin="dense" fullWidth required />
               )}
               isOptionEqualToValue={(option, value) => option.value === value.value}
             />
           </FormControl>
-          <FormControl fullWidth margin="dense">
+          <FormControl fullWidth margin="dense" required>
             <InputLabel>{t('common.sex')}</InputLabel>
             <Select
               label={t('common.sex')}
