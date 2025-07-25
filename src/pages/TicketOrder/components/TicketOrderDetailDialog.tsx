@@ -25,6 +25,9 @@ const TicketOrderDetailDialog: React.FC<TicketOrderDetailDialogProps> = ({ open,
         <DialogContent dividers>
           <Typography variant="subtitle1">{t('ticketOrder.billNo')}: {order?.billNo}</Typography>
           <Typography variant="subtitle1">{t('ticketOrder.bookerName')}: {order?.bookerName}</Typography>
+          <Typography variant="subtitle1">
+            {t('ticketOrder.type')}: {order?.type===0&&t('ticketOrder.type0')}{order?.type===1&&t('ticketOrder.type1')}
+          </Typography>
           <Typography variant="subtitle1">{t('ticketOrder.bookerContact')}: {order?.bookerContact}</Typography>
           <Typography variant="subtitle1">PNR: {order?.pnr}</Typography>
           <Typography variant="subtitle1">{t('ticketOrder.status')}: {t(`ticketOrder.status_${order?.status}`)}</Typography>

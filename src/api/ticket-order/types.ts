@@ -36,6 +36,7 @@ export interface TicketOrder {
   createdAt?: string; // 创建时间
   updatedAt?: string; // 更新时间
   // 可根据实际接口补充字段
+  type?:0|1; // 订单类型（仅查看） 0国内 1国际
 }
 
 // 查询参数
