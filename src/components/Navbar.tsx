@@ -44,21 +44,30 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
     useEffect(() => {
         (async () => {
             await getAndStoreUserInfo(dispatch);
-            dispatch(fetchCountryOptions());
-            dispatch(fetchCountryCodeOptions());
-            dispatch(fetchRoleOptions());
-            dispatch(fetchCertificateOptions());
-            dispatch(fetchAgentOptions());
-            dispatch(fetchCustomerOptions());
-            dispatch(fetchProductOptions());
-            dispatch(fetchAirlineOptions());
-            dispatch(fetchAirportOptions());
-            dispatch(fetchClassTypeOptions());
-            dispatch(fetchMealsOptions());
-            dispatch(fetchSexOptions());
-            dispatch(fetchSupplierOptions());
+            fetchBaseData()
         })();
     }, []);
+
+    useEffect(() => {
+      fetchBaseData();
+    }, [i18n.language]);
+
+
+  const fetchBaseData = ()=>{
+      dispatch(fetchCountryOptions());
+      dispatch(fetchCountryCodeOptions());
+      dispatch(fetchRoleOptions());
+      dispatch(fetchCertificateOptions());
+      dispatch(fetchAgentOptions());
+      dispatch(fetchCustomerOptions());
+      dispatch(fetchProductOptions());
+      dispatch(fetchAirlineOptions());
+      dispatch(fetchAirportOptions());
+      dispatch(fetchClassTypeOptions());
+      dispatch(fetchMealsOptions());
+      dispatch(fetchSexOptions());
+      dispatch(fetchSupplierOptions());
+  }
 
   const handleLogout = () => {
     dispatch(clearUserInfo());
