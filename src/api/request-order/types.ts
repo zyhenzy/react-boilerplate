@@ -56,3 +56,10 @@ export interface AddRequestOrderTripCommand{
   endTime?:string // 到达时间
   flightNo?:string // 航班号
 }
+
+// 修改需求订单
+export interface UpdateRequestOrderCommand {
+  id: string;
+  status: RequestOrderStatus;
+  remark?: string;
+}

@@ -189,7 +189,6 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
                 onChange={e => setForm(f => ({ ...f, enable: e.target.checked }))}
                 color="primary"
                 size="small"
-                required
               />
             </label>
           </div>

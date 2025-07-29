@@ -21,7 +21,10 @@
     "createdAt": "Created At",
     "updatedAt": "Updated At",
     "startDate": "Start Date",
-    "endDate": "End Date"
+    "endDate": "End Date",
+    "pleaseSelect": "Please select",
+    "yes": "Yes",
+    "no": "No"
   },
   "user": {
     "title": "User Management",
@@ -162,7 +165,14 @@
     "passengerTicketNo": "Ticket No",
     "addPassenger": "Add Passenger",
     "editPassenger": "Edit Passenger",
-    "ok": "OK"
+    "ok": "OK",
+    "editRemark": "Remark",
+    "save": "Save",
+    "yes": "Yes",
+    "no": "No",
+    "country": "Country",
+    "city": "City",
+    "sex": "Gender"
   },
   "ticketOrder": {
     "title": "Flight Ticket Order",

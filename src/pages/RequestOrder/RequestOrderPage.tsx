@@ -24,6 +24,8 @@ import type {Supplier} from "../../api/supplier/types";
 import {getSupplierList} from "../../api/supplier";
 import type {TicketOrder} from "../../api/ticket-order/types";
 import {addTicketOrder} from "../../api/ticket-order";
+import EditRemarkDialog from './components/EditRemarkDialog';
+import { updateRequestOrder } from '../../api/request-order';
 
 const RequestOrderPage: React.FC = () => {
   const { t } = useTranslation();
@@ -37,6 +39,8 @@ const RequestOrderPage: React.FC = () => {
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [detailOrder, setDetailOrder] = useState<RequestOrder | null>(null);
   const [editingOrder, setEditingOrder] = useState<TicketOrder | null>(null);
+  const [editRemarkOpen, setEditRemarkOpen] = useState(false);
+  const [editingRemarkOrder, setEditingRemarkOrder] = useState<RequestOrder | null>(null);
   const [query, setQuery] = useState({
     Dep: '',
     Arr: '',
@@ -135,6 +139,21 @@ const RequestOrderPage: React.FC = () => {
     fetchData();
   };
 
+  const handleEditRemark = async (order: RequestOrder) => {
+    const orderDetail = await getRequestOrderDetail(order.id!);
+    order.remark = orderDetail.remark ?? undefined;
+    setEditingRemarkOrder(order);
+    setEditRemarkOpen(true);
+  };
+
+  const handleRemarkSubmit = async (remark: string) => {
+    if (!editingRemarkOrder?.id) return;
+    await updateRequestOrder({ id: editingRemarkOrder.id, status: editingRemarkOrder.status!, remark });
+    setEditRemarkOpen(false);
+    setEditingRemarkOrder(null);
+    fetchData();
+  };
+
   return (
     <Box p={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -199,8 +218,9 @@ const RequestOrderPage: React.FC = () => {
                     ))}
                   </TableCell>
                   <TableCell>
-                    <IconButton size="small" onClick={() => handleViewDetail(item)}><VisibilityIcon /></IconButton>
+                    <Button size="small" onClick={() => handleViewDetail(item)}>{t('common.detail')}</Button>
                     <Button size="small" onClick={() => handleTrans(item)}>{t('requestOrder.transToTicketOrder')}</Button>
+                    <Button size="small" onClick={() => handleEditRemark(item)}>{t('common.editRemark')}</Button>
                   </TableCell>
                 </TableRow>
               ))
@@ -230,6 +250,12 @@ const RequestOrderPage: React.FC = () => {
           form={editingOrder || {}}
           setForm={setEditingOrder as any}
           editingId={null}
+      />
+      <EditRemarkDialog
+        open={editRemarkOpen}
+        onClose={() => { setEditRemarkOpen(false); setEditingRemarkOrder(null); }}
+        order={editingRemarkOrder}
+        onSubmit={handleRemarkSubmit}
       />
     </Box>
   );
