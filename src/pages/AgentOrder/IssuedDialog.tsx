@@ -50,8 +50,8 @@ const IssuedDialog: React.FC<IssuedDialogProps> = ({ open, onClose, onSubmit, or
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>{t('cancel')}</Button>
-        <Button onClick={handleSubmit} variant="contained" color="primary">{t('confirm')}</Button>
+        <Button onClick={onClose}>{t('common.cancel')}</Button>
+        <Button onClick={handleSubmit} variant="contained" color="primary">{t('common.confirm')}</Button>
       </DialogActions>
     </Dialog>
   );

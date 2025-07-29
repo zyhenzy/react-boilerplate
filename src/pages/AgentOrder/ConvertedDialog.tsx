@@ -87,8 +87,8 @@ const ConvertedDialog: React.FC<ConvertedDialogProps> = ({ open, onClose, onSubm
         <TextField margin="dense" label={t('agentOrder.tcRemark')} fullWidth value={form.tcRemark} onChange={e => handleChange('tcRemark', e.target.value)} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>{t('cancel')}</Button>
-        <Button onClick={handleSubmit} variant="contained" color="primary">{t('confirm')}</Button>
+        <Button onClick={handleClose}>{t('common.cancel')}</Button>
+        <Button onClick={handleSubmit} variant="contained" color="primary">{t('common.confirm')}</Button>
       </DialogActions>
     </Dialog>
   );
