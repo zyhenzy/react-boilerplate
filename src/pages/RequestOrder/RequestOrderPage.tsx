@@ -10,18 +10,14 @@ import {
   TableHead,
   TableRow,
   Paper,
-  IconButton,
   TablePagination,
   Button,
   TextField
 } from '@mui/material';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import RequestOrderDetailDialog from './components/RequestOrderDetailDialog';
 import { useTranslation } from 'react-i18next';
 import { getRequestOrderDetail } from '../../api/request-order';
 import TicketOrderFormDialog from "../TicketOrder/components/TicketOrderFormDialog";
-import type {Supplier} from "../../api/supplier/types";
-import {getSupplierList} from "../../api/supplier";
 import type {TicketOrder} from "../../api/ticket-order/types";
 import {addTicketOrder} from "../../api/ticket-order";
 import EditRemarkDialog from './components/EditRemarkDialog';
@@ -30,7 +26,6 @@ import { updateRequestOrder } from '../../api/request-order';
 const RequestOrderPage: React.FC = () => {
   const { t } = useTranslation();
   const [data, setData] = useState<RequestOrder[]>([]);
-  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
@@ -49,16 +44,6 @@ const RequestOrderPage: React.FC = () => {
     IsDesc: false,
     Ordering: '',
   });
-
-  // 获取供应商列表
-  const fetchSuppliers = async () => {
-    const res = await getSupplierList({ PageIndex: 1, PageSize: 1000 });
-    setSuppliers(res.data || []);
-  };
-
-  useEffect(() => {
-    fetchSuppliers();
-  }, []);
 
   const fetchData = async () => {
     setLoading(true);
@@ -141,7 +126,7 @@ const RequestOrderPage: React.FC = () => {
 
   const handleEditRemark = async (order: RequestOrder) => {
     const orderDetail = await getRequestOrderDetail(order.id!);
-    order.remark = orderDetail.remark ?? undefined;
+    order.tcRemark = orderDetail.tcRemark ?? undefined;
     setEditingRemarkOrder(order);
     setEditRemarkOpen(true);
   };
@@ -220,7 +205,7 @@ const RequestOrderPage: React.FC = () => {
                   <TableCell>
                     <Button size="small" onClick={() => handleViewDetail(item)}>{t('common.detail')}</Button>
                     <Button size="small" onClick={() => handleTrans(item)}>{t('requestOrder.transToTicketOrder')}</Button>
-                    <Button size="small" onClick={() => handleEditRemark(item)}>{t('common.editRemark')}</Button>
+                    <Button size="small" onClick={() => handleEditRemark(item)}>{t('requestOrder.tcRemark')}</Button>
                   </TableCell>
                 </TableRow>
               ))

@@ -23,7 +23,7 @@ const EditRemarkDialog: React.FC<EditRemarkDialogProps> = ({ open, onClose, orde
   const [remark, setRemark] = useState('');
 
   useEffect(() => {
-    setRemark(order?.remark || '');
+    setRemark(order?.tcRemark || '');
   }, [order]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -48,8 +48,8 @@ const EditRemarkDialog: React.FC<EditRemarkDialogProps> = ({ open, onClose, orde
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>{t('cancel', '取消')}</Button>
-          <Button type="submit" variant="contained" color="primary">{t('save')}</Button>
+          <Button onClick={onClose}>{t('common.cancel')}</Button>
+          <Button type="submit" variant="contained" color="primary">{t('common.save')}</Button>
         </DialogActions>
       </form>
     </Dialog>

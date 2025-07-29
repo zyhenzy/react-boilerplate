@@ -53,6 +53,7 @@ const RequestOrderDetailDialog: React.FC<RequestOrderDetailDialogProps> = ({ ope
             <InfoRow label={t('requestOrder.phoneNumber')} value={order?.phoneNumber} />
             <InfoRow label={t('requestOrder.bookerName')} value={order?.bookerName} />
             <InfoRow label={t('requestOrder.remark')} value={order?.remark} />
+            <InfoRow label={t('requestOrder.tcRemark')} value={order?.tcRemark} />
             <InfoRow label={t('requestOrder.customer')} value={getLabelFromOption(order?.customerId,customerOptions)} />
             <InfoRow label={t('requestOrder.status')} value={typeof order?.status === 'number' ? t(`requestOrder.status_${order.status}`) : '-'} />
             <Divider sx={{ my: 1 }} />

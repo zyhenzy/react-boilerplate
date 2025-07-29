@@ -14,6 +14,7 @@ export interface RequestOrder {
   countryNumber?: string | null; // 国家区号
   phoneNumber?: string; // 电话号码
   remark?: string | null; // 备注
+  tcRemark?: string | null; // TC备注
   passengerList?: AddRequestOrderPassengerCommand[];
   imageList?: string[];
   tripList?: AddRequestOrderTripCommand[];

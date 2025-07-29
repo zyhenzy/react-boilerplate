@@ -159,6 +159,7 @@
     "status_1": "已处理",
     "status_2": "已取消",
     "remark": "备注",
+    "tcRemark": "TC备注",
     "actions": "操作",
     "noData": "暂无数据",
     "loading": "加载中...",
