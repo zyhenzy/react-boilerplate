@@ -14,7 +14,7 @@ import type { Customer } from '../../../api/customer/types';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import Autocomplete from "@mui/material/Autocomplete";
-import type {IOption} from "../../../api/basic/types";
+import {ICityOption, IOption} from "../../../api/basic/types";
 import {getCityOptions} from "../../../api/basic";
 
 interface CustomerFormDialogProps {
@@ -37,7 +37,7 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
   const { t } = useTranslation();
   const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
   const productsOptions = useSelector((state: any) => state.options.productOptions) as IOption[];
-  const [cityOptions,setCityOptions] = useState<any[]>([])
+  const [cityOptions,setCityOptions] = useState<ICityOption[]>([])
 
   useEffect(() => {
     if (form.enable === undefined) {
@@ -98,7 +98,14 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
             <FormControl style={{ flex: 1 }} margin="dense">
               <Autocomplete
                   options={cityOptions}
-                  getOptionLabel={opt => opt.label || ''}
+                  getOptionLabel={opt => opt.name || ''}
+                  filterOptions={(options, { inputValue }) =>
+                      options.filter(opt =>
+                          (opt.name && opt.name.includes(inputValue)) ||
+                          (opt.nameEn && opt.nameEn.toLowerCase().includes(inputValue.toLowerCase())) ||
+                          (opt.value && opt.value.includes(inputValue))
+                      )
+                  }
                   value={cityOptions.find(opt => opt.value === form.cityCode) || null}
                   onChange={(_, newValue) => setForm(f => ({ ...f, cityCode: newValue ? newValue.value : '' }))}
                   renderInput={(params) => (

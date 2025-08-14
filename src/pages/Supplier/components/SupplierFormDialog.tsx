@@ -14,7 +14,7 @@ import {Box, FormControl, MenuItem} from '@mui/material';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import Autocomplete from "@mui/material/Autocomplete";
 import {useSelector} from "react-redux";
-import type {IOption} from "../../../api/basic/types";
+import {ICityOption, IOption} from "../../../api/basic/types";
 
 interface SupplierFormDialogProps {
   open: boolean;
@@ -48,7 +48,7 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
   const [previewOpen, setPreviewOpen] = useState(false);
   const countryCodeOptions = useSelector((state: any) => state.options.countryCodeOptions) as IOption[];
   const productsOptions = useSelector((state: any) => state.options.productOptions) as IOption[];
-  const [cityOptions,setCityOptions] = useState<any[]>([])
+  const [cityOptions,setCityOptions] = useState<ICityOption[]>([])
 
   useEffect(() => {
     if (form.countryCode) {
@@ -163,7 +163,14 @@ const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({ open, onClose, 
             <FormControl style={{ flex: 1 }} margin="dense">
               <Autocomplete
                   options={cityOptions}
-                  getOptionLabel={opt => opt.label || ''}
+                  getOptionLabel={opt => opt.name || ''}
+                  filterOptions={(options, { inputValue }) =>
+                      options.filter(opt =>
+                          (opt.name && opt.name.includes(inputValue)) ||
+                          (opt.nameEn && opt.nameEn.toLowerCase().includes(inputValue.toLowerCase())) ||
+                          (opt.value && opt.value.includes(inputValue))
+                      )
+                  }
                   value={cityOptions.find(opt => opt.value === form.cityCode) || null}
                   onChange={(_, newValue) => setForm(f => ({ ...f, cityCode: newValue ? newValue.value : '' }))}
                   renderInput={(params) => (

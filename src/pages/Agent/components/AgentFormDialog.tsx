@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
 import {getCityOptions} from "../../../api/basic";
+import {ICityOption} from "../../../api/basic/types";
 
 interface AgentFormDialogProps {
   open: boolean;
@@ -35,7 +36,7 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
 }) => {
   const { t } = useTranslation();
   const countryCodeOptions = useSelector((state: RootState) => state.options.countryCodeOptions);
-  const [cityOptions,setCityOptions] = useState<any[]>([])
+  const [cityOptions,setCityOptions] = useState<ICityOption[]>([])
 
   useEffect(() => {
     if (form.enable === undefined) {
@@ -109,7 +110,14 @@ const AgentFormDialog: React.FC<AgentFormDialogProps> = ({
             <FormControl style={{ flex: 1 }} margin="dense">
               <Autocomplete
                 options={cityOptions}
-                getOptionLabel={opt => opt.label || ''}
+                getOptionLabel={opt => opt.name || ''}
+                filterOptions={(options, { inputValue }) =>
+                    options.filter(opt =>
+                        (opt.name && opt.name.includes(inputValue)) ||
+                        (opt.nameEn && opt.nameEn.toLowerCase().includes(inputValue.toLowerCase())) ||
+                        (opt.value && opt.value.includes(inputValue))
+                    )
+                }
                 value={cityOptions.find(opt => opt.value === form.cityCode) || null}
                 onChange={(_, newValue) => setForm(f => ({ ...f, cityCode: newValue ? newValue.value : '' }))}
                 renderInput={(params) => (

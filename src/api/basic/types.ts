@@ -6,3 +6,8 @@ export interface IOption {
   [key: string]: any; // 支持任意扩展字段
 }
 
+export interface ICityOption {
+  name: string,
+  nameEn: string
+  value: string
+}

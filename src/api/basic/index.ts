@@ -1,5 +1,5 @@
 import http from '../../utils/http';
-import { IOption} from './types';
+import {ICityOption, IOption} from './types';
 
 // 性别下拉
 export function getSexOptions() {
@@ -18,8 +18,8 @@ export function getCountryCodeOptions() {
 
 // 城市下拉
 export function getCityOptions(params?:{country?: string,keyword?:string}) {
-  return http.get<IOption[]>('/v1/Data/cityOptions', params)
-      .then(res => res.filter(item => item.label && item.value));
+  return http.get<ICityOption[]>('/v1/Data/cityOptions', params)
+      .then(res => res.filter(item => item.name && item.value));
 }
 
 // 角色下拉

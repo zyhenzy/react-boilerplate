@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import type { AddTicketOrderTripCommand } from '../../../api/ticket-order/types';
 import {useSelector} from "react-redux";
-import type {IOption} from "../../../api/basic/types";
+import {ICityOption, IOption} from "../../../api/basic/types";
 import Autocomplete from '@mui/material/Autocomplete';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
@@ -18,10 +18,10 @@ interface TripFormDialogProps {
 }
 
 const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSubmit, trip }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [form, setForm] = useState<AddTicketOrderTripCommand>({});
-  const [depCityOptions, setDepCityOptions] = useState<IOption[]>([]);
-  const [arrCityOptions, setArrCityOptions] = useState<IOption[]>([]);
+  const [depCityOptions, setDepCityOptions] = useState<ICityOption[]>([]);
+  const [arrCityOptions, setArrCityOptions] = useState<ICityOption[]>([]);
   const airlineOptions = useSelector((state: any) => state.options.airlineOptions) as IOption[];
   const airportOptions = useSelector((state: any) => state.options.airportOptions) as IOption[];
   const classTypeOptions = useSelector((state: any) => state.options.classTypeOptions) as IOption[];
@@ -56,7 +56,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
           />
           <Autocomplete
             options={depCityOptions}
-            getOptionLabel={option => option.label || ''}
+            getOptionLabel={option => option.name || ''}
             value={depCityOptions.find(opt => opt.value === form.depCity) || null}
             onInputChange={async (_, value) => {
               if (value) {
@@ -74,7 +74,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
           />
           <Autocomplete
             options={arrCityOptions}
-            getOptionLabel={option => option.label || ''}
+            getOptionLabel={option => option.name || ''}
             value={arrCityOptions.find(opt => opt.value === form.arrCity) || null}
             onInputChange={async (_, value) => {
               if (value) {
