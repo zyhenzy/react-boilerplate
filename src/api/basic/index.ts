@@ -85,6 +85,6 @@ export function getImage(imageId: string) {
 
 // 获取预定人
 export function getReserverOptions(CustomerId:string,Role:string='pa') {
-  // return http.get<IReserver[]>('/v1/User/options',{CustomerId,Role});
-  return http.get<IReserver[]>('/v1/User/options');
+  return http.get<IReserver[]>('/v1/User/options',{CustomerId,Role});
+  // return http.get<IReserver[]>('/v1/User/options');
 }
