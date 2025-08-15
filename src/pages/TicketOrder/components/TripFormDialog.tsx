@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import type { AddTicketOrderTripCommand } from '../../../api/ticket-order/types';
 import {useSelector} from "react-redux";
-import {ICityOption, IOption} from "../../../api/basic/types";
+import {IAirportOption, ICityOption, IOption} from "../../../api/basic/types";
 import Autocomplete from '@mui/material/Autocomplete';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
@@ -23,7 +23,7 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
   const [depCityOptions, setDepCityOptions] = useState<ICityOption[]>([]);
   const [arrCityOptions, setArrCityOptions] = useState<ICityOption[]>([]);
   const airlineOptions = useSelector((state: any) => state.options.airlineOptions) as IOption[];
-  const airportOptions = useSelector((state: any) => state.options.airportOptions) as IOption[];
+  const airportOptions = useSelector((state: any) => state.options.airportOptions) as IAirportOption[];
   const classTypeOptions = useSelector((state: any) => state.options.classTypeOptions) as IOption[];
   const mealsOptions = useSelector((state: any) => state.options.mealsOptions) as IOption[];
 
@@ -147,6 +147,14 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
           <Autocomplete
               options={airportOptions}
               getOptionLabel={option => option.label || ''}
+              filterOptions={(options, { inputValue }) =>
+                  options.filter(opt =>
+                      (opt.label && opt.label.includes(inputValue)) ||
+                      (opt.labelEn && opt.labelEn.toLowerCase().includes(inputValue.toLowerCase())) ||
+                      (opt.value && opt.value.includes(inputValue)) ||
+                      (opt.cityCode && opt.cityCode.includes(inputValue))
+                  )
+              }
               value={airportOptions.find(opt => opt.value === form.depAirport) || null}
               onChange={(_, newValue) => setForm(f => ({ ...f, depAirport: newValue ? newValue.value : '' }))}
               renderInput={params => (
@@ -165,6 +173,14 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
           <Autocomplete
               options={airportOptions}
               getOptionLabel={option => option.label || ''}
+              filterOptions={(options, { inputValue }) =>
+                  options.filter(opt =>
+                      (opt.label && opt.label.includes(inputValue)) ||
+                      (opt.labelEn && opt.labelEn.toLowerCase().includes(inputValue.toLowerCase())) ||
+                      (opt.value && opt.value.includes(inputValue)) ||
+                      (opt.cityCode && opt.cityCode.includes(inputValue))
+                  )
+              }
               value={airportOptions.find(opt => opt.value === form.arrAirport) || null}
               onChange={(_, newValue) => setForm(f => ({ ...f, arrAirport: newValue ? newValue.value : '' }))}
               renderInput={params => (
@@ -281,6 +297,14 @@ const TripFormDialog: React.FC<TripFormDialogProps> = ({ open, onClose, onTripSu
             <Autocomplete
               options={airportOptions}
               getOptionLabel={option => option.label || ''}
+              filterOptions={(options, { inputValue }) =>
+                  options.filter(opt =>
+                      (opt.label && opt.label.includes(inputValue)) ||
+                      (opt.labelEn && opt.labelEn.toLowerCase().includes(inputValue.toLowerCase())) ||
+                      (opt.value && opt.value.includes(inputValue)) ||
+                      (opt.cityCode && opt.cityCode.includes(inputValue))
+                  )
+              }
               value={airportOptions.find(opt => opt.value === form.stopAirport) || null}
               onChange={(_, newValue) => setForm(f => ({ ...f, stopAirport: newValue ? newValue.value : '' }))}
               renderInput={params => (

@@ -11,3 +11,15 @@ export interface ICityOption {
   nameEn: string
   value: string
 }
+
+export interface IReserver{
+  label:string,
+  value:string
+}
+
+export interface IAirportOption {
+  cityCode: string
+  label: string
+  labelEn: string
+  value: string
+}

@@ -41,16 +41,12 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
   const { t, i18n } = useTranslation();
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
-    useEffect(() => {
-        (async () => {
-            await getAndStoreUserInfo(dispatch);
-            fetchBaseData()
-        })();
-    }, []);
-
-    useEffect(() => {
-      fetchBaseData();
-    }, [i18n.language]);
+  useEffect(() => {
+    (async () => {
+        await getAndStoreUserInfo(dispatch);
+        fetchBaseData()
+    })();
+  }, [i18n.language]);
 
 
   const fetchBaseData = ()=>{

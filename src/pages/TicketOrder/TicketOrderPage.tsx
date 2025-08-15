@@ -133,7 +133,7 @@ const TicketOrderPage: React.FC = () => {
       await updateTicketOrder({
         id: values.id,
         pnr: values.pnr ?? undefined,
-        bookerName: values.bookerName ?? undefined,
+        bookerId: values.bookerId ?? undefined,
         bookerContact: values.bookerContact ?? undefined,
         adjustmentValue: Number(values.adjustmentValue) ?? undefined,
         currencyBooking: values.currencyBooking ?? undefined,
@@ -149,7 +149,7 @@ const TicketOrderPage: React.FC = () => {
     } else {
       await addTicketOrder({
         pnr: values.pnr ?? undefined,
-        bookerName: values.bookerName ?? undefined,
+        bookerId: values.bookerId ?? undefined,
         bookerContact: values.bookerContact ?? undefined,
         adjustmentValue: Number(values.adjustmentValue) ?? undefined,
         changeRule: values.changeRule ?? undefined,

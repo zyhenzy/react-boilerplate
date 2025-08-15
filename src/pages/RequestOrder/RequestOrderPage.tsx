@@ -104,7 +104,7 @@ const RequestOrderPage: React.FC = () => {
   const handleSubmit = async (values: Partial<TicketOrder>) => {
     await addTicketOrder({
       pnr: values.pnr ?? undefined,
-      bookerName: values.bookerName ?? undefined,
+      bookerId: values.bookerId ?? undefined,
       bookerContact: values.bookerContact ?? undefined,
       adjustmentValue: Number(values.adjustmentValue) ?? undefined,
       changeRule: values.changeRule ?? undefined,

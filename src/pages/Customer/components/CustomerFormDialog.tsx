@@ -157,13 +157,14 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
               label={t('customer.serviceFeeCountType')}
               fullWidth
               value={form.serviceFeeCountType}
-              onChange={e => setForm(f => ({ ...f, serviceFeeCountType: Number(e.target.value) }))}
+              onChange={e => setForm(f => ({ ...f, serviceFeeCountType: Number(e.target.value),serviceFeeRatio:undefined }))}
               required
           >
             <MenuItem value={0}>{t('customer.serviceFeeCountType_full')}</MenuItem>
             <MenuItem value={1}>{t('customer.serviceFeeCountType_ticket')}</MenuItem>
+            <MenuItem value={2}>{t('customer.serviceFeeCountType_fixed')}</MenuItem>
           </TextField>
-          <TextField
+          {(form.serviceFeeCountType===0||form.serviceFeeCountType===1)&&<TextField
               margin="dense"
               label={t('customer.serviceFeeRatio')}
               type="number"
@@ -172,7 +173,17 @@ const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
               onChange={e => setForm(f => ({ ...f, serviceFeeRatio: Number(e.target.value) }))}
               required
               inputProps={{ min: 0, step: 0.01 }}
-          />
+          />}
+          {form.serviceFeeCountType===2&&<TextField
+              margin="dense"
+              label={t('customer.serviceFeeCountType_fixed')}
+              type="number"
+              fullWidth
+              value={form.serviceFeeRatio ?? ''}
+              onChange={e => setForm(f => ({ ...f, serviceFeeRatio: Number(e.target.value) }))}
+              required
+              inputProps={{ min: 0, step: 1 }}
+          />}
           <TextField
               select
               margin="dense"

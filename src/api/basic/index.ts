@@ -1,5 +1,5 @@
 import http from '../../utils/http';
-import {ICityOption, IOption} from './types';
+import {IAirportOption, ICityOption, IOption, IReserver} from './types';
 
 // 性别下拉
 export function getSexOptions() {
@@ -54,7 +54,7 @@ export function getAirlineOptions(){
 
 // 机场下拉
 export function getAirportOptions(){
-  return http.get<IOption[]>('/v1/Data/airportOptions').then(res => res.filter(item => item.label && item.value));
+  return http.get<IAirportOption[]>('/v1/Data/airportOptions').then(res => res.filter(item => item.label && item.value));
 }
 
 // 舱位等级
@@ -81,4 +81,10 @@ export function uploadImage(formData: FormData) {
 
 export function getImage(imageId: string) {
   return `/api/v1/Image/${imageId}`
+}
+
+// 获取预定人
+export function getReserverOptions(CustomerId:string,Role:string='pa') {
+  // return http.get<IReserver[]>('/v1/User/options',{CustomerId,Role});
+  return http.get<IReserver[]>('/v1/User/options');
 }

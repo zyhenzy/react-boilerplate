@@ -40,7 +40,9 @@ import {Passenger, PassengerQuery} from "../../../api/passenger/types";
 import {getPassengerListByCustomer} from "../../../api/passenger";
 import SelectPassengerDialog from './SelectPassengerDialog';
 import {getLabelFromOption} from "../../../utils";
-import type {IOption} from "../../../api/basic/types";
+import {IOption, IReserver} from "../../../api/basic/types";
+import {getReserverOptions} from "../../../api/basic";
+import Autocomplete from "@mui/material/Autocomplete";
 
 interface TicketOrderFormDialogProps {
   open: boolean;
@@ -67,6 +69,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
   const customerOptions = useSelector((state: RootState) => state.options.customerOptions);
   const [currentCurrency,setCurrentCurrency] = useState<string>() // 当前币种，来源于客户
   const [passengerList,setPassengerList] = useState<Passenger[]>([]) // 客户历史乘客信息
+  const [reserverOptions,setReserver] = useState<IReserver[]>([]) // 预定人列表
   const certificateOptions = useSelector((state: any) => state.options.certificateOptions) as IOption[];
   const supplierOptions = useSelector((state: any) => state.options.supplierOptions) as IOption[];
 
@@ -75,6 +78,7 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
     if(form.customerId){
       getCurrencyByCustomerId(form.customerId);
       getPassengerByCustomerId(form.customerId);
+      fetchReserverOptions(form.customerId);
     }
   }, [form.customerId]);
 
@@ -99,6 +103,12 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
     }
     const passengerList = await getPassengerListByCustomer(params)
     setPassengerList(passengerList.data || []);
+  }
+
+  // 获取预定人信息
+  const fetchReserverOptions = async (customerId:string)=>{
+    const reserverList = await getReserverOptions(customerId)
+    setReserver(reserverList || []);
   }
 
   // 计算服务费
@@ -242,15 +252,42 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
         {/*  </Button>*/}
         {/*</DialogTitle>*/}
         <DialogContent>
-          <TextField
-              autoFocus
-              margin="dense"
-              label={t('ticketOrder.bookerName')}
-              fullWidth
-              value={form.bookerName || ''}
-              onChange={e => setForm(f => ({ ...f, bookerName: e.target.value }))}
-              required
+          {/* 客户下拉选择 */}
+          <FormControl fullWidth margin="dense" required>
+            <InputLabel>{t('ticketOrder.customerId', '客户')}</InputLabel>
+            <Select
+                label={t('ticketOrder.customerId', '客户')}
+                value={form.customerId || ''}
+                onChange={e => setForm(f => ({ ...f, customerId: e.target.value }))}
+                disabled={form.isRequest}
+            >
+              {customerOptions.map((c: any) => (
+                  <MenuItem key={c.value} value={c.value}>{c.label}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <Autocomplete
+              options={reserverOptions}
+              getOptionLabel={option => option.label || ''}
+              value={reserverOptions.find(opt => opt.value === form.bookerId) || null}
+              onChange={(_, newValue) => setForm(f => ({ ...f, bookerId: newValue ? newValue.value : '' }))}
+              renderInput={params => (
+                  <TextField {...params} label={t('ticketOrder.bookerName')} margin="dense" fullWidth required />
+              )}
+              isOptionEqualToValue={(option, value) => option.value === value.value}
+              disabled={!form?.customerId||reserverOptions.length===0}
           />
+
+          {/*<TextField*/}
+          {/*    autoFocus*/}
+          {/*    margin="dense"*/}
+          {/*    label={t('ticketOrder.bookerName')}*/}
+          {/*    fullWidth*/}
+          {/*    value={form.bookerName || ''}*/}
+          {/*    onChange={e => setForm(f => ({ ...f, bookerName: e.target.value }))}*/}
+          {/*    required*/}
+          {/*/>*/}
           <TextField
               margin="dense"
               label={t('ticketOrder.bookerContact')}
@@ -286,20 +323,6 @@ const TicketOrderFormDialog: React.FC<TicketOrderFormDialogProps> = ({
               value={form.currencyBooking || ''}
               onChange={e => setForm(f => ({ ...f, currencyBooking: e.target.value }))}
           />}
-          {/* 客户下拉选择 */}
-          <FormControl fullWidth margin="dense" required>
-            <InputLabel>{t('ticketOrder.customerId', '客户')}</InputLabel>
-            <Select
-              label={t('ticketOrder.customerId', '客户')}
-              value={form.customerId || ''}
-              onChange={e => setForm(f => ({ ...f, customerId: e.target.value }))}
-              disabled={form.isRequest}
-            >
-              {customerOptions.map((c: any) => (
-                <MenuItem key={c.value} value={c.value}>{c.label}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
           <TextField
               margin="dense"
               label={t('ticketOrder.adjustmentValue')}

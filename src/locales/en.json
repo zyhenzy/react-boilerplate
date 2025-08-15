@@ -85,6 +85,7 @@
     "serviceFeeCountType": "Service Fee Calculation Type",
     "serviceFeeCountType_full": "Full Price",
     "serviceFeeCountType_ticket": "Ticket Only",
+    "serviceFeeCountType_fixed": "Fixed Value",
     "serviceFeeRatio": "Service Fee Ratio",
     "products": "Products"
   },

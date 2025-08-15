@@ -12,7 +12,7 @@ import {
   getClassTypeOptions,
   getMealsOptions, getSexOptions, getSupplierOptions
 } from '../api/basic';
-import { IOption } from '../api/basic/types';
+import {IAirportOption, IOption} from '../api/basic/types';
 
 export const fetchCountryOptions = createAsyncThunk('options/fetchCountryOptions', async () => {
   return await getCountryOptions();
@@ -76,7 +76,7 @@ interface OptionsState {
   customerOptions: IOption[];
   productOptions: IOption[];
   airlineOptions: IOption[];
-  airportOptions: IOption[];
+  airportOptions: IAirportOption[];
   classTypeOptions: IOption[];
   mealsOptions: IOption[];
   sexOptions: IOption[];

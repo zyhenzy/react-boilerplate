@@ -13,6 +13,7 @@ export interface TicketOrder {
   id?: string; // 订单ID fixme：确定下是否存在
   billNo?: string; // 订单号，fixme：确定下是否存在
   isRequest?:boolean // 是否是航班需求订单转换的（仅前端使用）
+  bookerId?: string; // 订票人ID
   bookerName?: string; // 订票人
   bookerContact?: string; // 订票人联系方式
   pnr?: string; // PNR
@@ -55,7 +56,7 @@ export interface TicketOrderQuery {
 
 // 添加机票订单
 export interface AddTicketOrderCommand {
-  bookerName?: string;
+  bookerId?: string;
   bookerContact?: string;
   adjustmentValue?: number;
   pnr?: string;
@@ -76,7 +77,7 @@ export interface AddTicketOrderCommand {
 export interface UpdateTicketOrderCommand {
   id: string;
   pnr?: string;
-  bookerName?: string;
+  bookerId?: string;
   bookerContact?: string;
   currency?: string;
   currencyBooking?: string; // 预定币种（只有在修改的时候有）
