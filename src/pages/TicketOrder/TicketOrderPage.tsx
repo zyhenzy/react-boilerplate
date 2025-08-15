@@ -30,7 +30,6 @@ import TicketOrderDetailDialog from './components/TicketOrderDetailDialog';
 import { useTranslation } from 'react-i18next';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import i18n from "../../i18n";
 
 const TicketOrderPage: React.FC = () => {
   const { t, i18n } = useTranslation();
