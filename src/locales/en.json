@@ -29,7 +29,8 @@
     "no": "No",
     "country": "Country",
     "city": "City",
-    "sex": "Gender"
+    "sex": "Gender",
+    "downExcel": "Down Excel"
   },
   "user": {
     "title": "User Management",

@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {IssuedTicketOrderCommand, TicketOrder} from '../../api/ticket-order/types';
-import { getTicketOrderList, addTicketOrder, updateTicketOrder, getTicketOrderDetail, cancelTicketOrder, payedTicketOrder, issuedTicketOrder, downloadTicketOrderWord } from '../../api/ticket-order';
+import {
+  getTicketOrderList,
+  addTicketOrder,
+  updateTicketOrder,
+  getTicketOrderDetail,
+  cancelTicketOrder,
+  payedTicketOrder,
+  issuedTicketOrder,
+  downloadTicketOrderWord,
+  downloadTicketOrderExcel
+} from '../../api/ticket-order';
 import {
   Box,
   Button,
@@ -20,6 +30,7 @@ import TicketOrderDetailDialog from './components/TicketOrderDetailDialog';
 import { useTranslation } from 'react-i18next';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import i18n from "../../i18n";
 
 const TicketOrderPage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -69,6 +80,17 @@ const TicketOrderPage: React.FC = () => {
     setEditingOrder({passengerList:[], flightList:[]});
     setDialogOpen(true);
   };
+
+  const handleExcel = () => {
+    const langValue = i18n.language === 'zh' ? 'zh_CN' : i18n.language;
+    downloadTicketOrderExcel(langValue,{
+        BillNo: query.BillNo,
+        StartDate: query.StartDate,
+        EndDate: query.EndDate,
+        PassengerName: query.PassengerName,
+        TicketNo: query.TicketNo
+    })
+  }
 
   const handleEdit = async (order: TicketOrder) => {
     const res = await getTicketOrderDetail(order.id!);
@@ -225,7 +247,10 @@ const TicketOrderPage: React.FC = () => {
       </Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <h2>{t('ticketOrder.title')}</h2>
-        <Button variant="contained" onClick={handleAdd}>{t('ticketOrder.add')}</Button>
+        <div>
+          <Button variant="contained" onClick={handleExcel}>{t('common.downExcel')}</Button>
+          <Button variant="contained" onClick={handleAdd} style={{ marginLeft: 8 }}>{t('ticketOrder.add')}</Button>
+        </div>
       </Box>
       <TableContainer component={Paper}>
         <Table>

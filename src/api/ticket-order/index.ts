@@ -136,3 +136,35 @@ export function downloadTicketOrderWord(lang: string, id: string, price?: boolea
     window.URL.revokeObjectURL(downloadUrl);
   });
 }
+
+
+// 下载机票订单excel
+export function downloadTicketOrderExcel(Lang:string,params:{
+  BillNo?:string, // 订单号
+  StartDate?:string, // 开始日期
+  EndDate?:string, // 结束日期
+  PassengerName?:string, // 乘客姓名
+  TicketNo?:string // 票号
+}) {
+  // 构建下载链接
+  let url = `/api/v1/TicketOrder/excel`;
+  const token = getCookie('pc-token');
+  axios.get(url, {
+    responseType: 'blob',
+    params,
+    headers: {
+      Lang,
+      Authorization: `Bearer ${token}` // 添加 token 到 header
+    }
+  }).then(res => {
+    const blob = new Blob([res.data]);
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    a.download = `orderList.xlsx`; // 可自定义文件名
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(downloadUrl);
+  });
+}

@@ -29,7 +29,8 @@
     "no": "否",
     "country": "国家",
     "city": "城市",
-    "sex": "性别"
+    "sex": "性别",
+    "downExcel": "下载Excel"
   },
   "user": {
     "title": "用户管理",
