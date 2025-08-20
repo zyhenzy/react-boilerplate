@@ -30,6 +30,7 @@ import {
     fetchSupplierOptions
 } from "../store/optionsSlice";
 import {AppDispatch} from "../store";
+import {TOKEN} from "../constants";
 
 interface NavbarProps {
   onMenuClick?: () => void;
@@ -67,7 +68,7 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
 
   const handleLogout = () => {
     dispatch(clearUserInfo());
-    clearCookie('pc-token'); // 清除token
+    clearCookie(TOKEN); // 清除token
     window.location.reload();
   };
 

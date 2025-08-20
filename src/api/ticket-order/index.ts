@@ -18,6 +18,7 @@ import {ListResponse} from "../types";
 import dayjs from 'dayjs';
 import axios from "axios";
 import {getCookie} from "../../utils/cookie";
+import {TOKEN} from "../../constants";
 
 
 // 获取机票订单列表
@@ -118,7 +119,7 @@ export function downloadTicketOrderWord(lang: string, id: string, price?: boolea
   if (typeof price !== 'undefined') {
     url += `?price=${price}`;
   }
-  const token = getCookie('pc-token');
+  const token = getCookie(TOKEN);
   axios.get(url, {
     responseType: 'blob',
     headers: {
@@ -148,7 +149,7 @@ export function downloadTicketOrderExcel(Lang:string,params:{
 }) {
   // 构建下载链接
   let url = `/api/v1/TicketOrder/excel`;
-  const token = getCookie('pc-token');
+  const token = getCookie(TOKEN);
   axios.get(url, {
     responseType: 'blob',
     params,

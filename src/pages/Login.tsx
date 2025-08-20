@@ -6,6 +6,7 @@ import type { LoginParams } from '../api/user/types';
 import { setCookie } from '../utils/cookie';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import {TOKEN} from "../constants";
 
 const Login: React.FC = () => {
     const [userName, setUserName] = useState('');
@@ -30,7 +31,7 @@ const Login: React.FC = () => {
             // @ts-ignore
             if (res && res.token) {
                 // @ts-ignore
-                setCookie('pc-token', res.token);
+                setCookie(TOKEN, res.token);
             }
             await getAndStoreUserInfo(dispatch);
             setError('');

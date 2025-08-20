@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { getCookie } from './cookie';
+import {getCookie, setCookie} from './cookie';
 import i18n from '../i18n';
+import {TOKEN} from "../constants";
 
 class HttpRequest {
     private instance: AxiosInstance;
@@ -18,7 +19,7 @@ class HttpRequest {
             // @ts-ignore
             (config: AxiosRequestConfig) => {
                 // 添加 token
-                const token = getCookie('pc-token');
+                const token = getCookie(TOKEN);
                 if (token) {
                     config.headers = config.headers || {};
                     config.headers['Authorization'] = `Bearer ${token}`;
@@ -38,6 +39,9 @@ class HttpRequest {
 
         this.instance.interceptors.response.use(
             (response: AxiosResponse) => {
+                if(response.headers['refreshToken']){
+                    setCookie(TOKEN, response.headers['refreshToken']);
+                }
                 const data = response.data;
                 if (data.code === 0) {
                     return data.result;
